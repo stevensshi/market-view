@@ -1,6 +1,6 @@
 # marketView — demo site
 
-**Live:** https://stevensshi.github.io/marketview-demo
+**Live:** https://stevensshi.github.io/market-view
 
 An autonomous market-intelligence product: every morning an LLM pipeline
 reads the market firehose (Bloomberg news mail, research newsletters such as
