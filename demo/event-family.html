@@ -1,0 +1,929 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>marketView — 事件族 demo (2026-07-13 data)</title>
+<style>
+:root{--bg:#0f1320;--panel:#171c2e;--panel2:#1d2438;--line:#2a3350;--ink:#e8ecf5;
+--mut:#97a0bd;--dim:#6b748f;--up:#2ec27e;--down:#ef5b6b;--accent:#3d7bff;--macro:#b07ce8;
+--high:#1e9e63;--med:#c79a2e;--low:#9aa3bd;--hair:rgba(255,255,255,.07);
+--lift:0 10px 26px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ background-image:radial-gradient(1100px 520px at 18% -10%,#1d2750 0%,rgba(15,19,32,0) 60%);background-repeat:no-repeat}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
+ position:sticky;top:0;z-index:60;background:rgba(15,19,32,.78);backdrop-filter:blur(8px);padding:8px 0}
+.tab{padding:6px 13px;border-radius:99px;background:rgba(255,255,255,.05);color:var(--mut);font-weight:600;border:none;font-size:13px}
+.tab.active{background:linear-gradient(135deg,#4c7dff,#6a5cff);color:#fff;box-shadow:0 4px 14px rgba(76,125,255,.35)}
+.tab.macro{background:rgba(176,124,232,.14);color:#d9c2f3;border:none}
+.tabsep{color:var(--dim);padding:0 2px}.crumb{color:var(--mut);font-size:12px;margin-left:auto}
+.panel{background:var(--panel);border:none;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--lift)}
+.panel h3{margin:0 0 8px;font-size:13px;letter-spacing:.02em;color:var(--mut);text-transform:uppercase;font-weight:700}
+.sub{color:var(--mut);font-size:12px;font-weight:500}
+.hero{background:linear-gradient(150deg,rgba(76,125,255,.14),rgba(106,92,255,.06) 55%,var(--panel))}
+.regime{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:800;font-size:12px;letter-spacing:.04em}
+.regime.off{background:rgba(239,91,107,.16);color:#ff9aa0}.regime.on{background:rgba(46,194,126,.16);color:#7ce3ae}.regime.mixed{background:rgba(227,179,65,.16);color:#ffd98a}
+.verified{color:var(--up);font-weight:700;font-size:12px;float:right}
+.tldr{margin:10px 0;font-size:15.5px}
+.stats{display:flex;flex-wrap:wrap;gap:14px;border-top:1px solid var(--hair);padding-top:10px;font-size:13px}
+.stats b.up{color:var(--up)}.stats b.down{color:var(--down)}.stats b.flat{color:var(--mut)}
+.work{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+@media(max-width:820px){.work{grid-template-columns:1fr}}
+.sector{margin-top:16px}.sector:first-of-type{margin-top:2px}
+.sector h4{margin:0 0 9px;font-size:13.5px;color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:6px;font-weight:700;display:flex;align-items:baseline;gap:7px}
+.sector h4 .sub{font-weight:500}
+details.thesis{border:none;border-radius:14px;padding:0;margin-bottom:10px;background:var(--panel2);
+ box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);
+ transition:transform .15s ease,box-shadow .15s ease}
+details.thesis:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.06)}
+details.thesis>summary{list-style:none;cursor:pointer;padding:11px}
+details.thesis>summary::-webkit-details-marker{display:none}
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rank{color:var(--dim);font-weight:800}.tname{font-weight:700;font-size:14.5px}
+.pill{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.03em}
+.pill.high{background:rgba(46,194,126,.16);color:#7ce3ae}.pill.med{background:rgba(199,154,46,.18);color:#ffd98a}.pill.low{background:rgba(154,163,189,.16);color:#b9c1d9}
+.lens{font-size:10.5px;padding:2px 8px;border-radius:99px;border:none;color:#d9c2f3;background:rgba(176,124,232,.16)}
+.senti{font-size:11px;font-weight:700}.senti.bear{color:var(--down)}.senti.bull{color:var(--up)}.senti.mix{color:var(--mut)}
+.barwrap{flex:1;min-width:80px;height:6px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin:0 6px}
+.bar{display:block;height:6px;background:var(--accent);border-radius:4px}
+.assets{color:var(--mut);font-size:12px}
+.assets .au{color:var(--up);font-weight:700}.assets .ad{color:var(--down);font-weight:700}
+.sig{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.mat{color:var(--macro);font-weight:800;font-size:11px}
+.sigtag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(61,123,255,.13);border:none;color:#bcd2ff}
+.tdate{color:var(--dim);font-size:11px;font-weight:600;white-space:nowrap}
+.voices{color:var(--mut);font-size:12px;margin-top:5px}.caret{margin-left:auto;color:var(--mut)}
+.bodyb{padding:0 11px 11px}.summary{font-size:13px;color:#d7deef;margin:6px 0 9px}
+.ev{display:grid;grid-template-columns:1fr 1fr;gap:9px}@media(max-width:640px){.ev{grid-template-columns:1fr}}
+.col{border:none;border-radius:11px;padding:10px;background:rgba(255,255,255,.03)}
+.col.for{background:rgba(46,194,126,.06)}.col.against{background:rgba(239,91,107,.06)}
+.col h4{margin:0 0 6px;font-size:11px;text-transform:uppercase}.col.for h4{color:var(--up)}.col.against h4{color:var(--down)}
+.point{font-size:12.5px;padding:5px 0;border-top:1px solid var(--hair)}.point:first-of-type{border-top:none}
+.vf{color:var(--up)}.flag{color:var(--med);font-weight:700}
+.cite{display:inline-block;font-size:10.5px;background:rgba(61,123,255,.12);border:none;color:#9fc0ff;border-radius:99px;padding:1px 8px;margin:3px 4px 0 0}
+.tl{list-style:none;margin:0;padding:0}.tl li{padding:5px 0;border-top:1px solid var(--hair);font-size:13px}.tl li:first-child{border-top:none}
+.when{color:var(--macro);font-weight:700;margin-right:6px}
+.cal{background:linear-gradient(160deg,rgba(176,124,232,.12),#211833)}.cal table{width:100%;border-collapse:collapse;font-size:12.5px}
+.cal td{padding:4px 0;border-top:1px solid var(--hair)}.cal tr:first-child td{border-top:none}
+.imp.high{color:var(--down);font-weight:700}.imp.med{color:var(--med);font-weight:700}
+.delta{background:#13233f}
+.vn{font-size:12.5px;padding:6px 0;border-top:1px solid var(--hair);color:#cdd5e8}.vn:first-child{border-top:none}
+.acgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:820px){.acgrid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.acgrid{grid-template-columns:1fr}}
+.ac{border:none;border-radius:12px;padding:10px;background:var(--panel2);box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05)}
+.ac.macro{border:none;background:linear-gradient(160deg,rgba(176,124,232,.16),#1d1530)}.ac .acn{font-weight:700}.ac .mv{font-weight:800}
+.ac .det{margin-top:6px;border-top:1px solid var(--hair);padding-top:6px;color:var(--mut);font-size:12px}
+.house{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:820px){.house{grid-template-columns:1fr}}
+.house .hp{border:none;border-radius:12px;padding:11px;background:rgba(255,255,255,.03);font-size:12.5px}
+.houseflag{font-size:11px;color:var(--med);font-weight:700}
+h1{font-size:20px;margin:0 0 2px}.note{color:var(--mut);font-size:11.5px;margin-top:18px;border-top:1px solid var(--hair);padding-top:10px}
+.voiceb{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:5px;border:none}
+.voiceb.primary,.voiceb.fund_manager,.voiceb.viral_social{color:#ffe39b;background:rgba(199,154,46,.18)}
+.voiceb.analyst{color:#bcd2ff;background:rgba(44,99,184,.22)}
+.voiceb.premium_journalism{color:#cdd5e8;background:rgba(70,82,122,.30)}
+.voiceb.free_aggregator{color:#97a0bd;background:rgba(42,51,80,.50)}
+.delta{background:linear-gradient(160deg,rgba(46,194,126,.10),#16241c)}
+.delta .dp{font-size:13px;padding:5px 0;border-top:1px solid rgba(46,194,126,.16)}.delta .dp:first-of-type{border-top:none}
+.secnav{position:sticky;top:46px;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+ padding:7px 10px;margin:0 0 10px;background:rgba(13,19,34,.72);backdrop-filter:blur(10px);
+ border:none;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.30)}
+.seclist.scrolly{max-height:640px;overflow-y:auto;padding:2px 6px 10px 2px;
+ border-bottom:1px dashed var(--hair);
+ scrollbar-width:thin;scrollbar-color:#3a4a72 transparent}
+.seclist.scrolly::-webkit-scrollbar{width:8px}
+.seclist.scrolly::-webkit-scrollbar-thumb{background:#3a4a72;border-radius:4px}
+.seclist.scrolly::-webkit-scrollbar-track{background:transparent}
+.navchip{color:#cdd5e8;text-decoration:none;font-size:11.5px;padding:3px 10px;border-radius:99px;
+ border:none;background:rgba(255,255,255,.05);white-space:nowrap}
+.navchip:hover{background:rgba(76,125,255,.20);color:#fff}.navchip b{color:#7fd4ff}
+.heatrow{margin-top:5px}.heatbar{background:linear-gradient(90deg,#b3541e,#ff8c42)!important}
+.heatchip{font-size:11px;font-weight:700;color:#ffb27d;white-space:nowrap}
+.cite .eng{color:#ffb27d;font-weight:700;font-size:10px}
+.cite .cred{color:#ffe39b;font-weight:700;font-size:10px}
+html{scroll-behavior:smooth}.sector{scroll-margin-top:96px}
+/* ── functional tabs + Home/focus views (body[data-view]) ── */
+button.tab{cursor:pointer;font-family:inherit;appearance:none}
+.tab.home{background:rgba(255,255,255,.05);color:var(--mut)}
+.tab.active{background:linear-gradient(135deg,#4c7dff,#6a5cff);color:#fff;box-shadow:0 4px 14px rgba(76,125,255,.35)}
+/* Home: cap each sector to its top-5 (ranked by materiality); focus uncaps */
+body[data-view="home"] .seclist>details.thesis:nth-of-type(n+6){display:none}
+/* focus (any non-home view): hide the whole-market context */
+body:not([data-view="home"]) .home-only,
+body:not([data-view="home"]) .hero,
+body:not([data-view="home"]) .secnav{display:none}
+/* "+N more" chip — only on Home, under its own sector */
+.morebtn{display:none;cursor:pointer;font-family:inherit;margin:2px 0 2px;width:100%;
+ text-align:left;background:rgba(76,125,255,.08);border:none;color:#9fc0ff;
+ border-radius:11px;padding:8px 12px;font-size:12.5px;font-weight:700}
+.morebtn:hover{background:rgba(76,125,255,.16);color:#fff}
+body[data-view="home"] .sector .morebtn{display:block}
+/* in focus the focus-header titles the class, so drop the sector's own heading */
+body:not([data-view="home"]) .sector>h4{display:none}
+/* focus header + back-to-home, shown only inside a class view */
+.focushead,.backhome{display:none}
+body:not([data-view="home"]) .focushead{display:block;margin:2px 0 12px}
+.focushead .fh{font-size:19px;font-weight:800}
+.focushead .fhsub{color:var(--mut);font-size:12.5px;margin-top:3px}
+.backhome{cursor:pointer;font-family:inherit;background:rgba(255,255,255,.05);border:none;
+ color:var(--mut);border-radius:99px;padding:5px 12px;font-size:12.5px;font-weight:700;margin-bottom:10px}
+body:not([data-view="home"]) .backhome{display:inline-block}
+.backhome:hover{color:#fff;background:rgba(76,125,255,.20)}
+.cal td .sub{font-size:10.5px}.imp.low{color:var(--mut);font-weight:700}
+.calempty{display:none;color:var(--mut);font-size:12.5px;padding:8px 2px}
+.calempty.show{display:block}
+
+.famchip{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;border:none;cursor:pointer;
+ background:rgba(255,178,125,.14);color:#ffb27d}
+.famchip:hover{background:rgba(255,178,125,.26)}
+.famchip.active{background:linear-gradient(135deg,#ff9d5c,#ffb27d);color:#251507;box-shadow:0 4px 14px rgba(255,178,125,.35)}
+.memrow{display:flex;gap:5px;flex-wrap:wrap;padding:8px 11px 3px}
+.memchip{font-size:10.5px;padding:2px 9px;border-radius:99px;background:rgba(61,123,255,.13);color:#bcd2ff}
+.memchip:hover{background:rgba(61,123,255,.25)}
+.memchip .au{color:var(--up)}.memchip .ad{color:var(--down)}
+.hubcard{background:linear-gradient(150deg,rgba(255,178,125,.08),var(--panel2) 60%)}
+.filterbar{display:none;position:sticky;top:46px;z-index:55;margin-bottom:10px;padding:8px 13px;border-radius:12px;
+ background:rgba(255,178,125,.10);backdrop-filter:blur(8px);color:#ffd9b8;font-size:12.5px;font-weight:600;
+ box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.filterbar button{float:right;border:none;border-radius:99px;padding:2px 12px;cursor:pointer;
+ background:rgba(255,255,255,.12);color:#fff;font-weight:700}
+body.filtered details.thesis{display:none}
+body.filtered details.thesis.famshow{display:block}
+</style></head><body><div class="wrap">
+<div class="tabs"><span class="sub" style="font-weight:700">⚡ 事件族</span><button class="famchip" id="nav-ai" onclick="famFilter('ai')">⚡ AI capex &amp; debt ×12</button><button class="famchip" id="nav-hormuz" onclick="famFilter('hormuz')">⚡ US-Iran · Hormuz ×10</button>
+ <span class="crumb">demo · 真实数据 2026-07-13 · 族标注=关键词（生产=ROLLUP LLM）</span></div>
+<div class="filterbar" id="filterbar"><button onclick="famClear()">显示全部</button>
+ <span id="filtertext"></span></div>
+<div class="sector" data-sec><h4>Macro/Politics <span class="sub">11 theses</span></h4>
+<details class="thesis hubcard" id="th-0" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#1</span>
+   <span class="tname">US-Iran war and the Hormuz supply shock are the market&#x27;s primary driver</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.39 · sov 11%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  <div class="memrow"><a class="memchip" href="#th-3" onclick="event.stopPropagation()">Commoditi · Hormuz closure premium: chokepoint war… <b class="au">↑</b></a><a class="memchip" href="#th-4" onclick="event.stopPropagation()">Commoditi · Contrarian crash: the Iran war breaks … <b class="ad">↓</b></a><a class="memchip" href="#th-13" onclick="event.stopPropagation()">Equities · Iran / Strait of Hormuz: an oil-driven… <b class="ad">↓</b></a><a class="memchip" href="#th-20" onclick="event.stopPropagation()">Commoditi · Pump-price pass-through: the oil shock… <b class="">·</b></a><a class="memchip" href="#th-25" onclick="event.stopPropagation()">Crypto · US–Iran escalation drives a geopolitic… <b class="ad">↓</b></a><a class="memchip" href="#th-26" onclick="event.stopPropagation()">Macro/Pol · War-driven inflation re-acceleration i… <b class="ad">↓</b></a><a class="memchip" href="#th-28" onclick="event.stopPropagation()">Commoditi · US militarization of the chokepoint — … <b class="">·</b></a><a class="memchip" href="#th-40" onclick="event.stopPropagation()">Fixed Inc · Oil-shock reflation: Hormuz supply fea… <b class="ad">↓</b></a><a class="memchip" href="#th-47" onclick="event.stopPropagation()">Commoditi · Chokepoint bypass: energy-security inf… <b class="">·</b></a></div>
+ </summary>
+ <div class="bodyb"><div class="summary">Fresh US strikes on Iran, Iranian retaliation against Gulf states, and disputed/declared closure of the Strait of Hormuz are re-pricing an oil supply-risk premium into every asset class. Crude is up 3% intraday and ~10% over three days, futures opened lower, and Asian equities sold off. This is the single thread running through inflation prints, growth downgrades, and cross-asset volatility. Note </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">US and Iran traded fresh strikes overnight into Monday, issuing conflicting declarations over whether the Strait of Hormuz is open.</div><div class="point">Iran launched missiles at Jordan, Oman, Bahrain and Kuwait after another wave of US strikes; Hormuz shipping traffic slowed, threatening oil flows.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">NUMERIC DISPUTE on the actual oil damage: one widely-shared post claims oil is only ~$5/barrel higher than before the war started, implying the risk premium is far smaller than headlines suggest. This cannot be reconcile</div><div class="point">Equities rallied THROUGH the flare-up: last week S&amp;P +1.2%, Nasdaq +1.7%, Mag7 +4.0% despite oil +4% and yields +7bps.</div></div></div></div>
+</details>
+<details class="thesis" id="th-1" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#2</span>
+   <span class="tname">Markets are shrugging it off: the resilience / buy-the-dip thesis</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.39 · sov 11%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The contrarian read is that the war is loud but not economically decisive. Equities rose through the flare-up, global inflation has stayed subdued despite the oil surge, the futures response to a literal Hormuz-closure declaration was a rounding error, and even the Fed-hike bear case comes with historical evidence that stocks recover. Positioning is into a seasonally favorable window with big-bank</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">S&amp;P +1.2%, Nasdaq +1.7%, Mag7 +4.0% last week DESPITE oil +4% and yields +7bps on the Iran flare-up, heading into a seasonally favorable window with big-bank earnings Tuesday.</div><div class="point">Global inflation has remained remarkably subdued despite the oil surge; peak price increases are arguably behind us nearly everywhere even as US markets price peak hawkishness — a setup for dovish repricing.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The resilience data is backward-looking (LAST week) and predates the newest strike wave, the missile launches at four Arab states, and the renewed Hormuz closure claim.</div><div class="point">Asia did NOT shrug it off: Kospi, Nikkei, SSE and Taiwan all fell, with reports of ~$1.5T in global value wiped in 10 hours.</div></div></div></div>
+</details>
+<details class="thesis hubcard" id="th-8" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#9</span>
+   <span class="tname">The AI boom is the counterweight holding the macro tape up</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.36 · sov 10%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  <div class="memrow"><a class="memchip" href="#th-2" onclick="event.stopPropagation()">Equities · The AI cost shock: adoption was easy, … <b class="ad">↓</b></a><a class="memchip" href="#th-7" onclick="event.stopPropagation()">Equities · The AI infrastructure supercycle is st… <b class="au">↑</b></a><a class="memchip" href="#th-9" onclick="event.stopPropagation()">Equities · Concentration risk: the AI trio IS the… <b class="ad">↓</b></a><a class="memchip" href="#th-10" onclick="event.stopPropagation()">Equities · Rotation, not exit: capital is fleeing… <b class="">·</b></a><a class="memchip" href="#th-11" onclick="event.stopPropagation()">Equities · Beneath the AI headline: labor, consum… <b class="ad">↓</b></a><a class="memchip" href="#th-14" onclick="event.stopPropagation()">Equities · Oracle as the fourth AI cloud: the cro… <b class="au">↑</b></a><a class="memchip" href="#th-15" onclick="event.stopPropagation()">Equities · Apple v. OpenAI: the incumbent–AI-lab … <b class="">·</b></a><a class="memchip" href="#th-21" onclick="event.stopPropagation()">Equities · China&#x27;s tech offensive and the coming … <b class="">·</b></a><a class="memchip" href="#th-23" onclick="event.stopPropagation()">Equities · India is the destination for capital f… <b class="au">↑</b></a><a class="memchip" href="#th-36" onclick="event.stopPropagation()">Equities · The defense-tech and space capital cyc… <b class="au">↑</b></a><a class="memchip" href="#th-38" onclick="event.stopPropagation()">Fixed Inc · AI debt indigestion: the hyperscaler i… <b class="ad">↓</b></a></div>
+ </summary>
+ <div class="bodyb"><div class="summary">Every bearish macro thread in this pool has an AI-shaped offset attached to it. The euro-area downgrade is partially cushioned by the semiconductor boom. South Korea is booking a RECORD tax windfall from AI-sector profits and recycling it into growth spending — an AI-financed fiscal impulse. Apollo&#x27;s research says AI adoption ADDS jobs. And Mag7 was +4.0% last week straight through an oil spike. T</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">South Korea expects a record tax windfall fueled by AI-sector profits and will channel it into future-growth spending — AI earnings converting directly into fiscal capacity.</div><div class="point">The AI-driven semiconductor boom is explicitly cited by economists as the partial offset to Iran-war drag on euro-area growth.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The political backlash is forming: tech layoffs are surging and a MAJORITY of US workers now support an AI sovereign wealth fund to hold AI corporations accountable — populist policy risk aimed straight at AI-exposed nam</div><div class="point">AI is already visibly reshaping (disrupting) older workers&#x27; careers, per new research — the labor effect is not uniformly benign.</div></div></div></div>
+</details>
+<details class="thesis" id="th-18" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#19</span>
+   <span class="tname">Global growth and labor markets are cracking beneath the war headlines</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.33 · sov 9%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">Underneath the geopolitics, the real-economy data is quietly deteriorating on both sides of the Atlantic. Economists cut euro-area growth on Iran-war drag; France&#x27;s unemployment is forecast to a seven-year high; and in the US the anticipated World Cup hiring boom simply hasn&#x27;t shown up, killing one of the bullish labor narratives right as earnings season opens. Tech layoffs are climbing and consum</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Economists cut euro-area growth forecasts, with the Iran war the named drag and the AI/semiconductor boom only a partial offset.</div><div class="point">French unemployment is now forecast to hit its highest level since 2019 in 2026, weaker than economists previously expected.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The strongest counter is the AI labor effect: a Ramp/Revelio study of 21,559 US firms finds AI adopters GREW headcount ~10% two years post-adoption, with entry-level jobs up ~12% — a Jevons effect, not a layoff wave.</div><div class="point">The euro-area downgrade explicitly names the AI-driven semiconductor boom as an offset, so the growth picture is a tug-of-war, not a one-way slide.</div></div></div></div>
+</details>
+<details class="thesis" id="th-19" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#20</span>
+   <span class="tname">Emerging-market political risk premium: the reform trade is unwinding</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.33 · sov 9%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">Two of the market&#x27;s favorite reform stories are cracking simultaneously. In Argentina, Milei&#x27;s aura is fading — political capital eroding, questions mounting over his health — and the country is openly reconsidering a &#x27;third way,&#x27; putting continued market-friendly reform in doubt. In Malaysia, the ex-ruling Barisan Nasional swept Johor in a landslide, weakening PM Anwar&#x27;s coalition and raising the</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">As Milei&#x27;s political capital erodes and questions mount over his health, Argentina is reconsidering its economic path, raising uncertainty around continued market-friendly reforms.</div><div class="point">Malaysia&#x27;s ex-ruling Barisan Nasional won Johor in a landslide, strengthening the former ruling bloc, weakening Anwar&#x27;s coalition and raising the odds of an early general election.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Not all of EM/Asia is deteriorating: South Korea is booking a RECORD AI-driven tax windfall and funding future growth with it.</div><div class="point">India is actively building strategic optionality via Modi&#x27;s Indo-Pacific outreach rather than passively absorbing shocks.</div></div></div></div>
+</details>
+<details class="thesis" id="th-22" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#23</span>
+   <span class="tname">Correlated cross-asset liquidation: this is a deleveraging event, not just a war trade</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.32 · sov 9%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The tell is gold. In a pure geopolitical risk-off, gold rallies — instead it fell alongside equities, silver and bitcoin, with ~$1.5T of global market value reportedly wiped in 10 hours. That pattern (everything down together, including the hedges) points to forced deleveraging / margin liquidation, with cited catalysts including US strikes on Iran, possible BOJ yen intervention, and a bond-yield </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Over $1.5T in global market value wiped in 10 hours: BTC -2.47%, gold -1.62%, silver -3.4%, KOSPI -8.95%, Nikkei -2.7%, SSE -2.3%, Taiwan -3.1% — drivers cited as US strikes on Iran, possible BOJ yen intervention, and a </div><div class="point">Independent news confirms the direction: Kospi and Nikkei declined and crude spiked on the same session.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">US futures barely moved (-0.1% to -0.3%) on the same catalyst, which is inconsistent with a genuine global margin event reaching the US.</div><div class="point">US large-cap and Mag7 performance in the prior week was strongly positive, with no sign of a deleveraging regime.</div></div></div></div>
+</details>
+<details class="thesis" id="th-24" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#25</span>
+   <span class="tname">Great-power realignment: alliances are being repriced as transactional</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.30 · sov 9%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A slower structural narrative running under the war. Trump says the US should be REIMBURSED by allies for guarding the Strait of Hormuz — turning security guarantees over the world&#x27;s most important oil chokepoint into a fee-for-service arrangement. Meanwhile Xi reaffirms unwavering backing for Kim and North Korea, Xi debuts at China&#x27;s flagship AI summit as US-China rivalry heats up, and Modi court</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Trump publicly demanded allied reimbursement for US military protection of the Strait of Hormuz — a transactional reframing of security guarantees over a critical oil chokepoint.</div><div class="point">Xi publicly stated China&#x27;s backing for Kim Jong Un and the China-North Korea friendship will not change, signaling bloc continuity amid shifting great-power dynamics.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">This is a multi-year structural thesis with no observable price impact in this pool — the records show the tape reacting to strikes and oil, not to alliance architecture.</div><div class="point">US-Iran technical talks are reportedly still continuing, suggesting diplomatic channels have not actually collapsed.</div></div></div></div>
+</details>
+<details class="thesis" id="th-26" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#27</span>
+   <span class="tname">War-driven inflation re-acceleration is closing the central-bank easing window</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.29 · sov 8%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The war is showing up in the CPI data. India printed 4.38% for June — an eighth straight monthly rise and above the 4.30% Reuters poll — driven by food and fuel from the US-Iran conflict plus a weak monsoon, complicating RBI easing and pressuring the rupee. Domestically the squeeze is broadening into &#x27;funflation,&#x27; where even the cheap stay-at-home substitutes are raising prices. The tail risk mark</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">India&#x27;s June CPI accelerated to 4.38% from 3.93% in May, above the 4.30% Reuters poll and the eighth straight monthly rise, on Iran-war fuel and weak-monsoon food prices — complicating RBI easing and pressuring the rupee</div><div class="point">&#x27;Funflation&#x27;: streaming, gaming and other at-home categories are raising prices, removing the cheap-substitute cushion for squeezed household budgets and weighing on discretionary spend.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Directly contradicting evidence: global inflation has remained &#x27;remarkably subdued&#x27; despite the oil surge, with peak price increases arguably behind us almost everywhere — even as US markets price peak hawkishness.</div><div class="point">US inflation is cited at ~4% with oil only ~$5/barrel above pre-war levels — a modest pass-through, not a spiral.</div></div></div></div>
+</details>
+<details class="thesis" id="th-30" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#31</span>
+   <span class="tname">Washington&#x27;s power vacuum: Senate succession chaos ahead of midterms</span>
+   <span class="pill high">high</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.27 · sov 8%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A genuine US political-stability shock that has nothing to do with Iran. Senator Lindsey Graham, a leading Republican foreign-policy hawk and Trump ally, died suddenly at 71, triggering a South Carolina succession fight months before the midterms with implications for Senate control and legislative throughput. Simultaneously McConnell disclosed a June fall and pneumonia hospitalization explaining </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Senator Lindsey Graham, a leading GOP foreign-policy hawk and Trump ally, died from sudden illness at 71.</div><div class="point">His death sets up a chaotic South Carolina Senate succession battle just months before the midterms, with potential implications for Senate control and legislative dynamics.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">No record in this pool links Graham&#x27;s death or McConnell&#x27;s absence to any market move — the asset-price impact is inferred, not observed.</div><div class="point">McConnell&#x27;s disclosure actually ENDS speculation rather than creating it, removing an uncertainty overhang.</div></div></div></div>
+</details>
+<details class="thesis" id="th-31" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#32</span>
+   <span class="tname">Structural US policy tailwind: engineering long-duration retail flows into equities</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.27 · sov 8%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A quiet, slow-burn bullish thesis that has nothing to do with the war. Trump Accounts launched in July with $1,000 government seed deposits and tax-deferred growth for eligible children. Trump is simultaneously embracing Australia&#x27;s superannuation model — backed by BlackRock&#x27;s Larry Fink — as a template for US retirement reform. Superannuation is a mandatory-contribution system; adopting it would </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Trump Accounts launched in July: $1,000 government seed deposits into tax-deferred children&#x27;s investment accounts — a structural tailwind for long-duration equity inflows.</div><div class="point">Trump has embraced Australia&#x27;s superannuation-based retirement system as a US reform model, with Larry Fink backing it — signaling potential alignment of US pension reform with a mandatory-contribution structure.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The housing law&#x27;s benefits are explicitly expected to LAG — implementation, supply response and the rate path all delay any market impact.</div><div class="point">Retirement reform is currently only an idea being &#x27;studied&#x27; and &#x27;eyed&#x27; — no legislation exists in these records.</div></div></div></div>
+</details>
+<details class="thesis" id="th-35" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#36</span>
+   <span class="tname">The Trump approval war: contested political capital as a policy-risk signal</span>
+   <span class="pill low">low</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.26 · sov 7%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A high-heat social fight over one number, and it matters because political capital determines whether the administration can sustain tariffs and the Iran campaign. Trump posted &#x27;59% Approval Rating. Prices coming down along with the lowering of oil and gas,&#x27; amplified across multiple accounts with enormous engagement. Critics respond that approval is in the LOW 30s, economy approval in the 20s, di</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Trump posted &#x27;59% Approval Rating. Prices coming down along with the lowering of oil and gas. Thank you!&#x27; (timestamped Jul 12 2026, 9:03 PM ET), amplified with heat 5246 and 1468 across accounts.</div><div class="point">The administration&#x27;s framing attributes lower pump prices and contained inflation to expanded domestic energy production — the policy claim behind the approval number.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">DIRECT CONTRADICTION: critics put approval in the low 30s, economy approval in the 20s, and disapproval in the 60s-70s — and say oil, gas and other prices remain substantially HIGHER than before the war, blaming tariffs </div><div class="point">The &#x27;prices coming down&#x27; claim is contradicted by the tape on the same days: WTI +3.0% and Brent +2.5% on the Hormuz headline, and oil up ~10% in three days.</div></div></div></div>
+</details></div><div class="sector" data-sec><h4>Equities <span class="sub">16 theses</span></h4>
+<details class="thesis" id="th-2" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#3</span>
+   <span class="tname">The AI cost shock: adoption was easy, the bill is not</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.39 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A margin/ROI bear thesis distinct from the concentration trade. Enterprises are moving to &#x27;valuemaxxing&#x27;, inference and integration costs are landing as a real budget shock, and frontier labs are visibly struggling with unit economics — Anthropic delayed a Claude paywall after backlash, signaling a $20/mo tier can&#x27;t fund frontier compute. Cheaper competing models and open-source releases compress </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Enterprise budgets are hitting a &#x27;dollar-sign shock&#x27; as inference, compute and integration costs emerge as a margin headwind that could pressure AI/software vendor pricing power.</div><div class="point">Buyers are shifting to &#x27;valuemaxxing&#x27; — the CNBC piece itself concedes AI-chip stocks have been volatile on spending worries.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Executives on the demand side call AI appetite &#x27;almost unlimited&#x27; even amid the value-maximization shift.</div><div class="point">Meta is committing $50B+ to a single 5GW site — behavior inconsistent with a capex retrenchment.</div></div></div></div>
+</details>
+<details class="thesis" id="th-5" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#6</span>
+   <span class="tname">Q2 earnings season is the referee: stocks are &#x27;priced for sunshine and rainbows&#x27;</span>
+   <span class="pill high">high</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.37 · sov 7%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A market-timing thesis rather than a directional one. With ~28 S&amp;P 500 companies reporting this week and JPMorgan/Netflix headlining, elevated valuations now face their verification event. Bulls (Evercore) say profit growth beats AI anxiety; Bloomberg warns that any disappointment risks a sharp derating in the concentrated winners.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Bloomberg: stocks &#x27;priced for sunshine and rainbows&#x27; now face the Q2 earnings test; disappointment risks a sharp derating in concentrated winners.</div><div class="point">Reporting season kicks off with JPMorgan Chase and Netflix; nearly 28 S&amp;P 500 names report this week.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The test may be pre-passed: bank profit engines are already expected to &#x27;roar&#x27; on resilient Main Street spending, and TSMC&#x27;s monthly print has already beaten.</div><div class="point">Earnings may be drowned out entirely — futures are being set overnight by Iranian strikes and oil, not by estimates.</div></div></div></div>
+</details>
+<details class="thesis" id="th-7" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#8</span>
+   <span class="tname">The AI infrastructure supercycle is still compounding</span>
+   <span class="pill high">high</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.36 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The core bull engine: foundry, memory and hyperscaler capex data all accelerated into July. TSMC&#x27;s June revenue surged ~68% YoY (NT$442.68B) and Q2 sales rose ~36%, Meta committed $50B+ to a 5GW Louisiana &#x27;Hyperion&#x27; supercluster, SK Hynix&#x27;s CEO says the memory shortage runs into the 2030s, and executives describe AI demand as &#x27;almost unlimited&#x27;. Washington easing UAE export curbs adds an increment</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">TSMC June 2026 revenue NT$442.68B (~US$13.8B), +68% YoY / +6.2% MoM; H1 cumulative NT$2.40T, +35.6% YoY — AI demand named as primary driver.</div><div class="point">TSMC quarterly sales +36% YoY to ~NT$1.27T, in line with consensus — &#x27;fresh sign of AI spending momentum&#x27;.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">NUMERIC DISCREPANCY (do not blend): headlines carry both &#x27;+68%&#x27; and &#x27;+36%&#x27; for TSMC. These are different periods — 68% is June monthly YoY; 36% is Q2 quarterly YoY — but the two figures are being circulated interchangeab</div><div class="point">The tape disagrees with the fundamentals: chip stocks were selling off Monday even with TSMC&#x27;s print in hand.</div></div></div></div>
+</details>
+<details class="thesis" id="th-9" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#10</span>
+   <span class="tname">Concentration risk: the AI trio IS the market, and it is cracking</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.36 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The strongest bear thesis. A ~$4.4T AI-chip trio (TSMC, SK Hynix, Samsung) now makes up roughly 29% of the MSCI EM index, and when it wobbles, whole national indices break. KOSPI fell ~8% and tripped its seventh circuit breaker of 2026 (Samsung -8%, SK Hynix -12%), and SK Hynix posted a record Seoul decline days after a hyped $26.5B US debut. Concentration has turned index-level risk into single-t</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Funds fret that a ~$4T AI trio&#x27;s grip on emerging markets is fueling record volatility, with one such stock plunging 15% in a single session.</div><div class="point">Fidelity and BlackRock are openly questioning whether TSMC/SK Hynix/Samsung gains can last; the trio nearly doubled in six months and is now ~29% of the MSCI EM index.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The underlying earnings are real and accelerating, not narrative-only: TSMC +68% June revenue and a memory shortage forecast to run to 2030.</div><div class="point">Demand for the listing was enormous — SK Hynix raised $26.5B and was indicated up 17% on debut; capital is not fleeing the theme.</div></div></div></div>
+</details>
+<details class="thesis" id="th-10" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#11</span>
+   <span class="tname">Rotation, not exit: capital is fleeing AI into Apple and the least-loved</span>
+   <span class="pill high">high</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.36 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The flows explanation for why indices are only mixed while chips crater: money is not leaving equities, it is moving within them. Apple has added ~$600B of market cap as a haven from the AI storm, sell-side is pushing &#x27;biggest and least-loved&#x27; mega-caps and lagging sectors ahead of earnings, and a big Apple price-target hike opened the week.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Apple&#x27;s $600B rally is explicitly attributed to traders fleeing the AI selloff; &#x27;Apple isn&#x27;t in the storm that the rest of the AI trade is in&#x27; (Bronzo).</div><div class="point">Monday&#x27;s setup: semis selling off alongside a big Apple price-target hike — the rotation visible in a single watchlist.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The Apple haven has its own live bomb: Apple is suing OpenAI and is described as having a &#x27;real problem&#x27; with its AI competitive position.</div><div class="point">Rotation cannot save you from an exogenous shock: US-Iran strikes knocked futures lower across the board regardless of sector.</div></div></div></div>
+</details>
+<details class="thesis" id="th-11" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#12</span>
+   <span class="tname">Beneath the AI headline: labor, consumer and old-economy cracks</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.36 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The quiet bear case that has nothing to do with valuations. Amazon&#x27;s largest-ever layoffs have pushed workers into a saturated job market eight-plus months on, Disney&#x27;s live-action Moana flopped, Chinese EV makers are outspending US rivals overseas, and the DOJ has opened a grand jury probe into the UAW&#x27;s president — governance risk for the Detroit Three. The AI-led index masks a weakening real ec</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Amazon&#x27;s most expansive job cuts ever have pushed workers into a saturated labor market, with burnout and frustration persisting months later — a drag on consumer and tech sentiment.</div><div class="point">Concentrated market gains are what&#x27;s driving the economy — narrow gains prop up macro data while dividing haves from have-nots and sustaining sticky services inflation.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The banks&#x27; consensus explicitly rests on resilient Main Street spending — analysts see one of the strongest quarters ever on the consumer.</div><div class="point">Innovation is still creating equity value outside AI — e.g. Vivani&#x27;s implantable GLP-1 targeting the adherence problem in the Wegovy/Ozempic market.</div></div></div></div>
+</details>
+<details class="thesis" id="th-13" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#14</span>
+   <span class="tname">Iran / Strait of Hormuz: an oil-driven geopolitical risk-off</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.35 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The exogenous shock. Fresh US strikes on Iran and Iranian retaliation, plus Tehran announcing a Strait of Hormuz closure, sent crude higher and equities lower — most violently in Asia. This is the driver that explains simultaneous weakness across unrelated sectors and the mixed-to-lower US futures tape.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">S&amp;P 500 futures -0.6% to 7,577.50 and Dow futures -0.26% as the Strait of Hormuz crisis escalated ahead of Q2 earnings.</div><div class="point">Futures fell after Trump directed strikes &#x27;to hold Iranian forces accountable&#x27;; Wall Street opened mixed with oil jumping after multiple waves of Monday strikes (Nasdaq futures -0.8%).</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">NUMERIC DISCREPANCY (do not blend): Nikkei is reported at -2.2% (Modern Diplomacy) and -1.12% (Mainichi) for overlapping coverage; KOSPI is variously -7.6% and ~-8%. Sources disagree on session boundaries.</div><div class="point">The war is a revenue event, not just a risk event: Iran volatility is a named driver of an expected blowout quarter for big-bank trading desks.</div></div></div></div>
+</details>
+<details class="thesis" id="th-14" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#15</span>
+   <span class="tname">Oracle as the fourth AI cloud: the crowd&#x27;s favorite non-consensus long</span>
+   <span class="pill low">low</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.34 · sov 6%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A social-origin thesis (viral heat 1213) with a substantive, checkable claim: Oracle&#x27;s profits could triple over three years while the stock trades below 10x 2029 earnings, with OCI growing 93% and a ~$640B backlog anchored by Meta and OpenAI demand — positioning it as the fourth major AI cloud. It is the clearest articulation of the &#x27;own the AI landlord, not the chipmaker&#x27; rotation.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Bull case as stated: profits tripling in three years, stock under 10x 2029 earnings, OCI +93%, ~$640B backlog from Meta/OpenAI.</div><div class="point">The &#x27;AI landlord&#x27; model is being independently validated as a strategy — Galaxy Digital is pivoting from crypto to gigawatt-scale AI data-center capacity.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The entire thesis is contingent on Meta/OpenAI demand converting the backlog — and the AI cost shock is precisely a story about buyers &#x27;valuemaxxing&#x27; and frontier labs unable to fund compute.</div><div class="point">UNVERIFIED: the OCI growth, backlog and 2029 multiple figures appear only in a single social post in this pool with no corroborating news record — treat all numbers as unconfirmed.</div></div></div></div>
+</details>
+<details class="thesis" id="th-15" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#16</span>
+   <span class="tname">Apple v. OpenAI: the incumbent–AI-lab IP war goes legal</span>
+   <span class="pill high">high</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.34 · sov 6%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The single most-covered story in the pool (10+ outlets, viral heat 18k). Apple sued OpenAI and two former employees alleging a trade-secret scheme operating &#x27;at every level&#x27;, stemming from the 2024 iOS ChatGPT integration. It has spilled into a public Musk–Altman fight and reframes the Apple/OpenAI relationship from partnership to litigation — injecting legal-cost, distraction and integration-unce</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Apple filed suit alleging a trade-secret theft scheme &#x27;at every level&#x27;, tied to the 2024 iOS ChatGPT integration partnership.</div><div class="point">Corroborated across the full press spectrum, including personnel-movement specifics (two ex-employees, a former VP of product design).</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The market read it as bullish for AAPL, not bearish: Apple simultaneously rallied ~$600B as an AI haven and drew a big price-target hike.</div><div class="point">Contrarian read from Stratechery: the lawsuit is a symptom, not a fix — &#x27;Apple&#x27;s Real Problem&#x27; is its AI competitive position.</div></div></div></div>
+</details>
+<details class="thesis" id="th-16" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#17</span>
+   <span class="tname">Banks are the quarter&#x27;s quiet winner: volatility, IPOs and a lending rebound</span>
+   <span class="pill high">high</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.34 · sov 6%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A distinct, well-evidenced bull thesis independent of AI. Big banks report July 14 into a triple tailwind — SpaceX IPO advisory fees, Iran-war trading volatility, and a commercial lending rebound — with Goldman EPS consensus at $14.47 (+32% YoY) and BofA at $1.12 on $30.7B (~25% YoY growth). Citigroup is flagged as the biggest improver.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Big banks poised to report booming Q2 revenue propelled by the SpaceX IPO, Iran war volatility and a commercial lending rebound.</div><div class="point">Consensus is aggressive: Goldman Q2 EPS $14.47 vs $10.96 (+32% YoY) on $16.49B revenue (+13%); BofA $1.12 EPS on $30.7B (~25% YoY), with estimates recently raised 2.2%.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The bull case is conditional on one number: JPMorgan&#x27;s NII guidance, which was trimmed at Q1 — a soft guide would reset the whole sector.</div><div class="point">Citi &#x27;still trails its own targets&#x27; even on its best metric — improvement is off a low base.</div></div></div></div>
+</details>
+<details class="thesis" id="th-17" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#18</span>
+   <span class="tname">Korea: a violent unwind has left world-beating stocks at record-cheap multiples</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.33 · sov 6%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A deep-value contrarian thesis emerging from viral social analysis and corroborated by Bloomberg. KOSPI was +122% YTD at its peak and has since given back 27% in 25 days (still ~+60% YTD), yet trades at a 6.4x forward P/E — the lowest on record, below 2008 — because forward earnings are up ~170% led by Samsung and SK Hynix memory. Either the earnings are fake or the index is the cheapest it has ev</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">KOSPI -27% in 25 days from a +122% YTD peak, still ~+60% YTD; forward P/E 6.4x is the lowest on record, below 2008 levels, with forward earnings up 170% led by Samsung/SK Hynix memory.</div><div class="point">Bloomberg independently corroborates: Korea&#x27;s world-beating stocks, powered by a combined $4.4T Samsung + SK Hynix, now trade cheaper than ever on a relative basis.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Cheap can get cheaper: KOSPI fell another ~8% and tripped its seventh circuit breaker of 2026, Samsung -8%, SK Hynix -12%.</div><div class="point">A low P/E on peak-cycle memory earnings is the classic value trap — and Fidelity/BlackRock are already questioning whether those gains last.</div></div></div></div>
+</details>
+<details class="thesis" id="th-21" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#22</span>
+   <span class="tname">China&#x27;s tech offensive and the coming &#x27;silicon curtain&#x27;</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.32 · sov 6%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A geopolitical-fragmentation thesis. China is weighing curbs on foreign access to its sought-after open-source AI models even as those models advance its soft power and its own founders (Zhipu) argue frontier AI should stay open to all. Combined with a first reusable rocket landing and EV export aggression, the direction of travel is a bifurcated global tech market — with unpriced consequences for</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Reuters: China weighs a &#x27;silicon curtain&#x27; restricting foreign access to Chinese open-source AI models — fragmenting global model availability and pressuring multinational AI/semi demand.</div><div class="point">Those open models are a genuine strategic asset — analysis argues freely shared Chinese AI is advancing Beijing&#x27;s global soft power and shaping adoption patterns.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The US is loosening, not tightening, at the margin — easing chip export curbs on the UAE to open Gulf AI-chip sales.</div><div class="point">China restricting its own open models would blunt exactly the soft-power channel that makes them strategically valuable — the policy is self-contradictory and may not land.</div></div></div></div>
+</details>
+<details class="thesis" id="th-23" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#24</span>
+   <span class="tname">India is the destination for capital fleeing the AI-concentration trade</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.30 · sov 6%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">Foreign money is rotating geographically, not just sectorally. Global funds put over $1B back into Indian equities (including $272M on Friday alone) after a four-month selling streak, with FPIs buying ₹15,157 crore of stocks and ₹9,853 crore of debt in July — explicitly framed as India acting as a relative safe haven amid global turmoil.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Global funds returned with more than $1B in net buying of Indian stocks, including $272M on Friday alone, viewing India as a relative safe haven.</div><div class="point">Corroborated in local-currency terms: FPIs turned net buyers in July with ₹15,157 crore into equities and ₹9,853 crore into debt after four straight months of selling.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">India carries its own idiosyncratic regulatory risk: the food-safety regulator has opened a probe into Swiggy&#x27;s Instamart ahead of earnings.</div><div class="point">The &#x27;safe haven&#x27; framing is untested against an oil shock — India is a large crude importer and Hormuz is the transmission channel.</div></div></div></div>
+</details>
+<details class="thesis" id="th-27" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#28</span>
+   <span class="tname">The SpaceX IPO reshaped retail flows and the new-issue market</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.29 · sov 5%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A flows/market-structure thesis. Post its June 12 listing, SPCX was retail&#x27;s single largest net buy of the quarter (~$1.25B across ~2.2M trades, nearly double the #2 name) and entered the top-25 holdings across all generations. The IPO is simultaneously a bank revenue line and a demonstration that mega-listings (SpaceX, SK Hynix&#x27;s $26.5B) can be absorbed without breaking the tape.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Apex Fintech&#x27;s Q2 report: SPCX drew ~$1.25B in retail net buying across ~2.2M trades since its June 12 listing — nearly double the second-most-bought name — entering top-25 holdings across all generations.</div><div class="point">The IPO is a named driver of the expected big-bank revenue boom, i.e. it monetized straight into Q2 earnings.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Hyped mega-listings are mean-reverting: SK Hynix was indicated +17% on debut and then posted a record drop in Seoul the next session.</div><div class="point">Concentrated retail crowding into one new listing is itself a fragility, echoing the concentration critique of the broader market.</div></div></div></div>
+</details>
+<details class="thesis" id="th-29" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#30</span>
+   <span class="tname">Event-driven and special situations are back: M&amp;A, activists and policy trades</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.27 · sov 5%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A bottom-up bull thesis for capital that wants no part of the AI argument. Cross-border M&amp;A is live (Nippon Paint&#x27;s $8.6B bid for Akzo Nobel&#x27;s paint business), Elliott has built a stake in CCC Intelligent Solutions, corporate landlords once in Trump&#x27;s crosshairs are now positioned for growth, prediction markets may get a World Cup tax edge over sportsbooks, and Michael Burry lays out a binary GSE </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Nippon Paint offered $8.6B for Akzo Nobel&#x27;s paint business — a large cross-border strategic deal outside tech.</div><div class="point">Elliott disclosed a large activist stake in CCC Intelligent Solutions; shares rose 1.5% premarket.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Burry&#x27;s own framing is explicitly binary and adverse in one leg: if the SPS liquidation preference is affirmed, the Twins fall to low single digits.</div><div class="point">Policy risk cuts both ways — the DOJ has opened a grand jury probe into UAW president Shawn Fain, and India&#x27;s regulator is probing Swiggy Instamart.</div></div></div></div>
+</details>
+<details class="thesis" id="th-36" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#37</span>
+   <span class="tname">The defense-tech and space capital cycle is a second, non-AI growth engine</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.26 · sov 5%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">Geopolitics is not only a risk factor — it is funding a durable capex theme. Europe&#x27;s Helsing raised $1.8B at an $18B valuation with demand exceeding allocation, positioning against Anduril, while China landed a reusable rocket for the first time. Sovereign-security spending and launch competition are drawing capital independently of the AI trade.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Helsing closed $1.8B at an $18B post-money valuation, citing demand exceeding allocation — evidence of investor appetite for European defense AI.</div><div class="point">China landed a reusable rocket for the first time (Long March 10B recovered), intensifying competition with US launch providers and lowering the cost of space access.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">These are private-market marks, not listed-equity earnings; Helsing&#x27;s $18B valuation is a funding round, not a public-market datapoint.</div><div class="point">China&#x27;s reusable-launch success is a competitive threat to US launch economics — including the newly listed SpaceX.</div></div></div></div>
+</details></div><div class="sector" data-sec><h4>Fixed Income <span class="sub">5 theses</span></h4>
+<details class="thesis" id="th-38" data-fam="ai">
+ <summary>
+  <div class="top"><span class="rank">#39</span>
+   <span class="tname">AI debt indigestion: the hyperscaler issuance wave is breaking the long end of credit</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.26 · sov 21%</span>
+   <button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ AI capex &amp; debt ×12</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The five largest AI spenders have doubled their debt load to roughly $350B to finance data center capex, and holders are now actively shedding longer-dated AI-related paper. This is a supply/duration story, not a default story: investment-grade tech was the market&#x27;s safe-haven credit, and its transformation into a heavy, serial issuer is forcing a repricing of duration risk and steepening credit c</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Investors are actively selling longer-dated AI debt, with duration risk being shed by holders wary of a supply glut and curve steepening from record Big Tech issuance — this is the transmission mechanism, observed direct</div><div class="point">The five largest AI-spending tech firms have doubled their debt load to $350 billion, with Bloomberg explicitly naming implications for credit markets and equity risk premia. [VIRAL heat 16 — the single highest-engagemen</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Bloomberg tags the $350B doubling as *neutral*, not bearish — the framing is aggressive capex financing by the highest-quality balance sheets in the world, which is a capital-structure normalization, not a distress signa</div><div class="point">The selling is specifically in *longer-dated* paper and is attributed to supply/duration, not credit quality — no record alleges impaired coverage, downgrade risk, or funding stress at any hyperscaler.</div></div></div></div>
+</details>
+<details class="thesis" id="th-40" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#41</span>
+   <span class="tname">Oil-shock reflation: Hormuz supply fear repricing the front end</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.24 · sov 20%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A 4.7% crude jump to $79.55 on conflicting claims over Strait of Hormuz shipping status has pushed the US 2-year Treasury yield to its highest since 2025. The bond market is reading an energy supply disruption as an inflation impulse that keeps the Fed from easing, so the pain is concentrated in policy-sensitive front-end duration rather than in a growth-driven long-end selloff.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Two-year US Treasury yields rose to their highest level since 2025, explicitly attributed to the oil gain — crude +4.7% to $79.55 on Strait of Hormuz supply-disruption fears.</div><div class="point">The Hormuz story is not isolated to the rates desk — it is bleeding into Fed commentary coverage, with Warsh&#x27;s testimony framed against &#x27;conflicting claims on Strait of Hormuz shipping status,&#x27; i.e. the market is pricing</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The Hormuz shipping status is itself contested — records repeatedly describe &#x27;conflicting claims,&#x27; meaning the oil move may rest on an unverified premise and could reverse rather than represent a durable inflation shock.</div><div class="point">Competing driver: the July decision is framed as being set by Warsh&#x27;s testimony and US inflation data (PPI) plus global central bank moves — a domestic/policy calendar story that would move yields with or without crude.</div></div></div></div>
+</details>
+<details class="thesis" id="th-41" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#42</span>
+   <span class="tname">The Warsh regime change: forward guidance is being withdrawn as a market anchor</span>
+   <span class="pill high">high</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.24 · sov 20%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The bond market is repricing around a new Fed reaction function under Kevin Warsh. Wall Street is explicitly asking him to drop calibrated guidance and simply state his views, which removes the guidance anchor that has suppressed front-end volatility for years. Task force appointments are shoring up his credibility ahead of Senate testimony, making the regime shift more likely to stick — and a Fed</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Investors are directly pressing Warsh to &#x27;skip the guidance&#x27; and give plain-spoken policy views — an explicit demand to abandon the guidance framework markets have traded against.</div><div class="point">Warsh&#x27;s Senate testimony plus incoming US inflation data are named as the two inputs that will set the tone for the July Fed decision, alongside Korea, China and UK central bank moves — an unusually event-dependent, guid</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The credibility-building read cuts the other way for volatility: if the task force picks genuinely institutionalize Warsh and insulate him from political pressure, the outcome is a more predictable Fed, not a less predic</div><div class="point">This is a demand from investors, not a stated Fed policy change — no record shows Warsh committing to drop guidance. The thesis rests on what Wall Street wants, not on what the Fed has said it will do.</div></div></div></div>
+</details>
+<details class="thesis" id="th-42" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#43</span>
+   <span class="tname">First crack in leveraged credit: the CLO blowup and the fight over the wreckage</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.24 · sov 20%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A CLO fund has fallen 50% and the resulting internal power struggle has spilled into public view. The governance fight is the tell — disputes over control typically surface only when marks are contested and losses are large enough to be worth fighting over. This is the only idiosyncratic credit-stress datapoint in the pool, and it sits in structured leveraged credit, the part of the market that hi</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">A CLO fund&#x27;s 50% decline has fueled an internal power struggle now spilling into the open, explicitly raising concerns about credit market stress.</div><div class="point">Macro consistency: the 2-year at post-2025 highs raises the floating-rate coupon burden on exactly the leveraged-loan collateral that sits inside CLO structures, providing a mechanism linking today&#x27;s rates move to struct</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">This is a single fund with an internal governance dispute — the record describes a power struggle, not a wave of CLO downgrades, defaults, or forced sales. Idiosyncratic manager blowups routinely fail to generalize, and </div><div class="point">Cuts against systemic contagion: the Fed&#x27;s top bank supervisor is publicly arguing *against* strict global rules — hardly the posture of a regulator seeing genuine credit-system stress on the screens.</div></div></div></div>
+</details>
+<details class="thesis" id="th-43" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#44</span>
+   <span class="tname">Regulatory loosening: Bowman&#x27;s push against the FSB as a quiet bid for credit</span>
+   <span class="pill low">low</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.24 · sov 20%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The Fed&#x27;s top bank supervisor is publicly warning the Financial Stability Board off &#x27;strict rules&#x27; unsuited to diverse jurisdictions. Read as policy direction, this is a deregulatory signal — lighter capital and liquidity treatment expands bank balance-sheet capacity to warehouse and intermediate credit, which is spread-supportive and a partial offset to the CLO and AI-debt stress narratives. This</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">The Federal Reserve&#x27;s top bank supervisor is explicitly warning the FSB against enforcing &#x27;strict rules&#x27; unsuited to a diverse set of jurisdictions — a flexibility/deregulatory posture from the seat that sets US bank cap</div><div class="point">Directionally consistent with the broader Fed leadership shift, where new task force appointments are consolidating a reshaped Fed with fresh political backing.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The record is tagged neutral and is about international regulatory coordination process, not US capital requirements — the leap from &#x27;FSB should be flexible&#x27; to &#x27;credit spreads get a bid&#x27; is inference, not a claim any so</div><div class="point">Timing is awkward: a call for supervisory flexibility lands the same day a CLO fund&#x27;s 50% collapse is spilling into open warfare — the pool&#x27;s own evidence suggests this is the wrong moment to be loosening the leash on cr</div></div></div></div>
+</details></div><div class="sector" data-sec><h4>Commodities <span class="sub">10 theses</span></h4>
+<details class="thesis" id="th-3" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#4</span>
+   <span class="tname">Hormuz closure premium: chokepoint war reprices crude</span>
+   <span class="pill high">high</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.39 · sov 13%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The dominant driver is a hot US-Iran exchange of strikes around the Strait of Hormuz, with Tehran declaring the strait closed. Crude repriced a geopolitical risk premium that had previously faded, with benchmarks up ~3-5% intraday and Brent printing around $79. Reporting spans wires, majors and viral social, making this the anchor narrative for the entire commodity complex.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Iran declared the Strait of Hormuz closed as the US and Iran traded missile and drone strikes; crude surged as much as 5%.</div><div class="point">Concrete price prints: Brent +$3.10 (+4.08%) to $79.11 and WTI +$2.95 (+4.11%) to $74.36 on the renewed tit-for-tat strikes.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">DISCREPANCY — the size of the move is reported inconsistently across the pool: &#x27;&gt;3%&#x27;, &#x27;&gt;4%&#x27;, &#x27;~+5%&#x27; and &#x27;as much as 5%&#x27; all appear for the same session, so the headline number is unreliable; only Business Times gives an </div><div class="point">A ~$79 Brent print is a modest absolute level for a supposed closure of a chokepoint handling roughly a fifth of seaborne oil — the market is pricing headline risk, not a realized outage.</div></div></div></div>
+</details>
+<details class="thesis" id="th-4" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#5</span>
+   <span class="tname">Contrarian crash: the Iran war breaks OPEC and oil goes to $40</span>
+   <span class="pill low">low</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.39 · sov 13%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A high-engagement social thesis running directly opposite the risk premium: that the conflict ultimately fractures OPEC&#x27;s pricing power, unleashing a supply glut that sends crude toward $40 and gasoline to $2 — framed as a 60-year US strategic objective finally achieved. No news record in the pool supports the price path, but the engagement is real and it is the loudest bear voice.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Argues crude is in &#x27;free fall&#x27; toward $40 with $2 gasoline, and that breaking OPEC would be the war&#x27;s real legacy.</div><div class="point">Consistent with the fade-the-spike evidence that barrels are still moving through Hormuz despite the closure rhetoric.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">DISCREPANCY — the claim of &#x27;free fall&#x27; is flatly contradicted by every price record in the pool for the same window: Brent +4.08% to $79.11, WTI +4.11% to $74.36, and multiple wires reporting a 3-5% surge.</div><div class="point">US retail gasoline is in fact rising again after eight weeks of decline — the opposite of the $2-gas path.</div></div></div></div>
+</details>
+<details class="thesis" id="th-6" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#7</span>
+   <span class="tname">The closure is rhetorical, not physical — fade the spike</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.37 · sov 12%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The counter-thesis to the risk premium: Hormuz has not actually been shut. Ships are still transiting (covertly), US Central Command insists the strait is open, and the &#x27;closure&#x27; exists mainly in Iranian declarations and social amplification. If barrels keep moving, the premium is a headline trade that decays.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">A handful of vessels slipped through Hormuz in secret even as the US and Iran issued conflicting status declarations — supply was not fully choked off.</div><div class="point">The US flatly rejects the closure claim: Washington insists the strait remains open, and CENTCOM asserts transit continues despite Iran&#x27;s announcements.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">&#x27;A handful of ships in secret&#x27; is not normal throughput — covert transit is consistent with a severely degraded, insurance-impaired corridor rather than a functioning one.</div><div class="point">Iran is reported to be attacking commercial shipping directly in the strait, which would make &#x27;open&#x27; a legal status without commercial meaning.</div></div></div></div>
+</details>
+<details class="thesis" id="th-12" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#13</span>
+   <span class="tname">Maximalist closure: 21% of world supply cut off (social contagion)</span>
+   <span class="pill low">low</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.36 · sov 12%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A cluster of viral posts pushing a far more extreme version of events than any wire supports: total IRGC closure to all vessels, 21% of global oil supply severed, attacks on commercial ships, peace talks cancelled, parabolic crude and an imminent financial-system collapse. Flagged as its own thesis because these posts are driving retail positioning and the Monday-crash narrative — not because the </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Posts claim the IRGC announced a full closure of Hormuz to all shipping on July 12, cutting off 21% of global oil supply.</div><div class="point">A parallel viral thread claims Iran launched a massive attack on commercial ships in the strait, rejected all peace talks and cancelled the peace deal, with crude going parabolic.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">DISCREPANCY — &#x27;financial system is collapsing&#x27; and &#x27;parabolic&#x27; crude are unsupported: the actual print is a ~4% move to $79 Brent, and equities showed an ordinary risk-off dip led by tech, not a collapse.</div><div class="point">The total-closure claim is directly refuted by reporting that vessels are still transiting and by the US position that the strait is open. Source quality is also poor: one account is an IRGC-branded handle and the other </div></div></div></div>
+</details>
+<details class="thesis" id="th-20" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#21</span>
+   <span class="tname">Pump-price pass-through: the oil shock becomes an inflation shock</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.33 · sov 11%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The macro transmission thesis: the crude move is already showing up at the pump and in inflation expectations, which is why equity futures fell while oil rose. US gasoline prices have turned higher after eight weeks of declines, India&#x27;s petrol is at record highs, and Bloomberg explicitly ties the strikes to revived inflation fears. Bullish commodities, bearish the consumer and rate-sensitive risk </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Fresh strikes lifted oil and pushed US equity futures lower, explicitly reviving inflation fears — the cross-asset signature of a supply-side price shock.</div><div class="point">US gasoline prices are rising again after eight straight weeks of decline, with the White House pushing an opaque &#x27;Freedom Fuel&#x27; cheap-gas venture into the gap — a sign the political cost of the pump is already binding.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The equity weakness is attributed to a tech-led selloff, not purely to energy — the oil-to-inflation-to-stocks chain may be over-fitted to a coincident tape.</div><div class="point">The India post is a political grievance about ethanol blending and government margins, not evidence of crude-driven pass-through; the r/energy item is partly about a venture-transparency story.</div></div></div></div>
+</details>
+<details class="thesis" id="th-28" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#29</span>
+   <span class="tname">US militarization of the chokepoint — Trump &#x27;takes over&#x27; Hormuz</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.29 · sov 10%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A distinct escalation channel: rather than de-escalating, Washington is asserting direct control of the strait and simultaneously demanding allies pay for the naval protection. This converts Hormuz from a shipping lane into a contested US asset — bullish crude in the near term via escalation risk, but also a signal that the US intends to guarantee flow.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Trump declared the US is &#x27;taking over&#x27; the Strait of Hormuz and that &#x27;Iran has nothing&#x27; — Brent extended gains above $79 on the headline.</div><div class="point">In parallel Trump says the US should be reimbursed by allies for guarding Hormuz — framing chokepoint protection as a paid service and introducing burden-sharing friction into the security premium.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">A credible US commitment to hold the strait open is ultimately bearish the risk premium — it is the same posture behind CENTCOM&#x27;s insistence that Hormuz remains open and that ships are still moving.</div><div class="point">The &#x27;taking over&#x27; line is so far a quote circulating on social rather than a documented military-control operation; the reimbursement story is the only sourced policy detail.</div></div></div></div>
+</details>
+<details class="thesis" id="th-32" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#33</span>
+   <span class="tname">Thin buffers: exhausted SPR meets returning Chinese stockpiling</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.27 · sov 9%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The shock is landing on an inventory system with little slack. The US strategic reserve has limited planned draw left before commercial inventories must bleed, while China is stepping back in as a stockpiling buyer. Both sides of the buffer equation amplify any real Hormuz outage — this is the thesis that turns a headline spike into a sustained bid.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">SPR capacity is close to spent: roughly 60-70M barrels of planned draw remain before commercial inventories have to absorb the shock.</div><div class="point">Demand-side restocking is returning: China&#x27;s crude imports look set to rebound as refiners and state buyers resume strategic stockpiling.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The SPR figure comes from a low-engagement social reply, not an official inventory report — treat the 60-70M barrel number as unverified.</div><div class="point">China&#x27;s restocking is framed as opportunistic buying &#x27;amid shifting global prices&#x27; — a price-sensitive bid that fades if crude stays elevated, rather than a structural demand floor.</div></div></div></div>
+</details>
+<details class="thesis" id="th-44" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#45</span>
+   <span class="tname">Under the war: US solar overtakes coal for the first time</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.24 · sov 8%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The one structural commodity story in the pool independent of the Middle East: US solar generation has surpassed coal output for the first time ever. It doesn&#x27;t explain today&#x27;s crude tape, but it is a high-engagement signal on the direction of thermal-fuel demand and is bearish coal even as hydrocarbons rally on geopolitics.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">US solar generation exceeded coal output for the first time on record, a structural shift that pressures coal and supports utility-scale renewables.</div><div class="point">The energy-security scramble triggered by Hormuz strengthens the strategic case for domestic generation that needs no chokepoint.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">No wire record in this pool corroborates the milestone — it is a single Reddit post, and solar generation displaces coal in power, not crude in transport, so it has no bearing on the Hormuz-driven oil move.</div></div></div></div>
+</details>
+<details class="thesis" id="th-47" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#48</span>
+   <span class="tname">Chokepoint bypass: energy-security infrastructure gets repriced</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.23 · sov 7%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The structural, longer-horizon read: if Hormuz can be closed on a Tehran press release, the option value of routes that avoid it — and of import optionality generally — rises sharply. Israel is pitching a Gulf-to-Europe pipeline through its territory; New Zealand is racing to lock in LNG import capacity. This is the capex/re-routing thesis that outlives the current spike.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Israel&#x27;s energy minister has proposed a ~700km pipeline linking the Persian Gulf to Europe via Israel, explicitly so Gulf states can bypass both Hormuz and the Houthi-controlled Red Sea.</div><div class="point">New Zealand is moving to sign its first LNG import terminal contract before the November election, explicitly citing energy security and supply diversification.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The pipeline is a ministerial proposal circulated on social, not a funded project — a multi-year build with obvious political obstacles, irrelevant to the current spot move.</div><div class="point">NZ&#x27;s plan is premised on cheap global LNG, and BHP&#x27;s asset sale is a copper-adjacent balance-sheet move — neither is a response to Hormuz, so the &#x27;bypass repricing&#x27; link is inference, not reporting.</div></div></div></div>
+</details>
+<details class="thesis" id="th-50" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#51</span>
+   <span class="tname">Second supply front: Ukrainian drones gut Russian refining</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.20 · sov 7%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A separate, non-Hormuz energy shock running in parallel: Ukrainian drone strikes are reported to have knocked out a large share of Russian refining capacity, producing domestic fuel shortages, soaring gasoline prices and falling oil income. This tightens refined products and removes a swing exporter at exactly the moment Gulf transit is contested — compounding the crude bid.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Claims ~45% of Russia&#x27;s oil refining capacity has been knocked out by Ukrainian drones, with gasoline prices soaring even in oil-producing regions and black markets emerging.</div><div class="point">A companion post describes the transmission into Russia&#x27;s economy: fuel shortages, banking panic, falling oil income, burning refineries and destroyed vessels.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">DISCREPANCY / SOURCING — the 45% figure comes solely from a partisan Ukrainian advocacy account and is uncorroborated by any wire record in this pool; treat as directionally suggestive, not a number to trade.</div><div class="point">Damaged refining is bearish crude at the margin — a refiner that cannot run must sell or shut in its own crude, which is why the same posts stress falling Russian oil income rather than a global crude squeeze.</div></div></div></div>
+</details></div><div class="sector" data-sec><h4>Crypto <span class="sub">8 theses</span></h4>
+<details class="thesis" id="th-25" data-fam="hormuz">
+ <summary>
+  <div class="top"><span class="rank">#26</span>
+   <span class="tname">US–Iran escalation drives a geopolitical risk-off repricing in crypto</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.30 · sov 16%</span>
+   <button class="famchip" onclick="famFilter('hormuz');event.stopPropagation()">⚡ US-Iran · Hormuz ×10</button><span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The dominant, best-sourced explanation: a widening US–Iran military conflict (Hormuz closure, US strikes, IRGC missiles at a US-hosted base in Jordan, Trump declaring the ceasefire over) pushed Bitcoin from the mid-$60Ks into the low-$60Ks and triggered leveraged long liquidations across BTC, ETH and XRP. Crypto traded as a high-beta risk asset, not a haven. Note: the records disagree materially o</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">US strikes on Iran following a renewed Strait of Hormuz closure sent Bitcoin lower as a geopolitical premium repriced across digital assets.</div><div class="point">An IRGC ballistic-missile salvo (10 missiles) at the US-hosted Al-Azraq/Muwaffaq Salti air base in Jordan — most intercepted, three landing domestically — is tied directly to crypto liquidations and volatility bracing.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">NUMERIC DISCREPANCY — price level: sources place BTC at &#x27;near $64,000&#x27; (July 12), &#x27;near $63K&#x27;, &#x27;below $63,000&#x27;, &#x27;below $62,000&#x27;, and &#x27;$60,000–$62,000&#x27; for what appears to be the same episode. Do not blend; the drawdown d</div><div class="point">NUMERIC DISCREPANCY — liquidation size: one source reports &#x27;over $1B&#x27; in crypto liquidations, another reports &#x27;~$450M&#x27; in leveraged longs wiped market-wide. Flagging rather than averaging.</div></div></div></div>
+</details>
+<details class="thesis" id="th-37" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#38</span>
+   <span class="tname">State legitimation: Bitcoin is being reclassified as US national-security infrastructure</span>
+   <span class="pill low">low</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.26 · sov 14%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A cluster of high-engagement political posts argues the deepest bid under crypto is now sovereign, not cyclical: the Vice President calling crypto mainstream and &#x27;here to stay&#x27;, a cabinet-level official framing Bitcoin as a national-security matter with active US initiatives to gain strategic advantage, and El Salvador&#x27;s uninterrupted daily accumulation. The claim is that state-level adoption stru</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">The US Vice President is quoted declaring that crypto, digital assets and especially Bitcoin are part of the mainstream economy and are here to stay — top-level political cover for regulation and institutional adoption.</div><div class="point">The US Secretary of War is reported to have openly revealed initiatives to gain strategic advantage in Bitcoin and agreed it is now a matter of national security — implying state accumulation or policy support.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The same US administration whose officials are quoted as pro-Bitcoin is the one prosecuting the Iran campaign that is actively driving crypto lower — political endorsement is not currently outweighing the risk-off flow.</div><div class="point">The highest-profile private booster is stepping back, not leaning in: Elon Musk says he will not promote crypto except jokingly and that any account &#x27;pumping crypto&#x27; as him is not him — a withdrawal of celebrity endorsem</div></div></div></div>
+</details>
+<details class="thesis" id="th-39" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#40</span>
+   <span class="tname">The cycle-timing fight: is this a pre-breakout shakeout or a shallow-cycle top?</span>
+   <span class="pill low">low</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.25 · sov 13%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A purely reflexive, sentiment-driven thesis with no hard catalyst: influencers argue the current weakness is a market-maker shakeout ahead of an earlier-than-consensus melt-up, contradicting a widely shared chart that puts the next bull cycle in 2027. The bull case leans on the prior cycle having been unusually shallow (so investors will sell too early), with targets ranging from $500,000 to Saylo</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Counter-thesis to the popular chart: the crowd expects a 2027 cycle, so market makers will front-run it — with a call for BTC to begin surging in September/October.</div><div class="point">Because the previous cycle was so shallow and never extended to the upside, investors will anchor on it and sell too early; a $500,000+ BTC target is argued to still be live.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">TARGET DISCREPANCY: the bull cluster spans $500,000 (CryptoMichNL), an unspecified near-term Sept/Oct surge (Ryker_Crypto), and $16,000,000 (Saylor) — three incompatible price frames presented as one narrative. Do not tr</div><div class="point">The Ryker_Crypto post&#x27;s stated timing window (September/October 2025) is already in the past relative to the current tape, which undercuts it as a forward call.</div></div></div></div>
+</details>
+<details class="thesis" id="th-46" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#47</span>
+   <span class="tname">Leverage and venue buildout: the plumbing for faster speculation keeps expanding</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.23 · sov 13%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A market-structure explanation for why crypto moves are getting more violent rather than why they are down: regulated and offshore venues keep adding leverage products. Kalshi launched a &#x27;Pro&#x27; tier for high-volume traders with multi-market simultaneous trading and perpetual futures, expanding perp access inside a regulated US prediction-market venue. More perp capacity plus a crowded long book is </div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Kalshi launched a &#x27;Pro&#x27; product targeting high-volume traders with multi-market simultaneous trading and perpetual futures, expanding the regulated venue&#x27;s leverage suite.</div><div class="point">The liquidation prints during the Iran escalation ($450M in leveraged longs per one source, $1B+ per another) show how much of the current tape is leverage-driven rather than spot-driven.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The Kalshi record contains no crypto price linkage at all — it is a product launch at a prediction-market venue, and treating it as a driver of BTC&#x27;s move is inference, not a claim any source makes.</div></div></div></div>
+</details>
+<details class="thesis" id="th-48" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#49</span>
+   <span class="tname">The MicroStrategy treasury flywheel is stalling — the marginal corporate bid is gone</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.22 · sov 12%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The loudest social/retail explanation for crypto weakness beyond the war: MSTR did not buy a single Bitcoin this week, instead raising capital through an at-the-market equity offering, with critics alleging Saylor is even selling BTC to fund USD raises. If the most reliable price-insensitive corporate buyer has paused — or reversed — the reflexive bid that underwrote prior accumulation is impaired</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">MSTR bought zero Bitcoin this week and appears to have funded operations via an ATM equity offering — a break from its prior relentless accumulation pattern.</div><div class="point">Critics allege Saylor is selling BTC to achieve the USD raises he is publicly celebrating, directly contradicting the &#x27;Bitcoin treasury, never sell&#x27; narrative and pressuring MSTR/STRC/MSTY sentiment.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Saylor&#x27;s public posture is unchanged and maximally bullish — he reiterated a $16M long-term BTC target and said he would happily buy at $200K, $500K, $1M, $2M, $4M, $8M and $16M, which is hard to square with a thesis tha</div><div class="point">The corporate-treasury trade is being actively defended elsewhere: Metaplanet is pitched as &#x27;the most undervalued stock in the world&#x27;, an amplified JPY carry trade short a terminally indebted currency and long Bitcoin sc</div></div></div></div>
+</details>
+<details class="thesis" id="th-49" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#50</span>
+   <span class="tname">No fresh money — internal rotation and yield-farming churn, not new demand</span>
+   <span class="pill low">low</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.21 · sov 11%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A low-conviction microstructure read: the visible onchain activity is capital rotating between existing narratives rather than entering the asset class. Solana memes show near-perfect zero-sum rotation ($CASHCAT +47% while $ANSEM -28% as liquidity shifted), new tokens keep launching into the same pool of capital, and DeFi yield distributions are running at modest single-digit scale (~$2,802 paid t</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Explicit zero-sum rotation inside the Solana meme sector: $CASHCAT +47% while $ANSEM -28% as liquidity shifted rapidly between narratives.</div><div class="point">New tokens continue to launch into the same capital base ($SLX going live on Solana), diluting attention rather than adding demand.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">If institutional pipes land as advertised (SBI + SMFG bringing Japanese RWA and stablecoin flow onto Solana), the &#x27;no fresh money&#x27; read is a snapshot of the wrong cohort.</div><div class="point">The far larger flow event in the window was forced deleveraging on war headlines, not passive rotation — which points to shock, not drift, as the driver.</div></div></div></div>
+</details>
+<details class="thesis" id="th-51" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#52</span>
+   <span class="tname">Regulatory surveillance overhang: DAC8 turns crypto ownership into a state database</span>
+   <span class="pill med">med</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.20 · sov 11%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A bearish structural counterweight to the adoption narrative, concentrated in European commentary: the EU&#x27;s DAC8 regime (effective 2026) would create a centralized record of who owns how much Bitcoin and when they bought and sold. The argument is not about tax per se but about custody of the data — invoking prior leaks (Bulgarian tax authority, Ledger) to claim such a database cannot be secured, c</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">DAC8 is described as creating, from 2026, a central EU database of Bitcoin ownership and transaction history, with prior Bulgarian tax and Ledger data leaks cited as evidence that state-collected crypto data cannot be ke</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The competing regulatory reading is that clarity is an institutional unlock, not a threat — Japan&#x27;s regulatory clarity is explicitly named as the ingredient that lets G-SIB capital come onchain.</div><div class="point">US political messaging in the same window runs the other way, with the Vice President framing crypto as mainstream and here to stay rather than as a target for surveillance.</div></div></div></div>
+</details>
+<details class="thesis" id="th-52" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#53</span>
+   <span class="tname">TradFi is wiring itself into public chains — the Japan/Solana institutional pipeline</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.18 · sov 10%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">A structural, non-price narrative: SBI Holdings and SMFG — a global systemically important bank — are reported to be building a Japan-led onchain financial market on Solana, bringing RWA tokenization and stablecoin infrastructure. The framing is that Japan supplies deep capital, institutional participation and regulatory clarity while Solana supplies throughput, cost and liquidity, creating an iss</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">SBI Holdings is building a Japan-led onchain financial market on Solana with SMFG, a G-SIB, bringing RWA and stablecoin rails to Japanese capital markets.</div><div class="point">The explicit strategic logic: Japan contributes capital, regulation and institutions; Solana contributes throughput, cost and liquidity — enabling global distribution of tokenized financial assets.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Both core claims come from Solana&#x27;s own official promotional account — self-interested framing with no independent news confirmation in this record set.</div><div class="point">The activity actually visible on Solana in the same window is meme-coin churn ($CASHCAT +47%, $ANSEM -28%) and token launches like $SLX — retail rotation, not institutional RWA flow.</div></div></div></div>
+</details></div><div class="sector" data-sec><h4>FX <span class="sub">3 theses</span></h4>
+<details class="thesis" id="th-33" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#34</span>
+   <span class="tname">Rate-differential dollar dominance</span>
+   <span class="pill med">med</span>
+   <span class="senti bull">bull</span>
+   <span class="mat">mat 0.27 · sov 35%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The wide policy-rate gap between the Fed (3.50–3.75%) and the ECB (2.25% deposit facility) keeps carry and relative-return flows tilted toward the dollar, making USD strength the default medium-term setup across major crosses even as individual data prints inject volatility.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">ECB deposit facility sits at 2.25% versus a Fed at 3.50–3.75%, a differential framed as tilting EUR/USD&#x27;s medium-term support toward the dollar.</div><div class="point">The prevailing macro backdrop is described as one that makes US assets more attractive globally — a &#x27;good for dollar&#x27; regime traders are now positioning around.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">A weak June US payrolls print (+57k) is cited as pressuring the dollar, and the same analysis concedes EUR/USD is &#x27;highly data-dependent and volatile&#x27; rather than cleanly trending — the differential is not a one-way trad</div></div></div></div>
+</details>
+<details class="thesis" id="th-34" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#35</span>
+   <span class="tname">The &#x27;good for dollar, bad for bonds&#x27; regime forces new hedges</span>
+   <span class="pill med">med</span>
+   <span class="senti mix">mix</span>
+   <span class="mat">mat 0.27 · sov 35%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">Rather than a clean risk-on or risk-off tape, the driver is an awkward two-sided regime: the same inflation-tinged macro that lifts the dollar is punishing inflation-sensitive US bond holders, so the FX move is inseparable from a cross-asset hedging scramble.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">Investors are described as caught between a stronger dollar making US assets more attractive and inflation-sensitive bonds leaving them exposed to losses, prompting new hedging strategies.</div><div class="point">The Japan leg shows the same pattern in miniature — currency weakness and bond-futures declines arriving together on one headline, rather than FX and rates decoupling.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">Sticky inflation (4.2% May CPI cited on the euro side) alongside a soft +57k June NFP muddies the &#x27;inflation-driven dollar&#x27; story — the growth signal and the inflation signal are pointing different ways.</div></div></div></div>
+</details>
+<details class="thesis" id="th-45" data-fam="">
+ <summary>
+  <div class="top"><span class="rank">#46</span>
+   <span class="tname">Yen weakness from Japanese policy inaction (GPIF)</span>
+   <span class="pill high">high</span>
+   <span class="senti bear">bear</span>
+   <span class="mat">mat 0.24 · sov 31%</span>
+   <span class="caret">▾</span></div>
+  
+ </summary>
+ <div class="bodyb"><div class="summary">The yen&#x27;s latest leg lower is idiosyncratic and headline-driven: a report that Japan has no plans to alter GPIF&#x27;s asset allocation removed a hoped-for repatriation/support channel, sending JPY toward 162 per dollar and dragging JGB futures with it.</div>
+  <div class="ev"><div class="col for"><h4>For</h4><div class="point">The yen fell as much as 0.4% to 162.36 per dollar on the report that Japan will not change GPIF&#x27;s asset allocation.</div><div class="point">Japanese government bond futures extended declines on the same report, suggesting the move is a domestic policy repricing rather than a pure dollar move.</div></div>
+   <div class="col against"><h4>Against</h4><div class="point">The same report notes Japan &#x27;could instead use other measures,&#x27; leaving open non-GPIF support channels that would cap yen downside.</div><div class="point">Part of the move may simply be the broad rate-differential dollar bid rather than anything Japan-specific, given the same backdrop is being described as globally supportive of USD.</div></div></div></div>
+</details></div>
+</div><script>
+let activeFam = null;
+function famFilter(fid){
+  if(activeFam === fid){ return famClear(); }
+  activeFam = fid;
+  document.body.classList.add('filtered');
+  let n = 0;
+  document.querySelectorAll('details.thesis').forEach(el => {
+    const hit = el.dataset.fam === fid;
+    el.classList.toggle('famshow', hit);
+    if(hit){ el.open = true; n++; }
+  });
+  document.querySelectorAll('[data-sec]').forEach(s => {
+    s.style.display = s.querySelector('details.famshow') ? '' : 'none';
+  });
+  document.querySelectorAll('.famchip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#nav-' + fid).forEach(c => c.classList.add('active'));
+  const bar = document.getElementById('filterbar');
+  bar.style.display = 'block';
+  document.getElementById('filtertext').textContent =
+    '⚡ 事件族过滤中 — 只显示该族 ' + n + ' 条 thesis（再点一次族 chip 或「显示全部」还原）';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function famClear(){
+  activeFam = null;
+  document.body.classList.remove('filtered');
+  document.querySelectorAll('[data-sec]').forEach(s => s.style.display = '');
+  document.querySelectorAll('.famchip').forEach(c => c.classList.remove('active'));
+  document.getElementById('filterbar').style.display = 'none';
+}
+</script></body></html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>marketView — market intelligence, synthesized nightly</title>
+<style>
+:root{--bg:#0f1320;--panel:#171c2e;--panel2:#1d2438;--line:#2a3350;--ink:#e8ecf5;
+--mut:#97a0bd;--dim:#6b748f;--up:#2ec27e;--accent:#3d7bff;--macro:#b07ce8;
+--hair:rgba(255,255,255,.07);
+--lift:0 10px 26px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+background-image:radial-gradient(1100px 520px at 18% -10%,#1d2750 0%,rgba(15,19,32,0) 60%);
+background-repeat:no-repeat}
+a{color:var(--accent);text-decoration:none}
+main{max-width:860px;margin:0 auto;padding:48px 20px 80px}
+h1{font-size:34px;margin:0 0 8px}
+.sub{color:var(--mut);font-size:17px;margin:0 0 26px}
+.asof{display:inline-block;font-size:12px;color:var(--mut);border:1px solid var(--line);
+border-radius:99px;padding:3px 12px;margin-bottom:30px}
+.cta{display:inline-block;background:linear-gradient(135deg,#4c7dff,#6a5cff);color:#fff;
+font-weight:700;font-size:17px;padding:13px 26px;border-radius:12px;
+box-shadow:0 4px 14px rgba(76,125,255,.35);margin-right:12px}
+.cta2{display:inline-block;background:var(--panel2);color:var(--ink);font-weight:600;
+font-size:15px;padding:12px 20px;border-radius:12px;border:1px solid var(--line)}
+section{margin-top:46px}
+h2{font-size:20px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.pipe{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+box-shadow:var(--lift);padding:16px 18px;font:13px/1.9 ui-monospace,Menlo,Consolas,monospace;
+color:var(--mut);overflow-x:auto;white-space:pre}
+.pipe b{color:var(--ink)}
+ul.feats{padding-left:20px;color:var(--mut)}
+ul.feats b{color:var(--ink)}
+#archive li{margin:5px 0;color:var(--mut)}
+footer{margin-top:60px;font-size:12px;color:var(--dim);border-top:1px solid var(--line);
+padding-top:16px}
+</style>
+</head>
+<body>
+<main>
+<h1>marketView</h1>
+<p class="sub">Every morning, an LLM pipeline reads the market firehose —
+newswires, research newsletters, viral social — and synthesizes it into
+ranked, evidence-linked investment theses across six asset classes.</p>
+<span class="asof" id="asof">data as of —</span><br>
+<a class="cta" href="latest/">Open today's market view →</a>
+<a class="cta2" href="demo/event-family.html">Event-family interaction demo</a>
+
+<section>
+<h2>How it's built</h2>
+<div class="pipe"><b>firehose</b>  news mail + research newsletters + web search + viral social
+   ↓
+<b>EXTRACT</b>   per-record structuring                 (budget LLM tier)
+   ↓
+<b>CLUSTER + SYNTHESIZE</b>  per-sector fan-out, market-wide ROLLUP  (frontier LLM)
+   ↓
+<b>VERIFY → RANK</b>  every claim needs a source; materiality = weighted signals
+   ↓
+<b>RENDER</b>    one self-contained HTML file — the page you're about to open</div>
+<ul class="feats">
+<li><b>Event families (事件族)</b>: theses driven by one underlying event are
+grouped, never merged — opposite-direction logics stay tradable.</li>
+<li><b>Consensus ↔ contrarian</b>: each thesis carries for/against evidence
+bars, so the minority view is visible instead of averaged away.</li>
+<li><b>Nightly autonomy</b>: a scheduled headless agent refreshes sources,
+rebuilds, passes a privacy gate, and publishes — no human in the loop.</li>
+</ul>
+</section>
+
+<section>
+<h2>Archive</h2>
+<ul id="archive"><li>loading…</li></ul>
+</section>
+
+<footer>Personal research project. Not investment advice. Sources are linked
+per evidence point inside each view.</footer>
+</main>
+<script>
+fetch('manifest.json').then(r=>r.json()).then(m=>{
+  if(m.length) document.getElementById('asof').textContent='data as of '+m[0].asof;
+  document.getElementById('archive').innerHTML=m.map(e=>
+    `<li><a href="views/${e.date}.html">${e.date}</a> — ${e.theses} theses · ${e.families} event families</li>`
+  ).join('');
+}).catch(()=>{document.getElementById('archive').textContent='no builds yet';});
+</script>
+</body>
+</html>
