@@ -81,7 +81,7 @@ per evidence point inside each view.</footer>
 fetch('manifest.json').then(r=>r.json()).then(m=>{
   if(m.length) document.getElementById('asof').textContent='data as of '+m[0].asof;
   document.getElementById('archive').innerHTML=m.map(e=>
-    `<li><a href="views/${e.date}.html">${e.date}</a> — ${e.theses} theses · ${e.families} event families</li>`
+    `<li><a href="views/${e.date}.html">${e.date}</a>${e.zh?` · <a href="views/${e.date}.zh.html">中文</a>`:''} — ${e.theses} theses · ${e.families} event families</li>`
   ).join('');
 }).catch(()=>{document.getElementById('archive').textContent='no builds yet';});
 </script>
