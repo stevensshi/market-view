@@ -136,11 +136,9 @@ body:not([data-view="home"]) .backhome{display:inline-block}
  font-family:inherit;background:rgba(255,178,125,.14);color:#ffb27d;white-space:nowrap}
 .famchip:hover{background:rgba(255,178,125,.26)}
 .famchip.active{background:linear-gradient(135deg,#ff9d5c,#ffb27d);color:#251507;box-shadow:0 4px 14px rgba(255,178,125,.35)}
-.memrow{display:flex;gap:5px;flex-wrap:wrap;padding:7px 0 2px}
 .memchip{font-size:10.5px;padding:2px 9px;border-radius:99px;background:rgba(61,123,255,.13);color:#bcd2ff}
 .memchip:hover{background:rgba(61,123,255,.25)}
 .memchip .au{color:var(--up)}.memchip .ad{color:var(--down)}
-details.thesis.hubcard{background:linear-gradient(150deg,rgba(255,178,125,.08),var(--panel2) 60%)}
 .filterbar{display:none;position:sticky;top:46px;z-index:55;margin-bottom:10px;padding:8px 13px;border-radius:12px;
  background:rgba(255,178,125,.10);backdrop-filter:blur(8px);color:#ffd9b8;font-size:12.5px;font-weight:600;
  box-shadow:0 6px 18px rgba(0,0,0,.28)}
@@ -172,24 +170,22 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
 
  <div class="work">
   <div>
-   <div class="panel"><h3 class="home-only">Market-wide theses by sector <span class="sub">— grouped by asset class · ranked by materiality · Home shows each sector's top 5 by materiality · open a tab for the full class</span></h3><div class="sector" id="sec-macro-politics" data-ac="macro-politics"><h4>🏛 Macro/Politics <span class="sub">— top 5 of 13 on Home · open the Macro/Politics tab for all 13</span></h4><div class="seclist"><details class="thesis hubcard" id="th-midterm-institutional-risk-premium-emergency-powers-election-denial-record-war-chest" data-fam="household-stress-data"><summary>
+   <div class="panel"><h3 class="home-only">Market-wide theses by sector <span class="sub">— grouped by asset class · ranked by materiality · Home shows each sector's top 5 by materiality · open a tab for the full class</span></h3><div class="sector" id="sec-macro-politics" data-ac="macro-politics"><h4>🏛 Macro/Politics <span class="sub">— top 5 of 13 on Home · open the Macro/Politics tab for all 13</span></h4><div class="seclist"><details class="thesis" id="th-midterm-institutional-risk-premium-emergency-powers-election-denial-record-war-chest" data-fam="household-stress-data"><summary>
  <div class="top"><span class="rank">#1</span><span class="tname">Midterm institutional risk premium: emergency powers, election denial, record war chest</span>
   <span class="pill med">med</span><span class="lens">🏛 macro</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('household-stress-data');event.stopPropagation()">⚡ Household stress data ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US large-cap <span class="ad">↓</span> · US Treasuries <span class="au">↑</span> · USD <span class="ad">↓</span> · gold <span class="au">↑</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-household-balance-sheets-are-cracking-beneath-a-resilient-headline-economy" onclick="event.stopPropagation()">Macro/Pol · Household balance sheets are cracking … <b class="ad">↓</b></a><a class="memchip" href="#th-us-consumer-bifurcation-trading-down-at-the-counter-trading-up-in-beauty" onclick="event.stopPropagation()">Equities · US consumer bifurcation — trading down… <b class="ad">↓</b></a><a class="memchip" href="#th-anti-oligarchy-populism-turns-into-a-live-wealth-tax-fight" onclick="event.stopPropagation()">Macro/Pol · Anti-oligarchy populism turns into a l… <b class="ad">↓</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.45</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: former White House attorney (PBS), Trump, CNBC All-America poll</div></summary>
  <div class="bodyb"><div class="summary">A governance-risk cluster distinct from the policy trades. A former White House attorney predicts Trump could declare a national emergency around the midterms; election-denial activists were briefed at the White House before a primetime speech; the release of alleged voter-fraud documents crashed WhiteHouse.gov. Trump and GOP allies have amassed a record $1.1 billion war chest, while CNBC polling shows democratic socialists outpolling MAGA candidates — a wide-variance political outcome distribution that argues for a higher equity risk premium into November.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">A former White House attorney says Trump is setting the stage to declare a national emergency around the midterms — an explicit governance-risk signal. <span class="vf">✓</span><div><a class="cite" href="https://www.pbs.org/newshour/show/trump-setting-stage-to-declare-emergency-around-midterms-former-white-house-attorney-says" target="_blank" rel="noopener">🔗 PBS NewsHour <span class="cred">🎙 PBS</span></a></div></div><div class="point">Election-denial activists were briefed at the White House ahead of a primetime speech, raising concerns about institutional pressure before midterm-related announcements. <span class="vf">✓</span><div><a class="cite" href="https://www.ms.now/news/election-denial-activists-briefed-at-white-house-ahead-of-trumps-prime-time-speech" target="_blank" rel="noopener">🔗 ms.now <span class="cred">🎙 ms.now</span></a></div></div><div class="point">WhiteHouse.gov crashed under demand after Trump released alleged voter-fraud documents, a marker of the intensity of the information cycle. <span class="vf">✓</span><div><a class="cite" href="https://www.the-express.com/news/politics/212019/trump-primetime-speech" target="_blank" rel="noopener">🔗 The Express</a></div></div><div class="point">CNBC&#x27;s All-America poll shows democratic socialist candidates winning Democratic primaries and outpolling MAGA-aligned rivals — a leftward shift that widens the policy-outcome distribution. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/democratic-socialists-top-maga-candidates-all-america-poll.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">Trump and GOP allies have built a record $1.1 billion midterm war chest that materially improves GOP odds in competitive races — read by some as continuity, not rupture, for Trump-era policy. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/trump-gop-amass-1-1-billion-to-battle-democrats-in-midterms" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">The emergency-declaration claim is a single former official&#x27;s prediction, not a reported plan — low evidentiary weight for a market-moving thesis. <span class="vf">✓</span><div><a class="cite" href="https://www.pbs.org/newshour/show/trump-setting-stage-to-declare-emergency-around-midterms-former-white-house-attorney-says" target="_blank" rel="noopener">🔗 PBS NewsHour <span class="cred">🎙 PBS</span></a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-us-iran-war-escalation-is-the-dominant-risk-premium-driver" data-fam="us-iran-war-escalation"><summary>
+</details><details class="thesis" id="th-us-iran-war-escalation-is-the-dominant-risk-premium-driver" data-fam="us-iran-war-escalation"><summary>
  <div class="top"><span class="rank">#2</span><span class="tname">US-Iran war escalation is the dominant risk-premium driver</span>
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Brent crude <span class="au">↑</span> <span class="au">$79.42 to $86.68</span> · Nasdaq 100 futures <span class="ad">↓</span> <span class="ad">-1.01%</span> · S&amp;P 500 futures <span class="ad">↓</span> <span class="ad">-0.31%</span> · global semis <span class="ad">↓</span> · gold <span class="au">↑</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-hormuz-closure-is-the-primary-crude-repricing-engine" onclick="event.stopPropagation()">Commoditi · Hormuz closure is the primary crude re… <b class="au">↑</b></a><a class="memchip" href="#th-the-war-has-widened-past-the-strait-to-gulf-energy-and-utility-infrastructure" onclick="event.stopPropagation()">Commoditi · The war has widened past the strait to… <b class="au">↑</b></a><a class="memchip" href="#th-a-positioning-squeeze-not-just-physics-is-amplifying-the-move" onclick="event.stopPropagation()">Commoditi · A positioning squeeze, not just physic… <b class="au">↑</b></a><a class="memchip" href="#th-the-de-escalation-off-ramp-diplomacy-could-strand-the-risk-premium" onclick="event.stopPropagation()">Commoditi · The de-escalation off-ramp: diplomacy … <b class="ad">↓</b></a><a class="memchip" href="#th-refined-product-pass-through-is-hitting-the-consumer-at-the-pump" onclick="event.stopPropagation()">Commoditi · Refined-product pass-through is hittin… <b class="au">↑</b></a><a class="memchip" href="#th-rerouting-tonne-mile-demand-is-the-durable-trade-even-if-crude-fades" onclick="event.stopPropagation()">Commoditi · Rerouting: tonne-mile demand is the du… <b class="au">↑</b></a><a class="memchip" href="#th-iran-driven-oil-spike-as-the-second-underweighted-drag" onclick="event.stopPropagation()">Equities · Iran-driven oil spike as the second, u… <b class="au">↑</b></a><a class="memchip" href="#th-india-squeezed-between-the-iran-shock-and-a-china-opening-debate" onclick="event.stopPropagation()">Macro/Pol · India squeezed between the Iran shock … <b class="ad">↓</b></a></div>
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:3%"></span></span><span class="heatchip">🔥 915 · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/zerohedge/status/2078530689431982579" target="_blank" rel="noopener">x.com 🔥915</a></span></div>
  <div class="sig"><span class="mat">materiality 0.43</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (6 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Iran&#x27;s supreme leader, CENTCOM, Scotiabank Economics, zerohedge, RBI governor</div></summary>
@@ -202,54 +198,49 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('household-stress-data');event.stopPropagation()">⚡ Household stress data ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US consumer discretionary <span class="ad">↓</span> · asset managers <span class="ad">↓</span> · US consumer ABS <span class="ad">↓</span> · US front-end <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: CNBC All-America Economic Survey, ladardo (X), zerohedge</div></summary>
  <div class="bodyb"><div class="summary">A cluster of consumer-stress evidence: over 80% of Americans fear running out of money in retirement against a stated $1.2 million target most cannot reach, households are cutting retirement contributions as everyday expenses climb, and CNBC&#x27;s All-America survey shows economic pessimism matching post-2020 troughs. Retail sales rose only modestly with lower gas outlays flattering the print. The counterweight is a labor market that keeps refusing to break.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">Over 80% of Americans worry about running out of money in retirement and most are too deep in debt to reach the $1.2 million they say they need. <span class="vf">✓</span><div><a class="cite" href="https://www.marketwatch.com/story/americans-say-they-need-1-2-million-to-retire-most-are-too-deep-in-debt-to-get-there-689c683b?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 MarketWatch</a></div></div><div class="point">Households are cutting retirement contributions as everyday costs climb, pressuring inflows to asset managers and retirement-plan providers. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/americans-pull-back-on-retirement-savings-as-everyday-expenses-climb" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">CNBC&#x27;s All-America Economic Survey shows consumer pessimism matching post-2020 lows, with Trump taking the bulk of the blame. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/economic-outlook-is-worsening-and-trump-is-getting-blamed-cnbc-survey-finds.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div><div class="point">Retail sales rose only modestly, with lower gasoline spending masking underlying demand patterns. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-retail-sales-rise-modestly-as-consumers-spend-less-on-gas" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">Headline unemployment may understate slack: adjusting Rhode Island&#x27;s labor force participation to its pre-pandemic level implies a 7.7% June unemployment rate. <span class="vf">✓</span><div><a class="cite" href="https://x.com/ladardo/status/2077782805254230212" target="_blank" rel="noopener">🔗 ladardo (X)</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">Initial jobless claims fell to 208,000, below forecasts — the labor market underpinning consumer income is not deteriorating. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-jobless-claims-decline-to-208-000-below-economist-forecasts" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">Housing affordability may be less dire than headlines imply, with underlying metrics reportedly better than widely reported figures suggest. <span class="vf">✓</span><div><a class="cite" href="https://x.com/zerohedge/status/2078575566849036365" target="_blank" rel="noopener">🔗 zerohedge (X)</a></div></div><div class="point">Survey-based pessimism has repeatedly decoupled from actual spending; sentiment troughs are not by themselves a spending forecast. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/economic-outlook-is-worsening-and-trump-is-getting-blamed-cnbc-survey-finds.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-european-divergence-italy-upgraded-while-the-defense-architecture-strains" data-fam="g3-central-bank-divergence"><summary>
+</details><details class="thesis" id="th-european-divergence-italy-upgraded-while-the-defense-architecture-strains" data-fam="g3-central-bank-divergence"><summary>
  <div class="top"><span class="rank">#4</span><span class="tname">European divergence: Italy upgraded while the defense architecture strains</span>
   <span class="pill med">med</span><span class="lens">🏛 macro</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('g3-central-bank-divergence');event.stopPropagation()">⚡ G3 central-bank divergence ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Italian BTPs <span class="au">↑</span> · Italian equities <span class="au">↑</span> · European defense <span class="au">↑</span> · EUR <span class="">→</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-the-ecb-s-one-last-hike-and-a-market-pricing-more-than-that" onclick="event.stopPropagation()">Fixed Inc · The ECB&#x27;s &#x27;one last hike&#x27; — and a mark… <b class="au">↑</b></a><a class="memchip" href="#th-g3-divergence-boj-upgrades-growth-but-stands-pat" onclick="event.stopPropagation()">Fixed Inc · G3 divergence: BOJ upgrades growth but… ·</a><a class="memchip" href="#th-japan-s-policy-bid-gpif-home-bias-plus-sovereign-ai" onclick="event.stopPropagation()">Equities · Japan&#x27;s policy bid — GPIF home bias pl… <b class="au">↑</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Bank of Italy, Giorgia Meloni, Friedrich Merz, Kanwal Sibal, Scotiabank Economics</div></summary>
  <div class="bodyb"><div class="summary">Two separable European threads point in opposite directions. Banca d&#x27;Italia raised its GDP forecast, adding to a run of upside revisions supporting Meloni&#x27;s government and a constructive tone for Italian assets and BTPs. Against that, analysts argue Merz&#x27;s ambition for Germany to become Europe&#x27;s biggest military power would undermine French standing and create friction with US bases on German soil — an unresolved architecture question sitting under European defense equities and the EUR risk premium, with an ECB &#x27;sobriety test&#x27; also on the calendar.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">Banca d&#x27;Italia upgraded its Italian GDP forecast, adding to a series of upside macro revisions supporting Meloni&#x27;s government, with Italian assets and BTPs likely constructive. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/bank-of-italy-raises-growth-forecast-in-another-boon-for-meloni" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">Analysis argues Germany becoming Europe&#x27;s dominant conventional military power — as Merz has said he wants — would undermine French standing and create friction with US bases on German soil, and notes it cannot happen quickly without nuclear weapons. <span class="vf">✓</span><div><a class="cite" href="https://x.com/KanwalSibal/status/2078540215061266928" target="_blank" rel="noopener">🔗 Kanwal Sibal (X)</a></div></div><div class="point">Scotiabank flags an ECB &#x27;sobriety test&#x27; in the week ahead alongside PMIs and UK jobs/CPI, keeping European policy a live variable. <span class="vf">✓</span><div><a class="cite" href="https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.global-week-ahead.july-17--2026.html" target="_blank" rel="noopener">🔗 Scotiabank</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">The German-defense argument is a single analyst&#x27;s commentary with low engagement and no policy action attached, so it should not be weighted as a market driver. <span class="vf">✓</span><div><a class="cite" href="https://x.com/KanwalSibal/status/2078540215061266928" target="_blank" rel="noopener">🔗 Kanwal Sibal (X)</a></div></div><div class="point">An Italian growth upgrade is a small idiosyncratic positive against a backdrop of oil-shock and trade-war risk that dominates European earnings exposure. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/bank-of-italy-raises-growth-forecast-in-another-boon-for-meloni" target="_blank" rel="noopener">🔗 Bloomberg</a><a class="cite" href="https://theedgemalaysia.com/node/811194" target="_blank" rel="noopener">🔗 The Edge Malaysia</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-contested-fed-path-sticky-import-costs-versus-a-cooling-cpi-print" data-fam="warsh-fed-hawkish-hold"><summary>
+</details><details class="thesis" id="th-contested-fed-path-sticky-import-costs-versus-a-cooling-cpi-print" data-fam="warsh-fed-hawkish-hold"><summary>
  <div class="top"><span class="rank">#5</span><span class="tname">Contested Fed path: sticky import costs versus a cooling CPI print</span>
   <span class="pill med">med</span><span class="lens">🏛 macro</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('warsh-fed-hawkish-hold');event.stopPropagation()">⚡ Warsh Fed hawkish hold ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US front-end <span class="">→</span> · US large-cap <span class="">→</span> · bitcoin <span class="au">↑</span> · gold <span class="au">↑</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-hawkish-fed-hold-officials-push-back-on-cuts" onclick="event.stopPropagation()">Fixed Inc · Hawkish Fed hold: officials push back … <b class="au">↑</b></a><a class="memchip" href="#th-warsh-s-credibility-test-a-new-chair-markets-haven-t-priced-yet" onclick="event.stopPropagation()">Fixed Inc · Warsh&#x27;s credibility test: a new chair … <b class="au">↑</b></a><a class="memchip" href="#th-a-quieter-fed-the-opacity-premium-and-ai-decoded-policy" onclick="event.stopPropagation()">Fixed Inc · A quieter Fed: the opacity premium and… <b class="au">↑</b></a></div>
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:22%"></span></span><span class="heatchip">🔥 7.2k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/KnoxieLuv/status/2078325106221195337" target="_blank" rel="noopener">x.com 🔥7.2k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.39</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Bureau of Labor Statistics (import prices), Jhoesaya (X), KnoxieLuv (X)</div></summary>
  <div class="bodyb"><div class="summary">The inflation signal is internally inconsistent in this record set. Official import-price data shows a surprise 0.3% monthly gain with Chinese-goods costs at the highest since 2008, and jobless claims at 208,000 undercut the case for near-term easing. Against that, a social post claims June CPI printed 3.5% against a 3.8% forecast and sparked a cross-asset relief rally. DISCREPANCY FLAGGED, NOT BLENDED: the 3.5% CPI figure comes only from an unverified social account and is not corroborated by any newswire record here.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">Import prices rose 0.3% on the month despite an energy decline, with Chinese-goods costs at their highest since 2008 — reinforcing a sticky-inflation, tariff-pass-through read that argues against cuts. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/import-prices-post-surprise-gain-as-costs-of-goods-from-china-hit-highest-since-2008.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div><div class="point">Initial jobless claims fell to 208,000, below economist forecasts, signaling labor-market resilience and reducing immediate pressure for dovish action. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-jobless-claims-decline-to-208-000-below-economist-forecasts" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">A widely-shared post argues Fed liquidity support (&#x27;Fed slop&#x27;) is failing to sustain the market — crowd framing of a broken central-bank put, consistent with the no-cut side of the debate. <span class="vf">✓</span><div><a class="cite" href="https://x.com/KnoxieLuv/status/2078325106221195337" target="_blank" rel="noopener">🔗 KnoxieLuv (X) <span class="eng">🔥7.2k</span></a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">A social account claims June CPI came in at 3.5% versus a 3.8% forecast, lifting Bitcoin, gold and the Nasdaq and reviving rate-cut bets. Treat with caution: no newswire record here confirms the print or the forecast. <span class="vf">✓</span><div><a class="cite" href="https://x.com/Jhoesaya/status/2078246959857492061" target="_blank" rel="noopener">🔗 Jhoesaya (X)</a></div></div><div class="point">Retail sales rose only modestly with lower gasoline outlays flattering the headline — a soft demand backdrop that would support easing rather than a hold. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-retail-sales-rise-modestly-as-consumers-spend-less-on-gas" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-the-tariff-wall-collapsed-and-the-fiscal-math-flipped-negative" data-fam="tariff-wall-collapse"><summary>
+</details><details class="thesis" id="th-the-tariff-wall-collapsed-and-the-fiscal-math-flipped-negative" data-fam="tariff-wall-collapse"><summary>
  <div class="top"><span class="rank">#6</span><span class="tname">The tariff wall collapsed and the fiscal math flipped negative</span>
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('tariff-wall-collapse');event.stopPropagation()">⚡ Tariff wall collapse ×5</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US Treasuries <span class="ad">↓</span> · US importers/retail <span class="au">↑</span> · Canada-exposed names <span class="ad">↓</span> · USD <span class="ad">↓</span> · credit <span class="">→</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-debt-past-100-of-gdp-fiscal-supply-rebuilds-the-term-premium" onclick="event.stopPropagation()">Fixed Inc · Debt past 100% of GDP: fiscal supply r… <b class="au">↑</b></a><a class="memchip" href="#th-bond-bull-capitulation-hoisington-flips-bearish-on-treasuries" onclick="event.stopPropagation()">Fixed Inc · Bond-bull capitulation: Hoisington fli… <b class="au">↑</b></a><a class="memchip" href="#th-tariff-front-running-is-a-separate-non-war-freight-squeeze" onclick="event.stopPropagation()">Commoditi · Tariff front-running is a separate, no… <b class="au">↑</b></a><a class="memchip" href="#th-tax-and-regulatory-cost-shocks-repricing-sector-economics" onclick="event.stopPropagation()">Equities · Tax and regulatory cost shocks reprici… <b class="ad">↓</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.39</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Steve Rattner, Trump, US Supreme Court, PBS NewsHour</div></summary>
  <div class="bodyb"><div class="summary">After the Supreme Court struck down the tariffs, the administration fell back on a temporary Section 122 10% global tariff that expires July 24, with a congressional extension seen as unlikely before the midterms. Meanwhile refunds of the illegal tariffs turned the revenue line into a reported $26 billion monthly loss. Trump is simultaneously opening new fronts — threatening to price Canadian wildfire smoke into tariffs — so the policy path is both fiscally negative and directionally unpredictable.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">Tariff revenue flipped to a $26 billion monthly loss as the government began refunding tariffs struck down by the Supreme Court, with the refund bill described as only getting started. <span class="vf">✓</span><div><a class="cite" href="https://x.com/SteveRattner/status/2078166103793012851" target="_blank" rel="noopener">🔗 Steve Rattner (X)</a></div></div><div class="point">The administration is racing to rebuild the tariff wall via Section 122, but that temporary 10% global tariff expires July 24 and a congressional extension looks unlikely ahead of the midterms — leaving the trade-policy path genuinely unresolved. <span class="vf">✓</span><div><a class="cite" href="https://www.pbs.org/newshour/politics/trump-administration-races-to-rebuild-tariff-wall-knocked-down-by-supreme-court" target="_blank" rel="noopener">🔗 PBS NewsHour</a></div></div><div class="point">Trump tied Canadian wildfire smoke to tariff grievances, signaling a new front in US-Canada trade hostilities rather than de-escalation. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/trump-canada-wildfire-tariffs.html" target="_blank" rel="noopener">🔗 CNBC</a><a class="cite" href="https://www.reuters.com/world/ontario-buy-new-11-new-aircraft-very-difficult-wildfire-fight-2026-07-17/" target="_blank" rel="noopener">🔗 Reuters</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">Tariff pass-through is still visibly in the price data — import prices posted a surprise 0.3% gain with Chinese-goods costs at their highest since 2008 — so the levies have not simply vanished from the cost structure. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/import-prices-post-surprise-gain-as-costs-of-goods-from-china-hit-highest-since-2008.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div><div class="point">Refunds are a transfer back to importers, which is a margin tailwind for tariff-exposed corporates even as it is a fiscal drain — the equity and bond implications point opposite ways. <span class="vf">✓</span><div><a class="cite" href="https://x.com/SteveRattner/status/2078166103793012851" target="_blank" rel="noopener">🔗 Steve Rattner (X)</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-prediction-markets-face-a-regulatory-and-tax-reckoning" data-fam="kalshi-insider-trading-probe"><summary>
+</details><details class="thesis" id="th-prediction-markets-face-a-regulatory-and-tax-reckoning" data-fam="kalshi-insider-trading-probe"><summary>
  <div class="top"><span class="rank">#7</span><span class="tname">Prediction markets face a regulatory and tax reckoning</span>
   <span class="pill med">med</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">prediction-market fintech <span class="ad">↓</span> · crypto <span class="ad">↓</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-kalshi-insider-trading-scandal-puts-political-prediction-markets-in-regulatory-crosshairs" onclick="event.stopPropagation()">Crypto · Kalshi insider-trading scandal puts po… <b class="ad">↓</b></a><a class="memchip" href="#th-monetizing-political-signal-trump-media-data-feeds-and-prediction-market-integrity" onclick="event.stopPropagation()">Equities · Monetizing political signal — Trump Me… <b class="au">↑</b></a><a class="memchip" href="#th-politically-connected-crypto-ventures-carry-compounding-sanctions-and-conflict-risk" onclick="event.stopPropagation()">Crypto · Politically-connected crypto ventures … <b class="ad">↓</b></a><a class="memchip" href="#th-stanford-study-exposes-settlement-manipulation-in-polymarket-s-short-duration-btc-contracts" onclick="event.stopPropagation()">Crypto · Stanford study exposes settlement mani… <b class="ad">↓</b></a><a class="memchip" href="#th-speculative-flow-is-draining-out-of-crypto-spot-and-into-event-contracts" onclick="event.stopPropagation()">Crypto · Speculative flow is draining out of cr… <b class="ad">↓</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: CFTC, IRS, Kalshi, Polymarket</div></summary>
@@ -261,31 +252,28 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('household-stress-data');event.stopPropagation()">⚡ Household stress data ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US megacap tech <span class="ad">↓</span> · California munis <span class="">→</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:44%"></span></span><span class="heatchip">🔥 14.5k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/HunterBiden/status/2078521645388464260" target="_blank" rel="noopener">x.com 🔥14.5k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Hunter Biden, Teddy Schleifer, Norway (precedent)</div></summary>
  <div class="bodyb"><div class="summary">Redistribution politics is moving from rhetoric to ballot. California&#x27;s proposed billionaire tax would raise revenue quickly but carries ambiguous long-term costs on Norway&#x27;s precedent, and the state&#x27;s richest are assembling a $90 million campaign to defeat it. That sits alongside CNBC polling showing democratic socialists outpolling MAGA candidates and a very high-engagement post arguing an American oligarchy has captured government and calling for a &#x27;New New Deal&#x27; dividend funded by the AI economy. The transmission is capital-flight risk and a higher discount on wealth concentrated in the largest state economy.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">California&#x27;s richest are preparing a $90 million campaign this fall to fight the state&#x27;s proposed billionaire tax, signaling how material the stakes are seen to be. <span class="vf">✓</span><div><a class="cite" href="https://x.com/teddyschleifer/status/2078252183837921668" target="_blank" rel="noopener">🔗 Teddy Schleifer (X)</a></div></div><div class="point">The proposed wealth tax could raise money quickly, but Norway&#x27;s experience shows targeting the wealthy has ambiguous long-term economic impact for the largest state economy in America. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/california-billionaire-tax.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div><div class="point">A very high-engagement post (14.5K) frames America as captured by an oligarchy that looted the treasury and calls for a New New Deal funded by a dividend from the AI economy — evidence the redistribution frame has real mass reach. <span class="vf">✓</span><div><a class="cite" href="https://x.com/HunterBiden/status/2078521645388464260" target="_blank" rel="noopener">🔗 Hunter Biden (X) <span class="eng">🔥14.5k</span></a></div></div><div class="point">Democratic socialist candidates are winning Democratic primaries and outpolling MAGA rivals, giving the redistribution platform an electoral vehicle. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/democratic-socialists-top-maga-candidates-all-america-poll.html" target="_blank" rel="noopener">🔗 CNBC</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">The $90 million opposition campaign is itself evidence the tax may not pass, and the Norway comparison cuts both ways — the long-term cost is described as ambiguous, not established. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/california-billionaire-tax.html" target="_blank" rel="noopener">🔗 CNBC</a><a class="cite" href="https://x.com/teddyschleifer/status/2078252183837921668" target="_blank" rel="noopener">🔗 Teddy Schleifer (X)</a></div></div><div class="point">Trump and the GOP hold a record $1.1 billion midterm war chest, a counterweight to the leftward polling shift translating into actual policy. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/trump-gop-amass-1-1-billion-to-battle-democrats-in-midterms" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-compounding-climate-disasters-collide-with-federal-funding-cuts" data-fam="canadian-wildfire-smoke"><summary>
+</details><details class="thesis" id="th-compounding-climate-disasters-collide-with-federal-funding-cuts" data-fam="canadian-wildfire-smoke"><summary>
  <div class="top"><span class="rank">#9</span><span class="tname">Compounding climate disasters collide with federal funding cuts</span>
   <span class="pill med">med</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('canadian-wildfire-smoke');event.stopPropagation()">⚡ Canadian wildfire smoke ×2</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US P&amp;C insurers <span class="ad">↓</span> · US agriculture <span class="au">↑</span> · US natgas/power <span class="au">↑</span> · Canada-exposed names <span class="ad">↓</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-canadian-wildfires-as-a-background-demand-and-soft-commodity-wildcard" onclick="event.stopPropagation()">Commoditi · Canadian wildfires as a background dem… <b class="au">↑</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Trump, Ontario (aircraft procurement)</div></summary>
  <div class="bodyb"><div class="summary">Texas floods, Canadian wildfire smoke and Western heat are hitting simultaneously while Trump-era cuts strain federal disaster-response capacity. The smoke is degrading US air quality with knock-on effects reaching World Cup events in New Jersey, and Trump has turned the episode into a tariff grievance against Canada. The market channel is insurance loss cost, agricultural output and weather-driven energy demand — plus a second-order trade-policy escalation.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">America faces compounding extreme weather — Texas floods, Canadian wildfire smoke and Western heat — with implications for insurance, agriculture and energy demand. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/texas-floods-canada-smoke-and-western-heat-batter-us" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">Cuts to federal disaster funding are complicating the US ability to manage compounding weather events from wildfires to floods. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/overlapping-weather-disasters-challenge-us-amid-trump-cuts" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">Smoke is degrading US air quality with potential effects on World Cup events in New Jersey, and Trump is framing wildfire emissions as a tariff grievance — turning a climate event into a trade front. <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/trump-canada-wildfire-tariffs.html" target="_blank" rel="noopener">🔗 CNBC</a><a class="cite" href="https://www.reuters.com/world/ontario-buy-new-11-new-aircraft-very-difficult-wildfire-fight-2026-07-17/" target="_blank" rel="noopener">🔗 Reuters</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">None of these records quantify insured losses, crop damage or power demand, so the earnings transmission is asserted rather than measured. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/texas-floods-canada-smoke-and-western-heat-batter-us" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-us-china-relations-rupture-on-election-meddling-charges-and-rare-earth-leverage" data-fam="us-china-rupture"><summary>
+</details><details class="thesis" id="th-us-china-relations-rupture-on-election-meddling-charges-and-rare-earth-leverage" data-fam="us-china-rupture"><summary>
  <div class="top"><span class="rank">#10</span><span class="tname">US-China relations rupture on election-meddling charges and rare-earth leverage</span>
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('us-china-rupture');event.stopPropagation()">⚡ US-China rupture ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">China ADRs <span class="ad">↓</span> · global autos/semis <span class="ad">↓</span> · rare earths <span class="au">↑</span> · CNH <span class="ad">↓</span> · US defense <span class="au">↑</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-governance-and-insider-risk-questions-reach-inside-the-institutions-themselves" onclick="event.stopPropagation()">Macro/Pol · Governance and insider-risk questions … <b class="au">↑</b></a><a class="memchip" href="#th-fraud-losses-as-a-hidden-drag-on-bank-and-card-credit" onclick="event.stopPropagation()">Fixed Inc · Fraud losses as a hidden drag on bank … <b class="ad">↓</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Trump, Xi Jinping, Kanwal Sibal, Epoch Times, Ucore</div></summary>
@@ -298,18 +286,16 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Indian equities <span class="ad">↓</span> · Indian govvies <span class="">→</span> · INR <span class="ad">↓</span> · India defense/infra <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: RBI governor, Modi adviser, Kanwal Sibal</div></summary>
  <div class="bodyb"><div class="summary">India sits at the intersection of several of this week&#x27;s shocks. The RBI governor named the Iran war and a possibly weak monsoon as the key downside risks ahead of the September policy review. Simultaneously a Modi adviser urged India to seek more Chinese investment and trade — a potential policy shift — while commentators frame the period to 2030 as the decisive window for India to build economic, technological and defense capability. China&#x27;s rare-earth curbs raise the cost of the manufacturing-buildout path.</div>
   <div class="ev"><div class="col for"><h4>▲ For</h4><div class="point">India&#x27;s RBI governor warned that Middle East tensions and a possibly weak monsoon are key downside risks for the economy ahead of the September policy review. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/iran-war-monsoons-key-risk-for-india-economy-rbi-governor-says" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div><div class="point">China&#x27;s rare earth export curbs threaten output across automotive, tech, defence and energy — precisely the sectors India&#x27;s buildout depends on. <span class="vf">✓</span><div><a class="cite" href="https://x.com/ucore/status/2077721985887437281" target="_blank" rel="noopener">🔗 Ucore (X) <span class="cred">🎙 X</span></a></div></div><div class="point">Commentary frames the period to 2030 as decisive for India to move with greater urgency on economic strength, technological capability and defense preparedness amid a more fragmented world. <span class="vf">✓</span><div><a class="cite" href="https://x.com/KanwalSibal/status/2078357492778873266" target="_blank" rel="noopener">🔗 Kanwal Sibal (X)</a></div></div></div>
    <div class="col against"><h4>▼ Against / counter</h4><div class="point">A Modi adviser publicly urged India to open its door to greater Chinese investment and trade, signaling a possible policy shift that would ease the supply-chain and capital constraints. <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/modi-adviser-urges-india-to-seek-more-chinese-investment-trade" target="_blank" rel="noopener">🔗 Bloomberg</a></div></div></div></div></div>
-</details><details class="thesis hubcard" id="th-multipolar-drift-china-s-soft-power-and-ai-bloc-building-versus-us-influence" data-fam="china-cheap-ai-export-push"><summary>
+</details><details class="thesis" id="th-multipolar-drift-china-s-soft-power-and-ai-bloc-building-versus-us-influence" data-fam="china-cheap-ai-export-push"><summary>
  <div class="top"><span class="rank">#12</span><span class="tname">Multipolar drift: China&#x27;s soft power and AI bloc-building versus US influence</span>
   <span class="pill med">med</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('china-cheap-ai-export-push');event.stopPropagation()">⚡ China cheap-AI export push ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">EM ex-China <span class="au">↑</span> · China tech <span class="au">↑</span> · USD <span class="ad">↓</span></span></div>
- <div class="memrow"><a class="memchip" href="#th-china-s-state-backed-ai-diplomacy-cheap-ai-as-an-export-strategy" onclick="event.stopPropagation()">Equities · China&#x27;s state-backed AI diplomacy — ch… <b class="ad">↓</b></a><a class="memchip" href="#th-washington-seizes-the-ai-chokepoint-political-risk-repriced-into-ai-moats" onclick="event.stopPropagation()">Equities · Washington seizes the AI chokepoint — … <b class="ad">↓</b></a></div>
  
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Pew Research Center, Xi Jinping</div></summary>
@@ -322,7 +308,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('us-china-rupture');event.stopPropagation()">⚡ US-China rupture ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">gold <span class="au">↑</span> · US Treasuries <span class="">→</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Fed Office of Inspector General, CFTC</div></summary>
  <div class="bodyb"><div class="summary">A small but distinct integrity thread: the Fed&#x27;s own watchdog is warning on insider risk after a China secrets case, calling for stronger protections against insider threats and foreign secrets exposure inside the central bank. It rhymes with the CFTC&#x27;s Kalshi probe of a White House staffer&#x27;s bets — two separate arms of the state finding information-integrity problems at the same time. Low direct price impact, but it feeds the broader institutional-credibility discount that shows up in gold and term premium.</div>
@@ -334,7 +319,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crude oil <span class="au">↑</span> · global <span class="ad">↓</span> · European luxury <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.43</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (8 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Chevron, Iran, Burberry</div></summary>
  <div class="bodyb"><div class="summary">Two independent equity drags ran simultaneously and are being conflated into one &#x27;AI selloff&#x27; story. Oil prices kept jumping on the Iran conflict, and the Iran-related spike is named as a co-trigger of the Chinese equity rout alongside AI capex fears. The geopolitical channel also shows up in single names: Iran designated SpaceX a military target, Burberry blamed Middle East conflict for hurting European tourist spending, and Chevron is advancing Iraqi upstream talks backing a pipeline explicitly designed to bypass the Strait of Hormuz — a tell that operators are pricing closure risk.</div>
@@ -345,7 +329,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US semis (SOX) <span class="ad">↓</span> <span class="ad">~10% for the week</span> · AI mega-caps <span class="ad">↓</span> <span class="ad">NVDA -3%</span> · China tech gauge <span class="ad">↓</span> <span class="ad">20% from a record</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:7%"></span></span><span class="heatchip">🔥 2.3k · 3 posts</span><span class="sub"> 𝕏×3 · hottest: <a class="cite" href="https://x.com/AfterQuery/status/2078238454245445964" target="_blank" rel="noopener">x.com 🔥1.0k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.41</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (6 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Moonshot AI, AfterQuery, Nvidia, AMD, Micron, TSMC</div></summary>
@@ -357,7 +340,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('spacex-post-ipo-collapse');event.stopPropagation()">⚡ SpaceX post-IPO collapse ×2</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">SpaceX (SPCX) <span class="ad">↓</span> <span class="ad">~40%</span> · recent IPOs <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:2%"></span></span><span class="heatchip">🔥 763 · 6 posts</span><span class="sub"> • • • • • • · hottest: <a class="cite" href="https://www.latimes.com/business/story/2026-07-16/spacex-stock-erases-gains-slides-below-ipo-price-in-intraday-trading" target="_blank" rel="noopener">latimes.com 🔥589</a></span></div>
  <div class="sig"><span class="mat">materiality 0.41</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (13 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: SpaceX, Elon Musk, Bloomberg, Business Insider</div></summary>
@@ -370,7 +352,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">S&amp;P 500 <span class="ad">↓</span> <span class="ad">1%</span> · Nasdaq <span class="ad">↓</span> <span class="ad">-1.4%</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.41</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (6 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: TSMC, FXEmpire</div></summary>
  <div class="bodyb"><div class="summary">The counter-case is that nothing fundamental broke. Q2 earnings had a strong start that the AI rotation simply overshadowed; TSMC beat on profit and revenue and raised capex; and softer CPI/PPI plus solid earnings support a breakout above 7,620 opening a path to 8,000 on the S&amp;P 500. Against that, the actual week was negative: the S&amp;P 500 fell 1% for its first losing week in three and only its third since March, with the Dow -406 (-0.8%) and Nasdaq -1.4%. Note these index figures appear twice in the pool from wire syndication — one event, not two.</div>
@@ -382,7 +363,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US mega-cap tech <span class="">→</span> · Nvidia <span class="ad">↓</span> <span class="ad">-3.7%</span> · Apple <span class="au">↑</span> <span class="au">0.4%</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.38</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Apple, Nvidia, Reuters</div></summary>
  <div class="bodyb"><div class="summary">The AI rotation is not a wholesale risk-off but a change in who leads: Apple reclaimed the world&#x27;s most valuable company title from Nvidia for the first time in 15 months as investors reassessed the AI outlook. Flag the numeric spread — one account has Nvidia -3.7% to ~$4.8T with Apple +0.4% to ~$4.9T; another has Apple ~$4.88T versus Nvidia ~$4.86T after Nvidia fell 3.5%; a third tape print shows NVDA -3%. Apple carries its own catalysts (DOJ settlement talks, a 2027 iPad overhaul), making it a credible defensive destination for AI-fatigued capital.</div>
@@ -393,7 +373,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">DJT / exchanges <span class="au">↑</span> · US biotech <span class="">→</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:10%"></span></span><span class="heatchip">🔥 3.3k · 4 posts</span><span class="sub"> • • • 🟠 · hottest: <a class="cite" href="https://www.reddit.com/r/technology/comments/1uzidt6/white_house_teleprompter_operator_made_more_than/" target="_blank" rel="noopener">reddit.com 🔥2.7k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.38</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Trump Media, Truth Social, Kalshi, Davis Ingle (White House)</div></summary>
@@ -405,7 +384,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span> · rates <span class="">→</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:18%"></span></span><span class="heatchip">🔥 6.0k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/peruvian_bull/status/2078342440944074970" target="_blank" rel="noopener">x.com 🔥6.0k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.37</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: peruvian_bull, Sotheby&#x27;s, Jensen Huang</div></summary>
@@ -418,7 +396,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">AI hardware/power semis <span class="au">↑</span> · European utilities <span class="au">↑</span> · power <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.37</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Nvidia, Japan (sovereign AI), Anthropic, Meta, Mitsubishi Electric, Rohm, Toshiba</div></summary>
  <div class="bodyb"><div class="summary">While AI equities de-rate, the physical commitments keep landing: Japan plans to buy 27,500 Nvidia Rubin chips for an estimated 140 MW sovereign AI data center for robotics; Anthropic is negotiating compute with Meta; and Mitsubishi Electric, Rohm and Toshiba are working on a power-semiconductor JV explicitly citing surging AI-driven hardware demand. The binding constraint is increasingly power, not appetite — the Iberian data center boom is hitting grid bottlenecks that threaten hyperscaler buildout timelines. That is a very different problem from demand evaporating.</div>
@@ -430,7 +407,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('china-cheap-ai-export-push');event.stopPropagation()">⚡ China cheap-AI export push ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US AI software <span class="ad">↓</span> · China AI names <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.35</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Xi Jinping, DeepSeek, Moonshot AI, BigOne Lab CEO</div></summary>
  <div class="bodyb"><div class="summary">Beijing is converting AI capability into geopolitical infrastructure. Xi Jinping made his first in-person appearance at the World AI Conference, vowing &#x27;AI for all&#x27; and launching the Shanghai-headquartered World Artificial Intelligence Cooperation Organization backed by 29 countries including Russia, Indonesia, Pakistan, Laos and Kazakhstan. DeepSeek — which raised $7.4B this year and is weighing a 2027 IPO — is framed by BigOne Lab&#x27;s CEO as running an economic play: flooding global markets with cheap AI rather than racing for frontier supremacy. That is a direct margin threat to US model pricing.</div>
@@ -441,7 +417,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Hong Kong <span class="au">↑</span> · Korea/Japan/SOXX <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:2%"></span></span><span class="heatchip">🔥 511 · 3 posts</span><span class="sub"> 𝕏×2 🟠 · hottest: <a class="cite" href="https://x.com/StockMKTNewz/status/2078066750596207007" target="_blank" rel="noopener">x.com 🔥396</a></span></div>
  <div class="sig"><span class="mat">materiality 0.35</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Michael Burry</div></summary>
@@ -453,7 +428,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US restaurants (YUM) <span class="ad">↓</span> · Sweetgreen (SG) <span class="au">↑</span> <span class="au">15%</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:4%"></span></span><span class="heatchip">🔥 1.3k · 1 post</span><span class="sub"> 🟠 · hottest: <a class="cite" href="https://www.reddit.com/r/tacobell/comments/1uynb9i/statement_from_taco_bell_on_the_cyclosporiasis/" target="_blank" rel="noopener">reddit.com 🔥1.3k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.35</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Taylor Farms, Taco Bell, Yum Brands, Sweetgreen, FDA, CDC</div></summary>
@@ -465,7 +439,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US AI software <span class="ad">↓</span> · AI compute suppliers <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:4%"></span></span><span class="heatchip">🔥 1.3k · 2 posts</span><span class="sub"> 𝕏×2 · hottest: <a class="cite" href="https://x.com/AfterQuery/status/2078238454245445964" target="_blank" rel="noopener">x.com 🔥1.0k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.35</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Google DeepMind, Gemini, xAI, Elon Musk, OpenAI, Anthropic, Thinking Machines, Moonshot AI</div></summary>
@@ -477,7 +450,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('household-stress-data');event.stopPropagation()">⚡ Household stress data ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US restaurants <span class="ad">↓</span> · US beauty retail <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:31%"></span></span><span class="heatchip">🔥 10.3k · 2 posts</span><span class="sub"> • 𝕏 · hottest: <a class="cite" href="https://stocktwits.com/SonGoku/message/659438293" target="_blank" rel="noopener">stocktwits.com 🔥10.3k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.35</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Morgan Stanley, Amorepacific, Cosmax, Ulta</div></summary>
@@ -489,7 +461,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span><span class="lens">🔥 social</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US large-cap (SPY/QQQ) <span class="au">↑</span> · BTC <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:57%"></span></span><span class="heatchip">🔥 18.8k · 4 posts</span><span class="sub"> •×4 · hottest: <a class="cite" href="https://stocktwits.com/SonGoku/message/659438293" target="_blank" rel="noopener">stocktwits.com 🔥10.3k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: SonGoku (Stocktwits), MiaHarperTrading, ArcValueTrade</div></summary>
@@ -502,7 +473,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('g3-central-bank-divergence');event.stopPropagation()">⚡ G3 central-bank divergence ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Japan (TOPIX) <span class="au">↑</span> · JPY <span class="">→</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Takaichi, GPIF, JERA, Kioxia, Toyota</div></summary>
  <div class="bodyb"><div class="summary">A distinct regional tailwind cutting against the global de-rating: Japanese policymaker Takaichi says GPIF investing in Japan assets is key, signaling continued domestic equity allocation by the world&#x27;s largest pension fund. That sits alongside state-directed AI procurement (27,500 Nvidia Rubin chips for a sovereign robotics data center), a domestic power-semiconductor consolidation, and JERA — Japan&#x27;s largest LNG buyer with $18.5bn annual revenue and a $30.8bn investment plan — studying a US listing. The offset is that Japan&#x27;s AI-linked market leadership has already been destroyed: Kioxia briefly overtook Toyota as Japan&#x27;s most valuable company before its value halved.</div>
@@ -513,7 +483,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">leveraged single-stock ETFs <span class="ad">↓</span> <span class="ad">-$10 billion</span> · US momentum factor <span class="ad">↓</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Goldman Sachs (flows desk), Bloomberg, Global Markets Observer</div></summary>
@@ -526,7 +495,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Japan/Korea memory <span class="ad">↓</span> <span class="ad">52% from peak</span> · Kioxia <span class="ad">↓</span> <span class="ad">over 16% overnight</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Kioxia, SK Hynix, Micron, Toyota</div></summary>
  <div class="bodyb"><div class="summary">Within semis, the AI-memory trade is unwinding hardest. Kioxia&#x27;s market value has fallen 52% from peak, having overtaken Toyota in mid-June as Japan&#x27;s most valuable company before slipping to fourth — with a two-day cumulative drop of roughly 31% (over 16% overnight after 15% the prior day). This is the cleanest evidence that the selloff is a de-rating of AI capex duration expectations rather than a demand shock, since no memory demand data has broken.</div>
@@ -537,7 +505,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('china-cheap-ai-export-push');event.stopPropagation()">⚡ China cheap-AI export push ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US AI mega-caps <span class="ad">↓</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: White House, OpenAI, Anthropic, Google, Demis Hassabis (DeepMind)</div></summary>
@@ -550,7 +517,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">China growth (ChiNext) <span class="ad">↓</span> <span class="ad">10.8%</span> · STAR Market 50 <span class="ad">↓</span> <span class="ad">16.9%</span> · India <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Coronation, TSMC, ChiNext, STAR Market 50</div></summary>
  <div class="bodyb"><div class="summary">Independent of the US chip story, Chinese and EM AI-linked equities suffered an outright capitulation. ChiNext fell 10.8% on the week and the Shanghai STAR Market 50 lost 16.9%, both diving over 7% in Friday&#x27;s session, driven by AI capex fears and an Iran-linked oil spike. Investor sentiment on China tech hardware hit its most bearish reading on record, and allocators are acting on it: South Africa&#x27;s $46B Coronation is trimming AI-exposed positions in Taiwan (TSMC) and Korea (KRX) to buy an India rebound.</div>
@@ -561,7 +527,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US media/streaming <span class="ad">↓</span> <span class="ad">~45%</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Netflix, Michael Burry</div></summary>
@@ -574,7 +539,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">European luxury <span class="ad">↓</span> <span class="ad">-5.4%</span> · European semicap <span class="ad">↓</span> <span class="ad">-3.8%</span> · European autos <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Burberry, ASML, ASM International, BE Semiconductor, Volvo Car, Chery</div></summary>
  <div class="bodyb"><div class="summary">A separate regional de-rating hit European growth and luxury names, dragging semicap equipment with it: Burberry dropped 5.4% in London after disappointing sales growth, with ASML -3.8%, ASM International -5.0% and BE Semiconductor -5.0%. Flag a cause-and-magnitude conflict: one source attributes Burberry&#x27;s -5.4% to disappointing sales growth, while another reports shares down more than 6% specifically because Middle East conflict hit tourist spending — and notes US and China sales were actually strong. Volvo Car separately scrapped its full-year volume target on a sharper-than-expected deterioration in China.</div>
@@ -585,7 +549,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">Boeing <span class="au">↑</span> · European banks <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: FAA, Boeing, Apple, DOJ, Friedrich Merz, UniCredit, Commerzbank</div></summary>
@@ -598,7 +561,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('spacex-post-ipo-collapse');event.stopPropagation()">⚡ SpaceX post-IPO collapse ×2</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">global IPO pipeline <span class="">→</span> · EM listings <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: SpaceX, Shein, Dangote, NSE India, JERA, DeepSeek</div></summary>
  <div class="bodyb"><div class="summary">Whether the AI unwind is a rotation or a regime change will be settled in primary markets, and the signals conflict. SpaceX&#x27;s post-listing collapse is explicitly reported as threatening the IPO market&#x27;s AI euphoria, and India&#x27;s NSE — operator of the world&#x27;s largest derivatives exchange by volume — drew a rare &#x27;sell&#x27; recommendation ahead of its debut. Yet the queue keeps forming: Shein cleared the HKEX listing committee, Dangote is closing a $2.5B pre-IPO private placement, JERA is studying a US listing, and DeepSeek is weighing a 2027 IPO after raising $7.4B.</div>
@@ -609,7 +571,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US medtech (ISRG) <span class="ad">↓</span> <span class="ad">10%</span> · GLP-1 pharma <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.29</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Eli Lilly, Novo Nordisk, IDEXX, Zoetis, Intuitive Surgical</div></summary>
@@ -622,7 +583,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('tariff-wall-collapse');event.stopPropagation()">⚡ Tariff wall collapse ×5</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">European industrials/utilities <span class="ad">↓</span> · US insurers <span class="">→</span> · Australia consumer <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.26</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Hungary, Trump administration, California regulators, Coles, TPG Capital</div></summary>
  <div class="bodyb"><div class="summary">A quieter, cross-border cluster of policy actions that change sector cost curves rather than sentiment. Hungary is overhauling corporate taxes to penalize polluters, raising costs for emissions-heavy operators and reshaping the competitive landscape for European industrials and utilities. Trump will cap student visas at four years, negative for university foreign-enrollment revenue and adjacent housing/consumer names. California&#x27;s rival political factions are proposing divergent home-insurance overhauls with material implications for insurers amid rising climate losses. And in Australia, the federal budget&#x27;s May housing tax changes are already visible in deal turbulence, with Coles walking away from Petbarn talks.</div>
@@ -633,7 +593,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span><span class="lens">🏛 macro</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('warsh-fed-hawkish-hold');event.stopPropagation()">⚡ Warsh Fed hawkish hold ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US front-end vol <span class="au">↑</span> · US large-cap <span class="">→</span> · USD <span class="">→</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.37</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Kevin Warsh (Fed Chair), Fed communications task force</div></summary>
@@ -646,7 +605,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('warsh-fed-hawkish-hold');event.stopPropagation()">⚡ Warsh Fed hawkish hold ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US Treasuries <span class="au">↑</span> · US large-cap <span class="ad">↓</span> · credit <span class="ad">↓</span> · USD <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.36</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Jeffrey Schmid (Kansas City Fed), Lorie Logan (Dallas Fed), Philip Jefferson (Fed Vice Chair)</div></summary>
  <div class="bodyb"><div class="summary">A chorus of Fed speakers is arguing that inflation has run above target too long and that policy should stay tight — or go tighter — draining rate-cut expectations from the front end and pushing Treasury yields higher. Schmid and Logan form the hawkish edge; Jefferson&#x27;s balanced &#x27;well positioned&#x27; framing is the counterweight, so the committee reads as a hawkish hold rather than a hiking bias.</div>
@@ -657,7 +615,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span><span class="lens">🏛 macro</span><span class="lens">🔥 social</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('tariff-wall-collapse');event.stopPropagation()">⚡ Tariff wall collapse ×5</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US long end <span class="au">↑</span> · USD <span class="ad">↓</span> · US IG <span class="ad">↓</span> · gold <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:26%"></span></span><span class="heatchip">🔥 8.5k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/SteveRattner/status/2077824725506498933" target="_blank" rel="noopener">x.com 🔥8.5k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.36</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Steve Rattner, Hoisington Investment Management</div></summary>
@@ -670,7 +627,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('tariff-wall-collapse');event.stopPropagation()">⚡ Tariff wall collapse ×5</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US long end <span class="au">↑</span> · long-duration IG <span class="ad">↓</span> · US large-cap <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Hoisington Investment Management</div></summary>
  <div class="bodyb"><div class="summary">Hoisington Investment Management — a structurally bullish long-duration Treasury shop for three decades — has turned decidedly bearish on US government bonds. This is a positioning/sentiment signal rather than a data signal: when the most committed duration buyer stops arguing the secular-disinflation case, the marginal bid for the long end thins out. The story was picked up and amplified socially, adding weight to the bearish-Treasuries narrative.</div>
@@ -681,7 +637,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('g3-central-bank-divergence');event.stopPropagation()">⚡ G3 central-bank divergence ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">EUR OIS curve <span class="au">↑</span> <span class="au">50bp</span> · German bunds <span class="au">↑</span> · EUR <span class="au">↑</span> · European <span class="ad">↓</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: ECB, Reuters poll economists, Bloomberg poll respondents, @Credit_Junk</div></summary>
@@ -694,7 +649,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('g3-central-bank-divergence');event.stopPropagation()">⚡ G3 central-bank divergence ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">JGBs <span class="">→</span> · JPY <span class="ad">↓</span> · EUR OIS curve <span class="au">↑</span> · Japan <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Bank of Japan, Bloomberg Economics, ECB</div></summary>
  <div class="bodyb"><div class="summary">The three major central banks are on visibly different tracks: the ECB is finishing a hiking cycle, the Fed is holding with a hawkish minority pushing for more, and the BOJ is expected to raise its GROWTH forecast while leaving rates unchanged. That combination — better Japanese growth without policy tightening — keeps JGB yields anchored relative to the rest of the G3 and keeps the yen the funding leg, which is the cross-market transmission channel for this week&#x27;s rates moves.</div>
@@ -705,7 +659,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US IG tech <span class="ad">↓</span> · AI capex names <span class="ad">↓</span> · IG spreads <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: S&amp;P Global Ratings, Oracle</div></summary>
@@ -718,7 +671,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('uk-leadership-transition');event.stopPropagation()">⚡ UK leadership transition ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">UK gilts <span class="au">↑</span> · GBP <span class="ad">↓</span> · UK domestics <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: IMF, Burnham</div></summary>
  <div class="bodyb"><div class="summary">The IMF has publicly cautioned against lifting the UK&#x27;s top income tax rate, warning of capital-flight and growth damage. For gilts this is a two-sided risk that resolves badly either way: raise the rate and risk the growth/base erosion the IMF flags; don&#x27;t raise it and the revenue gap has to be filled by issuance. It is a UK-specific overlay on the same fiscal-supply logic driving the US long end.</div>
@@ -729,7 +681,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span><span class="lens">🏛 macro</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('warsh-fed-hawkish-hold');event.stopPropagation()">⚡ Warsh Fed hawkish hold ×4</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US Treasuries <span class="au">↑</span> · US large-cap <span class="ad">↓</span> · USD <span class="">→</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.30</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Kevin Warsh (Fed Chair)</div></summary>
@@ -742,7 +693,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">European HY <span class="ad">↓</span> · private credit <span class="">→</span> · UK autos <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Aston Martin, HPS Investment Partners</div></summary>
  <div class="bodyb"><div class="summary">Aston Martin is in talks with funds including HPS for new debt, following a prior £50M ($67.5M) shareholder debt top-up to bolster cash. The pattern matters more than the issuer: stressed borrowers are routing around public bond markets to private credit, which means the deterioration shows up as spread widening and covenant terms inside private books rather than as visible price action in public HY. Reported cash-buffer sizing (£50M / $67.5M) is quoted as given and not reconciled to any FX rate.</div>
@@ -754,7 +704,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('us-china-rupture');event.stopPropagation()">⚡ US-China rupture ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US card ABS <span class="ad">↓</span> <span class="ad">$1B</span> · US payments <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: CNBC investigation</div></summary>
  <div class="bodyb"><div class="summary">Chinese organized crime rings are reportedly extracting up to $1B per year from US banks and retailers through tap-to-pay schemes. For fixed income the relevance is narrow but real: fraud losses flow straight through to issuers, payment processors and merchants, feeding loss rates in card ABS and bank credit portfolios. The $1B figure is reported as an annual estimate (&#x27;up to&#x27; / &#x27;roughly&#x27;) and should be treated as a range, not a measured number.</div>
@@ -765,7 +714,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crude (Brent/WTI) <span class="au">↑</span> <span class="au">+4.59%</span> · energy &amp; defense <span class="au">↑</span> · global risk assets <span class="ad">↓</span> · credit <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:3%"></span></span><span class="heatchip">🔥 1.0k · 4 posts</span><span class="sub"> 𝕏×3 • · hottest: <a class="cite" href="https://x.com/AJEnglish/status/2078258255155868077" target="_blank" rel="noopener">x.com 🔥930</a></span></div>
  <div class="sig"><span class="mat">materiality 0.43</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Bloomberg, Al Jazeera English, IRGC Navy, Trump, The Guardian, Babak Taghvaee, SprinterPress</div></summary>
@@ -777,7 +725,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crude (Brent) <span class="au">↑</span> <span class="au">+4.6%</span> · global indices <span class="ad">↓</span> · defense <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:19%"></span></span><span class="heatchip">🔥 6.4k · 2 posts</span><span class="sub"> 𝕏×2 · hottest: <a class="cite" href="https://x.com/FmrRepMTG/status/2078464057284129262" target="_blank" rel="noopener">x.com 🔥6.4k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Kuwait Petroleum Corp, IRGC, Marhelm Data, The Business Standard, TechTimes, Marjorie Taylor Greene, ZeroHedge</div></summary>
@@ -790,7 +737,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crude <span class="ad">↓</span> · global indices <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Iran&#x27;s parliament speaker, Gulf States, EU, Bloomberg</div></summary>
  <div class="bodyb"><div class="summary">A counter-narrative holds that the premium is diplomatic-headline-sensitive and fragile. Iran&#x27;s top negotiator is publicly defending US talks against hardliners, Gulf states and the EU issued a coordinated demand to reopen the strait, and Bloomberg argues the war has not actually broken the oil market. Under this thesis the correct trade is fading spikes, not chasing them.</div>
@@ -801,7 +747,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">tankers &amp; shipping <span class="au">↑</span> · crude freight <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Marhelm Data, Reuters, Bloomberg</div></summary>
@@ -814,7 +759,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">iron ore &amp; <span class="au">↑</span> · AU/US miners <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: BHP, Alcoa, Bloomberg, Mining.com</div></summary>
  <div class="bodyb"><div class="summary">Away from energy entirely, seaborne bulk and light-metal supply took two independent hits in the same week — BHP&#x27;s first Port Hedland industrial action in a generation and cyclone damage forcing Alcoa to cut alumina production guidance. Both tighten physical supply while hurting the producers&#x27; own equity, which is why the price and the share price diverge. NOTE numeric discrepancy on the strike&#x27;s precedent: Bloomberg describes it as the first Port Hedland strike &#x27;since 2000&#x27;, while mining coverage calls it the &#x27;first port strike in 26 years&#x27;.</div>
@@ -825,7 +769,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">gasoline &amp; diesel <span class="au">↑</span> <span class="au">more than 3.5%</span> · US consumer discretionary <span class="ad">↓</span> · integrated oil <span class="au">↑</span> · US breakevens <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Bloomberg, Steve Rattner, Marhelm Data</div></summary>
@@ -838,7 +781,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('us-iran-war-escalation');event.stopPropagation()">⚡ US-Iran war escalation ×9</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crude futures <span class="au">↑</span> <span class="au">~16%</span> · energy <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Bloomberg</div></summary>
  <div class="bodyb"><div class="summary">Funds that had positioned for a post-ceasefire oil glut are being forced to cover as fighting resumed, producing the fastest bullish crude positioning buildup in a decade. That makes part of the weekly move a flow event layered on top of the supply story — and implies asymmetric downside if a ceasefire lands. NOTE numeric discrepancy on the weekly gain: &#x27;above 14%&#x27; vs &#x27;~16% weekly gains&#x27; vs &#x27;largest weekly advance&#x27; unquantified.</div>
@@ -849,7 +791,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span><span class="lens">🏛 macro</span><span class="lens">🔥 social</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('uk-leadership-transition');event.stopPropagation()">⚡ UK leadership transition ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">UK/North Sea gas <span class="ad">↓</span> · UK E&amp;P <span class="au">↑</span> · GBP <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:96%"></span></span><span class="heatchip">🔥 31.9k · 3 posts</span><span class="sub"> 𝕏×3 · hottest: <a class="cite" href="https://x.com/RupertLowe10/status/2078435120004903384" target="_blank" rel="noopener">x.com 🔥18.8k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.27</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Andy Burnham, Rupert Lowe</div></summary>
@@ -861,7 +802,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">diesel/distillates <span class="au">↑</span> <span class="au">$70.3/bbl</span> · European refiners <span class="au">↑</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:23%"></span></span><span class="heatchip">🔥 7.8k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/nexta_tv/status/2078390648290312558" target="_blank" rel="noopener">x.com 🔥7.8k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.25</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Marhelm Data, NEXTA TV</div></summary>
@@ -874,7 +814,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">LNG/natural gas <span class="au">↑</span> <span class="au">$20.6999/MMBtu</span> · US LNG developers <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.25</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Marhelm Data</div></summary>
  <div class="bodyb"><div class="summary">The gas complex is repricing alongside oil but with distinct drivers: geopolitical risk premia are lifting spot LNG, with Pakistan paying its highest price since February, while the structural US export buildout implies a decade of feedgas demand growth and capex. Gas is the leveraged expression of the same risk with a longer tail.</div>
@@ -885,7 +824,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('tariff-wall-collapse');event.stopPropagation()">⚡ Tariff wall collapse ×5</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">container shipping <span class="au">↑</span> · US retail <span class="ad">↓</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Nikkei Asia</div></summary>
@@ -898,7 +836,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">long-dated crude <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: David Alandete, Trump administration</div></summary>
  <div class="bodyb"><div class="summary">A single, thinly-sourced report claims the Trump administration will take over Venezuela&#x27;s earthquake reconstruction with ~3,000 technicians and roughly $3B. If real, it signals deeper US engagement with the Venezuelan economy and potentially its oil sector — a long-dated bearish overhang on crude that has nothing to do with the current Gulf premium. Low confidence: one X post citing a White House correspondent, no corroboration in this pool.</div>
@@ -909,7 +846,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('canadian-wildfire-smoke');event.stopPropagation()">⚡ Canadian wildfire smoke ×2</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">lumber <span class="au">↑</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: BBC</div></summary>
@@ -922,7 +858,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span> <span class="ad">27.9% QoQ</span> · perpetual futures <span class="ad">↓</span> <span class="ad">10%</span> · crypto exchanges <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: CoinsText, FinanceFeeds, Kalshi, Polymarket</div></summary>
  <div class="bodyb"><div class="summary">Q2 2026 shows a clean divergence: top-10 CEX spot volume fell 27.9% QoQ to $1.95T and perpetual futures volume dropped 10% to $12.7T, with stablecoin and derivatives activity also declining — while prediction-market volumes set records on sports and politics, with Kalshi taking share from Polymarket. The read is that crypto&#x27;s marginal speculator has found a new venue, removing the reflexive volume that normally supports price.</div>
@@ -933,7 +868,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">prediction markets <span class="ad">↓</span> · US exchanges/brokers <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:100%"></span></span><span class="heatchip">🔥 33.2k · 7 posts</span><span class="sub"> • • • • • 🟠 • · hottest: <a class="cite" href="https://www.reddit.com/r/news/comments/1uy835p/white_house_teleprompter_operator_made_more_than/" target="_blank" rel="noopener">reddit.com 🔥33.0k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (8 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Gabriel Perez, Kalshi, CFTC, WSJ, BBC, CNBC, Axios, ABC News, The Verge</div></summary>
@@ -945,7 +879,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span><span class="lens">🏛 macro</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">stablecoins <span class="au">↑</span> · US payments <span class="au">↑</span> · USD funding <span class="">→</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:2%"></span></span><span class="heatchip">🔥 608 · 3 posts</span><span class="sub"> 𝕏×2 • · hottest: <a class="cite" href="https://x.com/circle/status/2077755132595343503" target="_blank" rel="noopener">x.com 🔥372</a></span></div>
  <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Visa, Circle, Fireblocks, USDC, Bloomberg</div></summary>
@@ -957,7 +890,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span><span class="lens">🔥 social</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kimi-k3-ai-shock');event.stopPropagation()">⚡ Kimi K3 AI shock ×12</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">BTC <span class="au">↑</span> · US AI/megacap <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:4%"></span></span><span class="heatchip">🔥 1.4k · 2 posts</span><span class="sub"> •×2 · hottest: <a class="cite" href="https://stocktwits.com/THE_TRADE/message/659438477" target="_blank" rel="noopener">stocktwits.com 🔥1.1k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: moonpatrol (StockTwits), THE_TRADE (StockTwits), IBIT / BlackRock</div></summary>
@@ -970,7 +902,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">BTC event contracts <span class="ad">↓</span> · crypto <span class="">→</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Stanford, SMU, Polymarket, Blockonomi, FinanceFeeds</div></summary>
  <div class="bodyb"><div class="summary">Academic researchers (Stanford/SMU) documented manipulative settlement patterns in Polymarket&#x27;s very short Bitcoin prediction contracts, quantifying roughly $1.28M in manipulation profit on 5-minute markets. Extending contract duration from 5 to 15 minutes eliminated the pattern, pointing to a fixable design flaw — but the finding lands precisely as event-contract volumes hit records, raising retail-protection and product-integrity questions across the crypto-linked derivatives complex.</div>
@@ -981,7 +912,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span><span class="lens">🔥 social</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">BTC <span class="ad">↓</span> <span class="ad">$60K</span> · altcoins <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:2%"></span></span><span class="heatchip">🔥 532 · 1 post</span><span class="sub"> • · hottest: <a class="cite" href="https://stocktwits.com/Andrewfritzen01/message/659438855" target="_blank" rel="noopener">stocktwits.com 🔥532</a></span></div>
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: ardizor, Andrewfritzen01, CoinAlertNews</div></summary>
@@ -994,7 +924,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('kalshi-insider-trading-probe');event.stopPropagation()">⚡ Kalshi insider-trading probe ×6</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">US crypto banking <span class="ad">↓</span> · prediction markets <span class="ad">↓</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Disruption Banking, Donald Trump Jr., Kalshi, Polymarket</div></summary>
  <div class="bodyb"><div class="summary">A separate strand of political risk runs through crypto: a Trump-affiliated crypto bank is alleged to have structured an Iran sanctions workaround, while crowd reporting flags a $300K Kalshi grant to Donald Trump Jr. and administration backing of Kalshi and Polymarket even as states push bans. Taken together these frame a governance risk where the venues and institutions closest to political power are also the ones facing the sharpest compliance exposure.</div>
@@ -1005,7 +934,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span><span class="lens">🔥 social</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="">→</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:18%"></span></span><span class="heatchip">🔥 6.1k · 2 posts</span><span class="sub"> 𝕏 • · hottest: <a class="cite" href="https://x.com/WatcherGuru/status/2078507036250112117" target="_blank" rel="noopener">x.com 🔥6.1k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: FBI, Watcher.Guru</div></summary>
@@ -1017,7 +945,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill low">low</span><span class="lens">🏛 macro</span><span class="lens">🔥 social</span>
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 18</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">USD (DXY) <span class="ad">↓</span> · CNY <span class="au">↑</span> · crude oil <span class="au">↑</span> · US Treasuries <span class="ad">↓</span></span></div>
- 
  <div class="top heatrow"><span class="sub">social heat</span><span class="barwrap"><span class="bar heatbar" style="width:24%"></span></span><span class="heatchip">🔥 8.1k · 1 post</span><span class="sub"> 𝕏 · hottest: <a class="cite" href="https://x.com/World_Affairs11/status/2078328124111032566" target="_blank" rel="noopener">x.com 🔥8.1k</a></span></div>
  <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: World_Affairs11, China, Saudi Arabia</div></summary>
@@ -1030,7 +957,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">CLP <span class="au">↑</span> · Chile equities <span class="au">↑</span> · Chile sovereign <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
  <div class="voices">voices: Jose Antonio Kast, Chile Senate, Bloomberg</div></summary>
  <div class="bodyb"><div class="summary">Chile&#x27;s Senate passing President Kast&#x27;s wide-ranging economic reform bill clears a legislative hurdle and signals that the government can actually execute its agenda. For FX this is the reform-premium trade: policy-execution credibility in a commodity-exporting EM tends to compress risk premia and support the local currency alongside domestic assets.</div>
@@ -1041,7 +967,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill med">med</span>
   <span class="senti mix">⚪ mixed</span><span class="tdate">📅 Jul 16</span><button class="famchip" onclick="famFilter('uk-leadership-transition');event.stopPropagation()">⚡ UK leadership transition ×3</button><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">GBP <span class="">→</span> · UK gilts <span class="">→</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Shabana Mahmood, Bloomberg</div></summary>
@@ -1054,7 +979,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="senti bear">🔴 bearish</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">RUB <span class="ad">↓</span> · USD (safe haven) <span class="au">↑</span> · crypto <span class="au">↑</span></span></div>
  
- 
  <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Vladimir Putin, Russian elite, Bloomberg</div></summary>
  <div class="bodyb"><div class="summary">Russia&#x27;s elite are moving billions of dollars of wealth offshore and into alternative assets, evading wartime capital controls. Two things follow: the ruble loses the artificial support that capital controls were designed to provide, and the sanctions regime is being leaked around by the very cohort it targets — a bearish combination for the currency and a signal that enforcement is weaker than headline policy implies.</div>
@@ -1065,7 +989,6 @@ body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead
   <span class="pill high">high</span>
   <span class="senti bull">🟢 bullish</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
  <div class="top" style="margin-top:6px"><span class="assets">CAD <span class="au">↑</span> · USD (G10) <span class="ad">↓</span> · US-Canada spread <span class="ad">↓</span></span></div>
- 
  
  <div class="sig"><span class="mat">materiality 0.25</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
  <div class="voices">voices: Reuters</div></summary>
