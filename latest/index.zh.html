@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market View — 全市场跨资产综合</title><style>
+:root{--bg:#0f1320;--panel:#171c2e;--panel2:#1d2438;--line:#2a3350;--ink:#e8ecf5;
+--mut:#97a0bd;--dim:#6b748f;--up:#2ec27e;--down:#ef5b6b;--accent:#3d7bff;--macro:#b07ce8;
+--high:#1e9e63;--med:#c79a2e;--low:#9aa3bd;--hair:rgba(255,255,255,.07);
+--lift:0 10px 26px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ background-image:radial-gradient(1100px 520px at 18% -10%,#1d2750 0%,rgba(15,19,32,0) 60%);background-repeat:no-repeat}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
+ position:sticky;top:0;z-index:60;background:rgba(15,19,32,.78);backdrop-filter:blur(8px);padding:8px 0}
+.tab{padding:6px 13px;border-radius:99px;background:rgba(255,255,255,.05);color:var(--mut);font-weight:600;border:none;font-size:13px}
+.tab.active{background:linear-gradient(135deg,#4c7dff,#6a5cff);color:#fff;box-shadow:0 4px 14px rgba(76,125,255,.35)}
+.tab.macro{background:rgba(176,124,232,.14);color:#d9c2f3;border:none}
+.tabsep{color:var(--dim);padding:0 2px}.crumb{color:var(--mut);font-size:12px;margin-left:auto}
+.panel{background:var(--panel);border:none;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--lift)}
+.panel h3{margin:0 0 8px;font-size:13px;letter-spacing:.02em;color:var(--mut);text-transform:uppercase;font-weight:700}
+.sub{color:var(--mut);font-size:12px;font-weight:500}
+.hero{background:linear-gradient(150deg,rgba(76,125,255,.14),rgba(106,92,255,.06) 55%,var(--panel))}
+.regime{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:800;font-size:12px;letter-spacing:.04em}
+.regime.off{background:rgba(239,91,107,.16);color:#ff9aa0}.regime.on{background:rgba(46,194,126,.16);color:#7ce3ae}.regime.mixed{background:rgba(227,179,65,.16);color:#ffd98a}
+.verified{color:var(--up);font-weight:700;font-size:12px;float:right}
+.tldr{margin:10px 0;font-size:15.5px}
+.stats{display:flex;flex-wrap:wrap;gap:14px;border-top:1px solid var(--hair);padding-top:10px;font-size:13px}
+.stats b.up{color:var(--up)}.stats b.down{color:var(--down)}.stats b.flat{color:var(--mut)}
+.work{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+@media(max-width:820px){.work{grid-template-columns:1fr}}
+.sector{margin-top:16px}.sector:first-of-type{margin-top:2px}
+.sector h4{margin:0 0 9px;font-size:13.5px;color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:6px;font-weight:700;display:flex;align-items:baseline;gap:7px}
+.sector h4 .sub{font-weight:500}
+details.thesis{border:none;border-radius:14px;padding:0;margin-bottom:10px;background:var(--panel2);
+ box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);
+ transition:transform .15s ease,box-shadow .15s ease}
+details.thesis:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.06)}
+details.thesis>summary{list-style:none;cursor:pointer;padding:11px}
+details.thesis>summary::-webkit-details-marker{display:none}
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rank{color:var(--dim);font-weight:800}.tname{font-weight:700;font-size:14.5px}
+.pill{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.03em}
+.pill.high{background:rgba(46,194,126,.16);color:#7ce3ae}.pill.med{background:rgba(199,154,46,.18);color:#ffd98a}.pill.low{background:rgba(154,163,189,.16);color:#b9c1d9}
+.lens{font-size:10.5px;padding:2px 8px;border-radius:99px;border:none;color:#d9c2f3;background:rgba(176,124,232,.16)}
+.senti{font-size:11px;font-weight:700}.senti.bear{color:var(--down)}.senti.bull{color:var(--up)}.senti.mix{color:var(--mut)}
+.barwrap{flex:1;min-width:80px;height:6px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin:0 6px}
+.bar{display:block;height:6px;background:var(--accent);border-radius:4px}
+.assets{color:var(--mut);font-size:12px}
+.assets .au{color:var(--up);font-weight:700}.assets .ad{color:var(--down);font-weight:700}
+.sig{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.mat{color:var(--macro);font-weight:800;font-size:11px}
+.sigtag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(61,123,255,.13);border:none;color:#bcd2ff}
+.tdate{color:var(--dim);font-size:11px;font-weight:600;white-space:nowrap}
+.voices{color:var(--mut);font-size:12px;margin-top:5px}.caret{margin-left:auto;color:var(--mut)}
+.bodyb{padding:0 11px 11px}.summary{font-size:13px;color:#d7deef;margin:6px 0 9px}
+.ev{display:grid;grid-template-columns:1fr 1fr;gap:9px}@media(max-width:640px){.ev{grid-template-columns:1fr}}
+.col{border:none;border-radius:11px;padding:10px;background:rgba(255,255,255,.03)}
+.col.for{background:rgba(46,194,126,.06)}.col.against{background:rgba(239,91,107,.06)}
+.col h4{margin:0 0 6px;font-size:11px;text-transform:uppercase}.col.for h4{color:var(--up)}.col.against h4{color:var(--down)}
+.point{font-size:12.5px;padding:5px 0;border-top:1px solid var(--hair)}.point:first-of-type{border-top:none}
+.vf{color:var(--up)}.flag{color:var(--med);font-weight:700}
+.cite{display:inline-block;font-size:10.5px;background:rgba(61,123,255,.12);border:none;color:#9fc0ff;border-radius:99px;padding:1px 8px;margin:3px 4px 0 0}
+.tl{list-style:none;margin:0;padding:0}.tl li{padding:5px 0;border-top:1px solid var(--hair);font-size:13px}.tl li:first-child{border-top:none}
+.when{color:var(--macro);font-weight:700;margin-right:6px}
+.cal{background:linear-gradient(160deg,rgba(176,124,232,.12),#211833)}.cal table{width:100%;border-collapse:collapse;font-size:12.5px}
+.cal td{padding:4px 0;border-top:1px solid var(--hair)}.cal tr:first-child td{border-top:none}
+.imp.high{color:var(--down);font-weight:700}.imp.med{color:var(--med);font-weight:700}
+.delta{background:#13233f}
+.vn{font-size:12.5px;padding:6px 0;border-top:1px solid var(--hair);color:#cdd5e8}.vn:first-child{border-top:none}
+.acgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:820px){.acgrid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.acgrid{grid-template-columns:1fr}}
+.ac{border:none;border-radius:12px;padding:10px;background:var(--panel2);box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05)}
+.ac.macro{border:none;background:linear-gradient(160deg,rgba(176,124,232,.16),#1d1530)}.ac .acn{font-weight:700}.ac .mv{font-weight:800}
+.ac .det{margin-top:6px;border-top:1px solid var(--hair);padding-top:6px;color:var(--mut);font-size:12px}
+.house{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:820px){.house{grid-template-columns:1fr}}
+.house .hp{border:none;border-radius:12px;padding:11px;background:rgba(255,255,255,.03);font-size:12.5px}
+.houseflag{font-size:11px;color:var(--med);font-weight:700}
+h1{font-size:20px;margin:0 0 2px}.note{color:var(--mut);font-size:11.5px;margin-top:18px;border-top:1px solid var(--hair);padding-top:10px}
+.voiceb{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:5px;border:none}
+.voiceb.primary,.voiceb.fund_manager,.voiceb.viral_social{color:#ffe39b;background:rgba(199,154,46,.18)}
+.voiceb.analyst{color:#bcd2ff;background:rgba(44,99,184,.22)}
+.voiceb.premium_journalism{color:#cdd5e8;background:rgba(70,82,122,.30)}
+.voiceb.free_aggregator{color:#97a0bd;background:rgba(42,51,80,.50)}
+.delta{background:linear-gradient(160deg,rgba(46,194,126,.10),#16241c)}
+.delta .dp{font-size:13px;padding:5px 0;border-top:1px solid rgba(46,194,126,.16)}.delta .dp:first-of-type{border-top:none}
+.secnav{position:sticky;top:46px;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+ padding:7px 10px;margin:0 0 10px;background:rgba(13,19,34,.72);backdrop-filter:blur(10px);
+ border:none;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.30)}
+.seclist.scrolly{max-height:640px;overflow-y:auto;padding:2px 6px 10px 2px;
+ border-bottom:1px dashed var(--hair);
+ scrollbar-width:thin;scrollbar-color:#3a4a72 transparent}
+.seclist.scrolly::-webkit-scrollbar{width:8px}
+.seclist.scrolly::-webkit-scrollbar-thumb{background:#3a4a72;border-radius:4px}
+.seclist.scrolly::-webkit-scrollbar-track{background:transparent}
+.navchip{color:#cdd5e8;text-decoration:none;font-size:11.5px;padding:3px 10px;border-radius:99px;
+ border:none;background:rgba(255,255,255,.05);white-space:nowrap}
+.navchip:hover{background:rgba(76,125,255,.20);color:#fff}.navchip b{color:#7fd4ff}
+.heatrow{margin-top:5px}.heatbar{background:linear-gradient(90deg,#b3541e,#ff8c42)!important}
+.heatchip{font-size:11px;font-weight:700;color:#ffb27d;white-space:nowrap}
+.cite .eng{color:#ffb27d;font-weight:700;font-size:10px}
+.cite .cred{color:#ffe39b;font-weight:700;font-size:10px}
+html{scroll-behavior:smooth}.sector{scroll-margin-top:96px}
+/* ── functional tabs + Home/focus views (body[data-view]) ── */
+button.tab{cursor:pointer;font-family:inherit;appearance:none}
+.langbtn{cursor:pointer}
+.tab.home{background:rgba(255,255,255,.05);color:var(--mut)}
+.tab.active{background:linear-gradient(135deg,#4c7dff,#6a5cff);color:#fff;box-shadow:0 4px 14px rgba(76,125,255,.35)}
+/* Home: cap each sector to its top-5 (ranked by materiality); focus uncaps */
+body[data-view="home"] .seclist>details.thesis:nth-of-type(n+6){display:none}
+/* focus (any non-home view): hide the whole-market context */
+body:not([data-view="home"]) .home-only,
+body:not([data-view="home"]) .hero,
+body:not([data-view="home"]) .secnav{display:none}
+/* "+N more" chip — only on Home, under its own sector */
+.morebtn{display:none;cursor:pointer;font-family:inherit;margin:2px 0 2px;width:100%;
+ text-align:left;background:rgba(76,125,255,.08);border:none;color:#9fc0ff;
+ border-radius:11px;padding:8px 12px;font-size:12.5px;font-weight:700}
+.morebtn:hover{background:rgba(76,125,255,.16);color:#fff}
+body[data-view="home"] .sector .morebtn{display:block}
+/* in focus the focus-header titles the class, so drop the sector's own heading */
+body:not([data-view="home"]) .sector>h4{display:none}
+/* focus header + back-to-home, shown only inside a class view */
+.focushead,.backhome{display:none}
+body:not([data-view="home"]) .focushead{display:block;margin:2px 0 12px}
+.focushead .fh{font-size:19px;font-weight:800}
+.focushead .fhsub{color:var(--mut);font-size:12.5px;margin-top:3px}
+.backhome{cursor:pointer;font-family:inherit;background:rgba(255,255,255,.05);border:none;
+ color:var(--mut);border-radius:99px;padding:5px 12px;font-size:12.5px;font-weight:700;margin-bottom:10px}
+body:not([data-view="home"]) .backhome{display:inline-block}
+.backhome:hover{color:#fff;background:rgba(76,125,255,.20)}
+.cal td .sub{font-size:10.5px}.imp.low{color:var(--mut);font-weight:700}
+.calempty{display:none;color:var(--mut);font-size:12.5px;padding:8px 2px}
+.calempty.show{display:block}
+/* event family (spec 2026-07-15) — family chips reuse the heat-orange capsule idiom */
+.famchip{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;border:none;cursor:pointer;
+ font-family:inherit;background:rgba(255,178,125,.14);color:#ffb27d;white-space:nowrap}
+.famchip:hover{background:rgba(255,178,125,.26)}
+.famchip.active{background:linear-gradient(135deg,#ff9d5c,#ffb27d);color:#251507;box-shadow:0 4px 14px rgba(255,178,125,.35)}
+.memrow{display:flex;gap:5px;flex-wrap:wrap;padding:7px 0 2px}
+.memchip{font-size:10.5px;padding:2px 9px;border-radius:99px;background:rgba(61,123,255,.13);color:#bcd2ff}
+.memchip:hover{background:rgba(61,123,255,.25)}
+.memchip .au{color:var(--up)}.memchip .ad{color:var(--down)}
+details.thesis.hubcard{background:linear-gradient(150deg,rgba(255,178,125,.08),var(--panel2) 60%)}
+.filterbar{display:none;position:sticky;top:46px;z-index:55;margin-bottom:10px;padding:8px 13px;border-radius:12px;
+ background:rgba(255,178,125,.10);backdrop-filter:blur(8px);color:#ffd9b8;font-size:12.5px;font-weight:600;
+ box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.filterbar button{float:right;border:none;border-radius:99px;padding:2px 12px;cursor:pointer;font-family:inherit;
+ background:rgba(255,255,255,.12);color:#fff;font-weight:700}
+body.famfiltered details.thesis{display:none!important}
+body.famfiltered details.thesis.famshow{display:block!important}
+body[data-view="macro-politics"] .sector:not([data-ac="macro-politics"]),body[data-view="macro-politics"] .focushead:not([data-ac="macro-politics"]),body[data-view="macro-politics"] .cal tr[data-ac]:not([data-ac="macro-politics"]){display:none}
+body[data-view="equities"] .sector:not([data-ac="equities"]),body[data-view="equities"] .focushead:not([data-ac="equities"]),body[data-view="equities"] .cal tr[data-ac]:not([data-ac="equities"]){display:none}
+body[data-view="fixed-income"] .sector:not([data-ac="fixed-income"]),body[data-view="fixed-income"] .focushead:not([data-ac="fixed-income"]),body[data-view="fixed-income"] .cal tr[data-ac]:not([data-ac="fixed-income"]){display:none}
+body[data-view="commodities"] .sector:not([data-ac="commodities"]),body[data-view="commodities"] .focushead:not([data-ac="commodities"]),body[data-view="commodities"] .cal tr[data-ac]:not([data-ac="commodities"]){display:none}
+body[data-view="crypto"] .sector:not([data-ac="crypto"]),body[data-view="crypto"] .focushead:not([data-ac="crypto"]),body[data-view="crypto"] .cal tr[data-ac]:not([data-ac="crypto"]){display:none}
+body[data-view="fx"] .sector:not([data-ac="fx"]),body[data-view="fx"] .focushead:not([data-ac="fx"]),body[data-view="fx"] .cal tr[data-ac]:not([data-ac="fx"]){display:none}</style></head>
+<body id="top" data-view="home"><div class="wrap">
+ <div class="tabs"><button class="tab home active" data-view="home">🏠 首页</button><button class="tab" data-view="macro-politics">🏛 Macro/Politics</button><button class="tab" data-view="equities">📈 Equities</button><button class="tab" data-view="fixed-income">🏦 Fixed Income</button><button class="tab" data-view="commodities">🛢 Commodities</button><button class="tab" data-view="crypto">₿ Crypto</button><button class="tab" data-view="fx">💱 FX</button><span class="tabsep">·</span><button class="famchip" id="nav-" onclick="famFilter('')">⚡ 美国-伊朗霍尔木兹战争 ×4</button><button class="famchip" id="nav-kimi-k3" onclick="famFilter('kimi-k3')">⚡ Kimi K3芯片抛售 ×2</button><button class="famchip" id="nav-" onclick="famFilter('')">⚡ 中国干预选举指控 ×2</button><button class="famchip" id="nav-ai" onclick="famFilter('ai')">⚡ 习近平AI峰会 ×2</button><span class="crumb">全市场 · 截至 Sat 18 Jul 2026 · 198 路跨资产 Exa 检索</span><button class="tab langbtn" onclick="langSwap()">English</button></div>
+ <button class="backhome" data-view="home">← 首页</button>
+ <div class="filterbar" id="filterbar"><button onclick="famClear()">显示全部</button><span id="filtertext"></span></div>
+ <div class="focushead" data-ac="macro-politics"><div class="fh">🏛 Macro/Politics <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 11 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div><div class="focushead" data-ac="equities"><div class="fh">📈 Equities <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 18 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div><div class="focushead" data-ac="fixed-income"><div class="fh">🏦 Fixed Income <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 9 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div><div class="focushead" data-ac="commodities"><div class="fh">🛢 Commodities <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 8 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div><div class="focushead" data-ac="crypto"><div class="fh">₿ Crypto <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 5 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div><div class="focushead" data-ac="fx"><div class="fh">💱 FX <span class="sub">— 全景模式</span></div><div class="fhsub">该类全部 3 条 thesis + 本类催化剂。其余已隐藏 — 点「← 首页」返回。</div></div>
+ <nav class="secnav"><span class="sub">共 54 条 theses</span><a class="navchip" href="#sec-macro-politics">🏛 Macro/Politics <b>11</b></a><a class="navchip" href="#sec-equities">📈 Equities <b>18</b></a><a class="navchip" href="#sec-fixed-income">🏦 Fixed Income <b>9</b></a><a class="navchip" href="#sec-commodities">🛢 Commodities <b>8</b></a><a class="navchip" href="#sec-crypto">₿ Crypto <b>5</b></a><a class="navchip" href="#sec-fx">💱 FX <b>3</b></a><a class="navchip" href="#top">↑ 顶部</a></nav>
+
+ <div class="panel hero"><h1>🌐 全市场跨资产视图</h1>
+  <div><span class="regime off">RISK-OFF</span>
+   <span class="sub"> · 信念度  · 广度 </span>
+   <span class="verified">🔗 320 条引用 · 296 个去重信源 · ✓ 165 已验证 · ⚑ 48 已标记</span></div>
+  <div class="tldr"><b>太长不看：</b> <i>盘面呈避险格局，但属轮动而非恐慌抛售。当日主导因素是一场由中国引领的AI/芯片冲击——Moonshot开源权重的Kimi K3重新点燃了DeepSeek式的担忧，拖累股指期货和半导体走低——并叠加地缘政治双重冲击：特朗普解密的中国干预选举指控威胁贸易休战及9月的特朗普-习近平峰会，以及美国-伊朗冲突进入第六天、霍尔木兹油轮遇袭重建原油风险溢价。表象之下实为真正的双向格局：坚挺的硬数据、丰厚的并购管线、能源与银行交易业务的强势、主权AI需求以及完好无损的前沿芯片多头逻辑缓冲了回撤，而鹰派央行（美联储鹰派、日本央行、欧洲央行的最后一次加息）令&#x27;更高更久&#x27;得以延续。资金正撤离拥挤的AI/动量多头、SpaceX和加密货币，转向能源、价值股和中国/新兴市场——这是降险，而非降总敞口。</i></div>
+  </div>
+
+ 
+
+ <div class="work">
+  <div>
+   <div class="panel"><h3 class="home-only">全市场分板块 theses <span class="sub">— 按资产类分组 · 按 materiality 排序 · 首页显示各板块前 5 · 点 tab 看整类</span></h3><div class="sector" id="sec-macro-politics" data-ac="macro-politics"><h4>🏛 Macro/Politics <span class="sub">— 首页显示前 5 条（共 11 条） · 点击 Macro/Politics tab 查看全部 11 条</span></h4><div class="seclist"><details class="thesis" open><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">关税升级扩散为进口成本通胀渠道</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span> · rates <span class="au">↑</span> · commodities <span class="au">↑</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.44</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Trump, USTR Greer, Canada (Ottawa), Brazil / WTO, GOP</div></summary>
+ <div class="bodyb"><div class="summary">针对加拿大的新关税威胁（因野火烟雾）、即将出台的巴西决定，以及悬而未决的瑞士裁决，正在扩大贸易战阵线，而进口价格已显示出关税传导，中国商品成本处于2008年高点。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">特朗普威胁对加拿大征收新的/更高的关税，指责800多起野火产生的烟雾“入侵”美国城市，并誓言将污染成本加入现有关税。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/trump-canada-wildfire-tariffs.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.theglobeandmail.com/world/us-politics/article-donald-trump-threatens-tariffs-canada-over-wildfire-smoke/" target="_blank" rel="noopener">🔗 theglobeandmail</a><a class="cite" href="https://ca.news.yahoo.com/trump-takes-aim-canada-over-201027800.html" target="_blank" rel="noopener">🔗 yahoo</a><a class="cite" href="https://www.reuters.com/world/ontario-buy-new-11-new-aircraft-very-difficult-wildfire-fight-2026-07-17/" target="_blank" rel="noopener">🔗 reuters <span class="cred">🎙 US Government</span></a></div></div><div class="point">美国贸易代表Greer表示，巴西关税决定将于周三出台，叠加在现有25%关税之上，巴西计划在WTO对此提出申诉。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/greer-says-us-to-announce-decision-on-brazil-tariffs-wednesdsay" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">美国进口价格意外上涨0.3%，中国商品成本处于2008年以来最高水平——关税正传导至价格的直接证据。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/import-prices-post-surprise-gain-as-costs-of-goods-from-china-hit-highest-since-2008.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">美国还在权衡对瑞士的关税决定，显示战线不止延伸至单一国家。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/greer-praises-swiss-investments-as-us-weighs-tariff-decision" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">6月批发价格（PPI）因汽油价格大幅下跌意外下降0.3%，缓解了近期通胀压力，并部分抵消了进口价格涨幅。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/wholesale-inflation-june-2026-.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div></div></div>
+</details><details class="thesis hubcard" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">美中破裂：干预选举指控威胁贸易休战</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 中国干预选举指控 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span> · commodities <span class="ad">↓</span> · fx <span class="">→</span></span></div>
+ <div class="memrow"><a class="memchip" href="#th-" onclick="event.stopPropagation()">Crypto · 地缘政治避险——特朗普对中国的选举数据指控… <b class="ad">↓</b></a></div>
+ 
+ <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Trump, Xi, USTR Jamieson Greer, US Intelligence Community, Chancellor Merz</div></summary>
+ <div class="bodyb"><div class="summary">特朗普解密指控中国干预2020年大选，重新引发地缘政治风险，并可能破坏脆弱的贸易休战和计划中的9月特朗普-习近平峰会，针锋相对的报复性措施已在累积。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">在一场25分钟的黄金时段讲话中，特朗普解密了指控中国干预2020年大选的情报，这与美国情报界自身“没有证据表明选票被篡改”的结论相矛盾。 <span class="vf">✓</span><div><a class="cite" href="https://www.channelnewsasia.com/world/trump-accuse-china-2020-us-voting-interference-6259916" target="_blank" rel="noopener">🔗 channelnewsasia</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/trump-accuses-china-of-election-meddling-putting-ties-at-risk" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">分析师警告称，这些指控可能在9月与习近平会晤前扰乱美中贸易休战，并打压了市场情绪。 <span class="vf">✓</span><div><a class="cite" href="https://investinglive.com/news/trump-s-china-election-claims-risk-unsettling-trade-truce-ahead-of-xi-meeting" target="_blank" rel="noopener">🔗 investinglive</a><a class="cite" href="https://www.marketwatch.com/story/why-trumps-speech-on-u-s-elections-could-be-bad-for-markets-e617dc64?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 marketwatch</a></div></div><div class="point">升级正在扩大：政府将缩短中国记者的美国签证停留期限，招致北京迅速回应和针锋相对的限制。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/trump-to-cut-us-stays-for-china-journalists-risking-retaliation" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">德国的Merz正逐步倾向于支持欧盟对华施压，扩大西方阵线，并可能招致对欧洲出口商的报复。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/merz-is-inching-germany-toward-backing-eu-push-against-china" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">美国贸易代表Greer将9月特朗普-习近平峰会定性为对中国先前承诺的盘点，暗示外交渠道仍然开放。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/trump-xi-summit-to-take-stock-of-china-commitments-greer-says" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">一位莫迪顾问敦促印度寻求更多中国投资和贸易，这表明并非每个主要经济体都在与北京脱钩。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/modi-adviser-urges-india-to-seek-more-chinese-investment-trade" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis hubcard" data-fam="ai" id="th-ai"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">中国崛起:竞逐AI领导地位与全球软实力</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ 习近平AI峰会 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="">→</span> · fx <span class="">→</span></span></div>
+ <div class="memrow"><a class="memchip" href="#th-ai-ai" onclick="event.stopPropagation()">Equities · AI 治理与出口管制地缘政治重塑 AI 溢价… ·</a></div>
+ 
+ <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Xi, People&#x27;s Daily, Axios, Pew Research</div></summary>
+ <div class="bodyb"><div class="summary">习近平将中国定位为全球AI新秩序的领导者并积极争取发展中世界,官方媒体抨击西方出口管制,广为流传的报道称中国已缩小AI差距并赢得全球好感——这一叙事对AI相关股票及美元储备地位具有影响。美国方面的反驳:其自身的AI繁荣依然完好无损。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">习近平将中国定位为全球AI新秩序的领导者,向发展中国家承诺提供5,000个培训名额及集团层面的合作,同时警告勿以安全为由过度干预——直接挑战美国的主导地位。[爆款热度22] <span class="vf">✓</span><div><a class="cite" href="https://www.reuters.com/world/asia-pacific/chinas-xi-promotes-chinas-commitment-ai-access-speech-shanghai-conference-2026-07-17/" target="_blank" rel="noopener">🔗 reuters <span class="cred">🎙 Chinese Government</span></a><a class="cite" href="https://www.cnbc.com/2026/07/17/x-china-ai-summit-risks-security.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">一篇Axios报道称中国已抹平美国的AI领先优势。[爆款热度4] <span class="vf">✓</span><div><a class="cite" href="https://www.axios.com/2026/07/17/china-ai-kimi-k3-open-source-anthropic-opus" target="_blank" rel="noopener">🔗 axios <span class="cred">🎙 Axios</span></a></div></div><div class="point">中国《人民日报》警告勿制造&#x27;AI铁幕&#x27;,抨击西方赢家通吃的AI出口管制是一场可能割裂全球AI供应链的科技冷战。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-party-mouthpiece-warns-against-iron-curtain-in-world-ai" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">一项Pew研究显示,全球公众舆论如今更青睐中国而非美国,表明美国软实力受到侵蚀,并对美元储备地位及美国跨国公司产生影响。[爆款热度30] <span class="vf">✓</span><div><a class="cite" href="https://www.bbc.com/news/articles/cd959q11g54o" target="_blank" rel="noopener">🔗 bbc <span class="cred">🎙 Pew Research</span></a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">美国的AI繁荣仍在重塑经济,并通过股权增值造就新的百万富翁,这证明美国的AI领导地位依然完好。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/the-ai-boom-is-changing-the-economy-and-minting-new-millionaires-overnight" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis hubcard" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#4</span><span class="tname">中东战争重燃石油风险溢价,霍尔木兹威胁全球增长</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 美国-伊朗霍尔木兹战争 ×4</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span> · fx <span class="">→</span></span></div>
+ <div class="memrow"><a class="memchip" href="#th-" onclick="event.stopPropagation()">Equities · 能源板块因中东紧张局势与油价走强而繁荣… <b class="au">↑</b></a><a class="memchip" href="#th-" onclick="event.stopPropagation()">Commoditi · 霍尔木兹战争风险溢价收紧原油市场… <b class="au">↑</b></a><a class="memchip" href="#th-" onclick="event.stopPropagation()">Commoditi · 绕行霍尔木兹的管道缓解咽喉要道压力… <b class="ad">↓</b></a></div>
+ 
+ <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Iran, IEA chief, RBI Governor, Trump, Speaker Ghalibaf</div></summary>
+ <div class="bodyb"><div class="summary">美国与伊朗重燃的敌对行动蔓延至叙利亚和巴林,加之对美国能否保障霍尔木兹海峡安全的质疑,持续支撑着石油风险溢价,IEA警告这可能危及全球增长——尽管德黑兰的谈判代表仍在为外交辩护。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">伊朗称美国最新的打击击中了民用基础设施,并将攻击范围扩大至叙利亚和巴林,侵蚀了脆弱的美伊停火。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-us-trump-syria-bahrain.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">IEA负责人警告,若霍尔木兹危机持续,全球经济将陷入险境,而特朗普正面临美国保障该海峡安全的实力局限,持续加剧运费与石油瓶颈。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/iea-boss-warns-global-economy-in-peril-if-hormuz-crisis-persists" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/trump-confronts-limits-to-us-power-to-secure-strait-of-hormuz" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">印度RBI行长在9月利率决议前,将伊朗战争列为经济的关键下行风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/iran-war-monsoons-key-risk-for-india-economy-rbi-governor-says" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">伊朗议会议长Ghalibaf公开为对美和谈辩护以反驳强硬派,表明内部对外交的支持及近期升级风险的降低。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/iran-s-top-negotiator-defends-us-peace-talks-against-hardliners" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#5</span><span class="tname">美国经济:强韧的硬数据 vs 恶化的情绪(滞胀之争)</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="">→</span> · rates <span class="">→</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： CNBC All-America Economic Survey, Federal Reserve (Beige Book)</div></summary>
+ <div class="bodyb"><div class="summary">情绪与购买力正在走弱,特朗普日益受到指责,但劳动力与消费的硬数据依然稳固——使市场在软着陆与关税驱动的滞胀解读之间产生分歧。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">CNBC全美经济调查显示,经济前景恶化至疫情后的低点,对特朗普的指责不断上升。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/economic-outlook-is-worsening-and-trump-is-getting-blamed-cnbc-survey-finds.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">随着房价与抵押贷款利率双双上升,购房者的购买力连续第五个月下滑。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/homebuyer-affordability.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">美联储褐皮书发现,世界杯提振了酒店餐饮支出,但其他领域的消费信号依然疲弱;另外,6月非农就业人数六年来首次下降。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/world-cup-economy-spending-alcohol-hotels-fed.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-jobless-claims-decline-to-208-000-below-economist-forecasts" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">针对学生签证新设的四年期限收紧了外国学费流入及未来高技能劳动力的供给渠道,拖累了增长前景。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/trump-to-limit-student-visas-to-four-years-in-latest-crackdown" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">每周首次申请失业救济人数降至208,000,低于预期,凸显了劳动力市场的韧性。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-jobless-claims-decline-to-208-000-below-economist-forecasts" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">随着消费者将支出从汽油转移,零售销售温和增长,表明消费者具有潜在的韧性。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-retail-sales-rise-modestly-as-consumers-spend-less-on-gas" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#6</span><span class="tname">欧洲政治与财政的交叉逆流（UK vs Italy）</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="">→</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： IMF, Andy Burnham, Shabana Mahmood, Bank of Italy, Giorgia Meloni</div></summary>
+ <div class="bodyb"><div class="summary">英国领导层更迭带来财政稳定担忧——IMF和Burnham本人均警告税收与土地税风险——尽管英国GDP超预期走高；与此同时，意大利凭借上调的增长预期以及Meloni推进改革展现韧性，而芬兰的丑闻增添尾部风险。传导路径经由英国国债、意大利国债（BTP）及英镑/欧元。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">IMF告诫即将上任的英国领导层不要上调最高所得税税率，警告可能引发资本外逃和增长放缓。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/imf-cautions-burnham-against-raising-uk-s-top-income-tax-rate" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">即将执掌英国工党的Burnham警告，仓促推出土地税可能带来金融稳定风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/burnham-warned-of-financial-stability-risk-from-a-quick-land-tax" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">随着一桩政治丑闻爆发，芬兰总理要求议会召开会议，增添了近期欧洲政治风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/finnish-premier-asks-parliament-to-convene-as-scandal-flares-up" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">意大利央行上调增长预期，对Meloni是一大利好，其旗舰选举改革也已在下议院过关——支撑意大利主权信用与政治稳定。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/bank-of-italy-raises-growth-forecast-in-another-boon-for-meloni" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/meloni-s-electoral-reform-clears-italy-s-lower-house-with-vote" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">尽管面临能源与政治动荡，英国经济5月意外增长，即将上任的财政大臣Mahmood的财政空白局面提供了政策灵活性。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/uk-economy-grew-in-may-despite-energy-political-turmoil" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/mahmood-s-economic-blank-slate-key-to-appeal-as-uk-chancellor" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#7</span><span class="tname">地缘政治与供应链政策交织下印度增长的交叉逆流</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">fx <span class="ad">↓</span> · equities <span class="">→</span> · commodities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： RBI Governor, Modi, Modi economic adviser</div></summary>
+ <div class="bodyb"><div class="summary">印度面临多重外部风险（伊朗战争、季风偏弱、美国对俄石油制裁令贸易谈判复杂化），而RBI与莫迪正以进口替代及对中国资本的开放态度予以应对——对卢比及印度股市而言，这是一种多空均衡的格局。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">RBI行长在9月利率决议前，将伊朗战争及可能出现的季风偏弱列为关键经济风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/iran-war-monsoons-key-risk-for-india-economy-rbi-governor-says" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">美国重启对俄罗斯石油二级制裁的威胁，为美印贸易谈判增添新的障碍，能源与包装行业敞口面临风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/russia-oil-sanctions-threat-may-complicate-us-india-trade-talks" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">莫迪正推动进口替代，以使印度免受地缘政治与大宗商品冲击，一位莫迪顾问则敦促扩大对中国投资与贸易的开放以支撑增长。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/modi-pushes-to-cut-import-reliance-to-shield-india-from-shocks" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/modi-adviser-urges-india-to-seek-more-chinese-investment-trade" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#8</span><span class="tname">乌克兰政治动荡与俄罗斯制裁/资本外逃</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · crypto <span class="au">↑</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.25</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Zelenskyy, Mykhailo Fedorov, Putin, CIA</div></summary>
+ <div class="bodyb"><div class="summary">泽连斯基罢免了一位广受欢迎、精通科技的国防部长，引发基辅抗议与动荡，与此同时，美国重启对俄罗斯石油二级制裁的威胁以及权贵资本外逃涌入加密货币，令俄罗斯/乌克兰这一渠道对石油与加密货币持续保持活跃。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">泽连斯基在一次改组中罢免了精通科技的国防部长Fedorov——乌克兰无人机/数字战略的设计师——此举在基辅引发抗议，并预示政治不稳定。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/ukraine-tech-savvy-defense-minister-fedorov-leaves-in-reshuffle" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/protests-flare-in-kyiv-over-ouster-of-popular-defense-minister" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">美国重启对俄罗斯石油买家实施二级制裁的威胁，可能收紧原油流动并使美印贸易谈判复杂化。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/russia-oil-sanctions-threat-may-complicate-us-india-trade-talks" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">据报道，俄罗斯权贵正通过加密货币及离岸渠道转移数十亿资金，以规避战时资本管制，并一度影响加密货币价格。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/russia-s-elite-are-moving-billions-beyond-putin-s-wartime-grasp" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">CIA表示，AI赋能的无人机令俄罗斯军队只有~30分钟的反应时间，凸显出一个加速升温的国防科技投资主题。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/cia-says-ai-drones-give-russian-troops-only-30-minutes-to-live" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">泽连斯基坚称被罢免的部长仍是其团队的一员，将此次改组定性为延续而非决裂。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/protests-flare-in-kyiv-over-ouster-of-popular-defense-minister" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#9</span><span class="tname">中国增长低于目标，但企稳信号浮现</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 15</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="ad">↓</span> · equities <span class="">→</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Beijing (NBS), Chinese economists</div></summary>
+ <div class="bodyb"><div class="summary">随着投资下滑，Q2 中国 GDP 录得自 2022 年以来最弱且低于北京的目标，激起了对刺激政策的呼声——但 GDP 平减指数转正、新房价格下滑趋缓，暗示需求见底。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">随着投资下滑，中国录得自 2022 年以来最慢的季度增长 4.3%，低于北京 4.5-5% 的目标，提高了新一轮刺激政策的概率。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/china-gdp-retail-sales-investment-june-.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-s-gdp-growth-weakens-to-4-3-below-official-target-range" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">中国 GDP 平减指数三年来首次转正，经济学家认为这比整体增长数据更有意义，是需求正在企稳的迹象。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-s-gdp-price-gauge-turns-positive-after-years-of-deflation" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">中国新房价格下滑趋缓，表明房地产市场正在见底。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-new-home-price-slump-eases-in-sign-market-is-stabilizing" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#10</span><span class="tname">华盛顿机构与治理诚信的侵蚀</span>
+  <span class="pill low">low</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.20</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Fed OIG, CFTC, Kalshi, Bloomberg Opinion</div></summary>
+ <div class="bodyb"><div class="summary">一系列治理相关报道——美联储监察机构在一起涉华窃密间谍案定罪后发出的内部人风险警告、CFTC对一名白宫工作人员Kalshi押注的调查，以及“新贪腐时代”的评论——共同推动着一个关于美国机构信任度减弱的缓慢发酵叙事。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">在一名前美联储顾问因在一起涉华窃密案中泄露敏感经济数据而被判处三年监禁后，美联储监察长办公室（OIG）就内部人风险发出警告，凸显了央行内部的脆弱性。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/fed-s-watchdog-warns-on-insider-risk-after-china-secrets-case" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/ex-fed-adviser-gets-three-years-in-prison-in-china-secrets-case" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">CFTC正在调查一名白宫提词器操作员在Kalshi预测市场上就特朗普相关结果所下的押注，令Kalshi面临监管和道德层面的担忧。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/cftc-probes-white-house-teleprompter-s-kalshi-bets-on-trump" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Bloomberg Opinion将特朗普时代描述为一个重新定义政治与市场交汇点的“新贪腐时代”。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/trump-s-presidency-deals-and-the-new-age-of-grift" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#11</span><span class="tname">财富大转移——规模存在争议</span>
+  <span class="pill low">low</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets"></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.20</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： CNBC</div></summary>
+ <div class="bodyb"><div class="summary">多项相互矛盾的研究将即将到来的代际财富转移规模估计在$36 trillion至$100 trillion以上不等，这是长期资产流动的一个结构性驱动因素，但各估算值之间近3倍的差距削弱了其可信度。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">两项研究将即将到来的代际财富转移规模估计在$36 trillion至$100 trillion以上，对资产市场和遗产规划均有影响。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/great-wealth-transfer-estimates.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">数值差异：各估算值相差近3倍（$36T对$100T+），因此对该标题数字应审慎对待，而非简单加以混合。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/great-wealth-transfer-estimates.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div></div></div>
+</details></div><button class="morebtn" data-view="macro-politics">▸ 还有 6 条 Macro/Politics thesis — 点此打开完整的 🏛 Macro/Politics 视图</button></div><div class="sector" id="sec-equities" data-ac="equities"><h4>📈 Equities <span class="sub">— 首页显示前 5 条（共 18 条） · 点击 Equities tab 查看全部 18 条</span></h4><div class="seclist"><details class="thesis" data-fam="kimi-k3" id="th-moonshot-kimi-k3"><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">中国Moonshot的Kimi K3冲击引发全球芯片抛售和避险情绪</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('kimi-k3');event.stopPropagation()">⚡ Kimi K3芯片抛售 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span> · rates <span class="ad">↓</span> · crypto <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.45</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (17 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Moonshot AI, Torsten Slok / Apollo, BofA, Nikkei, Business Insider</div></summary>
+ <div class="bodyb"><div class="summary">一款强大的中国开源权重新模型——Moonshot拥有约2.8T参数的Kimi K3，在上海发布并宣称以远低成本达到与OpenAI/Anthropic相当的水平——重新燃起了DeepSeek式的担忧，即美国AI主导地位和高企的半导体估值面临风险，令半导体股跌入熊市区域，并拖累大盘指数当日及当周走低。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Moonshot在世界人工智能大会上发布了Kimi K3，一款约2.8T参数的开源权重模型，宣称达到与OpenAI/Claude相当的水平，权重将于7月27日发布。 <span class="vf">✓</span><div><a class="cite" href="https://apnews.com/article/kimi-k3-china-ai-0d8a5e268deb11a673f4d444fc597cc5" target="_blank" rel="noopener">🔗 apnews</a><a class="cite" href="https://www.bbc.com/news/articles/cy9w4q8pgp0o" target="_blank" rel="noopener">🔗 bbc</a><a class="cite" href="https://www.businessinsider.com/kimi-k3-ai-model-moonshot-china-open-weights-benchmarks-pricing-2026-7" target="_blank" rel="noopener">🔗 businessinsider</a><a class="cite" href="https://www.independent.co.uk/news/chinese-ceo-chatgpt-california-xi-jinping-b3017145.html" target="_blank" rel="noopener">🔗 independent</a><a class="cite" href="https://www.ft.com/content/c6ecd8ce-c441-4d7c-aea6-fae3e28fb6ff" target="_blank" rel="noopener">🔗 ft <span class="cred">🎙 Financial Times</span></a></div></div><div class="point">受该模型影响，美国股指期货和芯片股下滑；SOXX/SMH各跌约5%，PHLX Semiconductor指数当周下跌约10%，跌入熊市区域（较6月底峰值下跌超20%）。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/us-stock-index-futures-slide-as-jitters-grow-on-chip-selloff" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://247wallst.com/investing/2026/07/17/live-nasdaq-composite-tech-stocks-plunge-on-rising-ai-costs-and-netflix-guidance-miss/" target="_blank" rel="noopener">🔗 247wallst</a><a class="cite" href="https://www.theglobeandmail.com/investing/article-chipmakers-and-other-high-flying-stocks-slide-as-ai-trade-wobbles/" target="_blank" rel="noopener">🔗 globeandmail</a><a class="cite" href="https://www.marketwatch.com/story/chip-stocks-enter-bear-market-territory-a-bofa-analyst-says-not-to-panic-4d34df17?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 marketwatch</a></div></div><div class="point">随着芯片股暴跌扩散为避险情绪，Nasdaq和S&amp;P 500下跌约1-2%，当周收低；Nvidia和大型科技股大跌。 <span class="vf">✓</span><div><a class="cite" href="https://krdo.com/news/2026/07/17/us-stock-futures-asian-markets-down-on-concerns-over-chinese-ai-advances/" target="_blank" rel="noopener">🔗 krdo</a><a class="cite" href="https://m.economictimes.com/markets/us-stocks/news/us-stocks-today-us-stocks-end-lower-for-the-day-and-week-as-chip-selloff-broadens/amp_articleshow/132469580.cms" target="_blank" rel="noopener">🔗 economictimes</a><a class="cite" href="https://asia.nikkei.com/business/markets/equities/nvidia-big-tech-stocks-tumble-as-chinese-ai-model-stokes-competitive-fears" target="_blank" rel="noopener">🔗 nikkei</a><a class="cite" href="https://srnnews.com/sp-500-and-nasdaq-slip-as-chip-rout-extends-netflix-slides/" target="_blank" rel="noopener">🔗 srnnews</a><a class="cite" href="https://biz.chosun.com/en/en-international/2026/07/17/AJXMH3Q55RFM7PTI772RWEGCPY/" target="_blank" rel="noopener">🔗 chosunbiz</a></div></div><div class="point">中国芯片恐慌指标触及四年高点；在AI抛售中，Kioxia市值在一个月内较峰值腰斩。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/china-chip-stock-pullback-drives-investor-fear-to-four-year-high" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/chipmaker-kioxia-s-market-value-halves-from-peak-on-ai-selloff" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.japantimes.co.jp/business/2026/07/17/companies/kioxia-market-value-halves/" target="_blank" rel="noopener">🔗 japantimes</a></div></div><div class="point">Apollo的Torsten Slok表示，中国开源权重模型与美国前沿模型之间的能力差距现在以月计，对美国AI溢价构成压力。 <span class="vf">✓</span><div><a class="cite" href="https://www.apollo.com/wealth/insights-news/insights/daily-spark/chinese-models-vs-frontier-models" target="_blank" rel="noopener">🔗 apollo</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/china-s-powerful-new-moonshot-ai-model-closes-gap-with-us-rivals" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">BofA将芯片回调定性为季节性的Q3重置，而非结构性断裂，并呼吁不要恐慌。 <span class="vf">✓</span><div><a class="cite" href="https://www.marketwatch.com/story/chip-stocks-enter-bear-market-territory-a-bofa-analyst-says-not-to-panic-4d34df17?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 marketwatch</a></div></div><div class="point">基本面依然稳健：TSMC业绩超预期并上调指引，ASML上调展望，黄仁勋表示Vera Rubin仍按计划推进。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/tsmc-beats-lofty-estimates-in-latest-sign-of-sustained-ai-demand" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/asml-raises-full-year-outlook-as-ai-boosts-demand-at-chipmakers" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/nvidia-s-huang-declares-vera-rubin-on-track-despite-delay-talk" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Kimi K3也被看多地定性为“全球最大”的开源模型，更廉价的中国AI可能扩大整体市场，而不仅仅是摧毁美国的价值。 <span class="vf">✓</span><div><a class="cite" href="https://www.straitstimes.com/asia/east-asia/chinese-start-up-moonshot-unveils-worlds-largest-open-ai-model-kimi-k3-closing-in-on-us-rivals" target="_blank" rel="noopener">🔗 straitstimes</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/deepseek-champions-china-s-bid-to-flood-the-world-with-cheap-ai" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">能源板块因中东紧张局势与油价走强而繁荣</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 美国-伊朗霍尔木兹战争 ×4</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span> · commodities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.40</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： ConocoPhillips, BP, MarketWatch</div></summary>
+ <div class="bodyb"><div class="summary">随着美伊冲突进入第二周、霍尔木兹通行放缓提振油价，能源板块表现优异；在美国推动削弱伊朗之际，ConocoPhillips收购了BP在伊拉克42%的股权，公用事业/可再生能源吸引了新的投资。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">一篇评论文章将能源公司描述为蓬勃发展并跑赢大盘；随着油价因中东紧张局势上涨，能源股上涨。 <span class="vf">✓</span><div><a class="cite" href="https://www.marketwatch.com/story/look-on-the-bright-side-energy-companies-are-booming-546164fb?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 marketwatch</a><a class="cite" href="https://m.economictimes.com/markets/us-stocks/news/us-stocks-today-us-stocks-end-lower-for-the-day-and-week-as-chip-selloff-broadens/amp_articleshow/132469580.cms" target="_blank" rel="noopener">🔗 economictimes</a></div></div><div class="point">随着霍尔木兹通行放缓、美伊武装冲突进入第二周（包括美国对伊朗主要出口码头附近一艘超级油轮的打击），油价上涨。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/volvo-car-flags-weak-profitability-on-challenging-china-market" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://biz.chosun.com/en/en-international/2026/07/17/AJXMH3Q55RFM7PTI772RWEGCPY/" target="_blank" rel="noopener">🔗 chosunbiz</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/syngenta-s-5-billion-hong-kong-ipo-is-said-to-face-fresh-delays" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">ConocoPhillips正以数十亿美元的投资收购BP在伊拉克42%的股权，与美国削弱伊朗的战略相一致；英国的Burnham支持北海石油，Naturgy正在建设一座约€344M的澳大利亚可再生能源工厂。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/bp-conocophillips-to-back-iraq-with-major-energy-investment-.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/burnham-to-back-north-sea-oil-and-take-control-of-thames-water" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/spain-s-naturgy-to-build-344-million-australia-renewables-plant" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">同一场中东冲突对股市构成广泛的避险拖累，因此油价紧张这一驱动因素是双刃剑。 <span class="vf">✓</span><div><a class="cite" href="https://biz.chosun.com/en/en-international/2026/07/17/AJXMH3Q55RFM7PTI772RWEGCPY/" target="_blank" rel="noopener">🔗 chosunbiz</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">强劲的并购浪潮支撑股市风险偏好</span>
+  <span class="pill high">high</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span> · credit <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.38</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Uber, Stripe, Advent, Eli Lilly, EQT, UniCredit, Merz</div></summary>
+ <div class="bodyb"><div class="summary">一波广泛的交易激增——Uber-Delivery Hero、Stripe/Advent-PayPal（$53B）、Lilly-AtaiBeckley、EQT-Kakaku、Conoco-BP伊拉克，以及UniCredit-Commerzbank路径的解禁——表明企业信心，并在AI动荡中支撑估值。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Uber同意收购Delivery Hero（数字差异：不同来源报道为$14.8B和约€12.5B——已标注，未合并）。 <span class="vf">✓</span><div><a class="cite" href="https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Acquisition-Offer-for-Delivery-Hero/default.aspx" target="_blank" rel="noopener">🔗 investor.uber <span class="cred">🎙 Uber Investor Relations</span></a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/uber-agrees-to-buy-delivery-hero-as-food-sector-consolidates" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.reuters.com/business/finance/uber-nears-125bn-deal-acquire-delivery-hero-ft-reports-2026-07-15/" target="_blank" rel="noopener">🔗 reuters <span class="cred">🎙 Reuters</span></a><a class="cite" href="https://www.theguardian.com/technology/2026/jul/16/uber-buy-germany-delivery-hero-148bn-global-deal" target="_blank" rel="noopener">🔗 theguardian <span class="cred">🎙 The Guardian</span></a></div></div><div class="point">Stripe和Advent提交了对PayPal的$53B收购报价，令PYPL飙升。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/stripe-advent-offer-to-buy-paypal-for-more-than-53-billion-reuters.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a></div></div><div class="point">Eli Lilly将收购迷幻药制造商AtaiBeckley（数字差异：CNBC称$2.8B，而Bloomberg称“至多$3.8B”——已标注，未合并）；EQT将其对Kakaku.com的报价上调至高于LY/Bain。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/16/eli-lilly-to-buy-psychedelics-maker-ataibeckley-2point8-billion.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/lilly-to-buy-psychedelic-firm-ataibeckley-for-up-to-3-8-billion" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/eqt-raises-offer-price-for-kakaku-com-above-bid-by-ly-bain" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">柏林表示不会阻止UniCredit-Commerzbank交易，为欧洲大型银行并购扫除了一个关键的政治障碍。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/merz-says-germany-isn-t-blocking-unicredit-deal-for-commerzbank" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/berlin-prepares-commerzbank-demands-in-potential-unicredit-talks" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">并非所有交易都在敲定——Coles结束了与Petbarn的谈判，Syngenta $5B的香港IPO再次推迟，显示出一定的交易/发行摩擦。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/coles-ends-talks-to-buy-petbarn-chain-from-tpg-capital" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/syngenta-s-5-billion-hong-kong-ipo-is-said-to-face-fresh-delays" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#4</span><span class="tname">Netflix指引不及预期重燃流媒体增长担忧</span>
+  <span class="pill high">high</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.38</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Netflix, Michael Burry</div></summary>
+ <div class="bodyb"><div class="summary">Netflix下滑——为约4年来最大跌幅、较2025年峰值蒸发约$260B——原因是疲弱的Q3预测和减少的参与度披露；它依靠约300部AI辅助的影视作品来削减成本，同时Michael Burry指出其制作费用摊销的三处变化。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Netflix股价因令人失望的盈利预测以及减少“What We Watched”参与度更新的计划而下跌。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/16/netflix-nflx-earnings-q2-2026.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://247wallst.com/investing/2026/07/17/live-nasdaq-composite-tech-stocks-plunge-on-rising-ai-costs-and-netflix-guidance-miss/" target="_blank" rel="noopener">🔗 247wallst</a></div></div><div class="point">股价较2025年6月的纪录高点下跌约45% / 约$260B，并创下四年来最大跌幅，进一步的下行风险被提示。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/netflix-faces-earnings-risk-after-stock-s-260-billion-wipeout" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/netflix-pledges-more-programs-ai-to-reverse-slowing-growth" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Michael Burry指出Netflix制作费用摊销方法的三处变化，并正在审视其会计处理（数字差异：Burry援引$134.15的2025年6月30日峰值和$74的收盘价，与[82]中“$260B/-45%”的表述存在实质性差异；数据未经调节——已标注，未合并）。 <span class="vf">✓</span><div><a class="cite" href="https://michaeljburry.substack.com/p/trading-post-july-17-2026-plus-netflix" target="_blank" rel="noopener">🔗 michaeljburry</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/netflix-faces-earnings-risk-after-stock-s-260-billion-wipeout" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">Netflix承诺推出更多AI驱动的节目，并披露约300部作品使用了生成式AI，这可能改善内容产出和利润率。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/netflix-pledges-more-programs-ai-to-reverse-slowing-growth" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.theverge.com/streaming/966633/netflix-ai-titles-q2-2026-earnings" target="_blank" rel="noopener">🔗 theverge <span class="cred">🎙 Netflix</span></a></div></div></div></div></div>
+</details><details class="thesis" data-fam="kimi-k3" id="th-ai"><summary>
+ <div class="top"><span class="rank">#5</span><span class="tname">AI基础设施需求依然强劲——多头逻辑完好无损</span>
+  <span class="pill high">high</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('kimi-k3');event.stopPropagation()">⚡ Kimi K3芯片抛售 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span> · commodities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.37</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： TSMC, ASML, Jensen Huang / Nvidia, McKinsey (Sternfels)</div></summary>
+ <div class="bodyb"><div class="summary">与抛售走势相反,前沿芯片基本面依然稳健:TSMC与ASML均超预期并上调指引,Nvidia的路线图如期推进并积极争取日本,主权AI、机器人及算力交易持续扩张——将此轮回撤定性为估值重置,而非需求断裂。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">TSMC超越了高企的预期,并因AI需求持续而上调销售展望,同时正扩大规模达$265B的美国建厂计划,押注AI芯片周期仍处早期。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/tsmc-beats-lofty-estimates-in-latest-sign-of-sustained-ai-demand" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/tsmc-to-spend-265-billion-on-us-buildout-in-key-trump-deal" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">ASML因AI驱动的需求增强而上调全年指引;黄仁勋表示Vera Rubin已投产且进度如期,并正积极争取日本供应商。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/asml-raises-full-year-outlook-as-ai-boosts-demand-at-chipmakers" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/nvidia-s-huang-declares-vera-rubin-on-track-despite-delay-talk" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/nvidia-s-huang-courts-japanese-suppliers-with-kanda-pork-skewers" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">日本计划采购~27,500块Nvidia Rubin芯片,用于一座140MW的主权AI中心,其机器人制造商也加入了Nvidia的Cosmos物理AI联盟。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-to-buy-nvidia-rubin-chips-to-build-sovereign-ai-for-robots" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-s-robot-makers-join-nvidia-s-physical-ai-cosmos-coalition" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">算力供给正在收紧:Anthropic正与Meta商谈一笔~$10B的算力租赁,此前已达成SpaceX Colossus交易,并正筹备IPO。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/anthropic-meta-ai-compute.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.nytimes.com/2026/07/17/technology/meta-anthropic-ai-computing-power.html" target="_blank" rel="noopener">🔗 nytimes</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/anthropic-is-said-to-plan-ipo-investor-meetings-as-listing-nears" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">作为SK Hynix替代标的的韩国EWY ETF录得创纪录资金流入、Mitsubishi-Rohm-Toshiba功率芯片合资企业、新成立的Toyota支持的机器人独角兽,以及McKinsey的&#x27;黄金时代&#x27;论断,均反映出对AI建设持久性的坚定信念。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/korea-etf-s-ewy-record-inflow-fuels-sk-hynix-proxy-play" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/mitsubishi-electric-eyes-power-chip-merger-with-rohm-and-toshiba" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/toyota-backed-robotics-startup-walden-launches-with-1-1-billion-valuation" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/mckinsey-boss-sternfel-says-ai-could-mean-golden-age-for-consultancy-firm" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">Kimi K3宣称以低成本实现同等性能,直接威胁到多头逻辑所依赖的美国AI估值溢价。 <span class="vf">✓</span><div><a class="cite" href="https://apnews.com/article/kimi-k3-china-ai-0d8a5e268deb11a673f4d444fc597cc5" target="_blank" rel="noopener">🔗 apnews</a><a class="cite" href="https://www.ft.com/content/c6ecd8ce-c441-4d7c-aea6-fae3e28fb6ff" target="_blank" rel="noopener">🔗 ft <span class="cred">🎙 Financial Times</span></a></div></div><div class="point">接近纪录的内部人士抛售,以及对资本开支能否获得回报的质疑,削弱了需求叙事;Google的Gemini发布因内部不足而推迟。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/us-corporate-insiders-are-selling-stocks-at-a-near-record-pace" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/stock-market-today-dow-s-p-live-updates" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/google-gemini-launch-delayed-as-tech-falls-short-of-internal-goals" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#6</span><span class="tname">大盘科技股轮动:Apple取代Nvidia成为市值最高的公司</span>
+  <span class="pill high">high</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="">→</span></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:45%"></span></span><span class="heatchip">🔥 4.8k · 1 帖</span><span class="sub"> 🟠 · hottest: <a class="cite" href="https://www.reddit.com/r/wallstreetbets/comments/1uz032r/apple_unseats_nvidia_to_become_worlds_most/" target="_blank" rel="noopener">reddit.com 🔥4.8k</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.36</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Apple, Nvidia, HSBC, r/wallstreetbets</div></summary>
+ <div class="bodyb"><div class="summary">随着Nvidia在2026年表现落后,投资者在大盘科技股内部进行轮动,Apple重夺全球市值最高公司的桂冠(~$4.88T对Nvidia的~$4.86T),受益于中国AI审批、iPad改版、可能达成的DOJ反垄断和解以及HSBC上调评级。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Apple以~$4.88T的市值超越Nvidia成为全球市值最高的公司,而Nvidia下跌3.5%至~$4.86T,反映出投资者正将视野扩展至直接AI受益者之外。 <span class="vf">✓</span><div><a class="cite" href="https://www.channelnewsasia.com/business/apple-beats-nvidia-world-most-valuable-company-6261371" target="_blank" rel="noopener">🔗 channelnewsasia</a><a class="cite" href="https://www.cnbc.com/2026/07/17/apple-nvidia-aapl-nvda-market-cap.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.reddit.com/r/wallstreetbets/comments/1uz032r/apple_unseats_nvidia_to_become_worlds_most/" target="_blank" rel="noopener">🔗 reddit <span class="eng">🔥4.8k</span></a></div></div><div class="point">Apple的利好因素不断累积:中国批准由Alibaba提供支持的iPhone AI、2027年OLED iPad改版、DOJ反垄断和解的早期谈判,以及HSBC上调评级至买入并给出$366目标价。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/apple-gets-approval-for-alibaba-powered-iphone-ai-tools-in-china" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/apple-nears-launch-of-oled-ipad-mini-new-ipad-air-and-base-ipad-in-2027" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/apple-in-early-settlement-talks-with-doj-over-antitrust-case" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://247wallst.com/investing/2026/07/17/live-nasdaq-composite-tech-stocks-plunge-on-rising-ai-costs-and-netflix-guidance-miss/" target="_blank" rel="noopener">🔗 247wallst</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">桂冠易主的差距很小(~$4.88T对~$4.86T),且Nvidia的路线图仍按计划推进,因此其表现落后或只是暂时的。 <span class="vf">✓</span><div><a class="cite" href="https://www.channelnewsasia.com/business/apple-beats-nvidia-world-most-valuable-company-6261371" target="_blank" rel="noopener">🔗 channelnewsasia</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/nvidia-s-huang-declares-vera-rubin-on-track-despite-delay-talk" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">市值最高公司这一里程碑在散户中引发热议(热度4846),表明这既是基本面事件,也是情绪/仓位事件。 <span class="vf">✓</span><div><a class="cite" href="https://www.reddit.com/r/wallstreetbets/comments/1uz032r/apple_unseats_nvidia_to_become_worlds_most/" target="_blank" rel="noopener">🔗 reddit <span class="eng">🔥4.8k</span></a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#7</span><span class="tname">AI资本开支回报存疑,过度杠杆化仓位平仓</span>
+  <span class="pill med">med</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span> · rates <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： IBM, Coronation, Bloomberg</div></summary>
+ <div class="bodyb"><div class="summary">与中国催化因素不同,投资者正质疑前所未有的AI资本开支能否获得回报;IBM的预警、接近纪录的内部人士抛售、杠杆化动量交易的平仓,以及中国对冲基金的撤离,均指向今年AI主导的涨势内部存在脆弱性。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">IBM的展望预警&#x27;重创&#x27;了科技行业中的AI掉队者,强化了对落后者无法变现的行业巨额资本开支的担忧。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/ibm-s-warning-is-a-hammer-slamming-down-on-tech-s-ai-outsiders" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">美国企业内部人士正以接近纪录的速度抛售——正是这一群体此前推动了此轮涨势;半导体ETF盘前下跌4.4%。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/us-corporate-insiders-are-selling-stocks-at-a-near-record-pace" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">芯片制造商因担忧前所未有的AI投资可能无法支撑高企的估值而遭抛售,拖累了大盘期货。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/stock-market-today-dow-s-p-live-updates" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">芯片股疲软引发担忧,即AI交易已过度杠杆化且超前透支,这种担忧从首尔蔓延至硅谷。 <span class="vf">✓</span><div><a class="cite" href="https://www.theglobeandmail.com/investing/article-chipmakers-and-other-high-flying-stocks-slide-as-ai-trade-wobbles/" target="_blank" rel="noopener">🔗 globeandmail</a><a class="cite" href="https://srnnews.com/chipmakers-and-other-high-flying-stocks-slide-as-ai-trade-wobbles/" target="_blank" rel="noopener">🔗 srnnews</a></div></div><div class="point">2026年在AI上大赚的中国对冲基金正悄然寻求退出,Coronation正削减对台湾/韩国AI的敞口。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-hedge-funds-that-won-big-on-ai-start-looking-for-exits" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/coronation-trims-tsm-krx-ai-hype-boosts-india-stocks" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">一项鲜为人知的基于偏度的波动率指标预示,&#x27;七巨头&#x27;(Magnificent Seven)的盈利有望突破,或将推动S&amp;P 500创下新高。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/obscure-volatility-measure-points-to-a-magnificent-seven-earnings-breakout-.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">TSMC的超预期并上调,以及ASML上调指引,表明资本开支有需求支撑,而非投机。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/tsmc-beats-lofty-estimates-in-latest-sign-of-sustained-ai-demand" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/asml-raises-full-year-outlook-as-ai-boosts-demand-at-chipmakers" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#8</span><span class="tname">SpaceX上市后崩跌,打击IPO/AI狂热</span>
+  <span class="pill high">high</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:9%"></span></span><span class="heatchip">🔥 920 · 5 帖</span><span class="sub"> •×2 •×2 • · hottest: <a class="cite" href="https://www.latimes.com/business/story/2026-07-16/spacex-stock-erases-gains-slides-below-ipo-price-in-intraday-trading" target="_blank" rel="noopener">latimes.com 🔥583</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.32</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (4 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： SpaceX, Ortex, Reuters, LA Times</div></summary>
+ <div class="bodyb"><div class="summary">SpaceX在Starship于最后一秒中止发射后,首次跌破其$135的IPO发行价——自纳入Nasdaq-100以来下跌~23%,市值蒸发~$1T,空头获利~$8.7B——这轮平仓被解读为对AI驱动的IPO估值的警示。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">SpaceX首次跌破其$135的IPO发行价,并在连续多个交易日的盘中抹去了上市以来的全部涨幅。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/spacex-spcx-stock-ipo-price.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/spacex-shares-fall-below-ipo-price-for-first-time-as-hype-fades" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.latimes.com/business/story/2026-07-16/spacex-stock-erases-gains-slides-below-ipo-price-in-intraday-trading" target="_blank" rel="noopener">🔗 latimes <span class="eng">🔥583</span></a><a class="cite" href="https://www.reuters.com/legal/transactional/spacex-shares-slide-below-ipo-price-blistering-rally-unravels-2026-07-15/" target="_blank" rel="noopener">🔗 reuters <span class="cred">🎙 Reuters</span></a><a class="cite" href="https://www.cnbc.com/2026/07/13/spacex-spcx-stock-ipo-price.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a></div></div><div class="point">在Starship最后一秒中止发射后,该股自纳入Nasdaq-100以来下跌~23%,这是其IPO以来的首次发射尝试。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/spacex-stock-starship-test-flight-aborted.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/spacex-to-launch-giant-starship-rocket-in-first-flight-since-ipo" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">约$1T的市值被抹去;散户与华尔街持有者陷入亏损,而空头持续施压,卖空者锁定了~$8.7B的利润(热度264)。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/spacex-set-to-wipe-out-1-trillion-in-value-as-shares-slide" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.cnbc.com/2026/07/17/retail-and-wall-street-are-underwater-on-spacex-but-not-going-down-without-a-fight.html" target="_blank" rel="noopener">🔗 cnbc</a><a class="cite" href="https://www.reuters.com/business/media-telecom/short-sellers-rack-up-87-bln-profit-spacex-slips-below-ipo-price-ortex-2026-07-16/" target="_blank" rel="noopener">🔗 reuters <span class="cred">🎙 Reuters</span></a></div></div><div class="point">此次上市后的崩跌被明确定性为威胁IPO市场中AI驱动的狂热;NSE India罕见地获得IPO前的&#x27;卖出&#x27;评级,Syngenta的香港上市再次推迟。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/spacex-post-listing-collapse-threatens-ipo-market-s-ai-euphoria" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/nse-stock-draws-rare-sell-call-ahead-of-long-awaited-ipo-debut" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/syngenta-s-5-billion-hong-kong-ipo-is-said-to-face-fresh-delays" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">一级发行渠道依然活跃——Anthropic正筹备IPO,Dangote即将完成一笔$2.5B的IPO前配售——表明这股狂热正在重新定价,而非消亡。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/anthropic-is-said-to-plan-ipo-investor-meetings-as-listing-nears" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/dangote-taps-2-5-billion-in-private-share-placement-before-ipo" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis" data-fam="ai" id="th-ai-ai"><summary>
+ <div class="top"><span class="rank">#9</span><span class="tname">AI 治理与出口管制地缘政治重塑 AI 溢价</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('ai');event.stopPropagation()">⚡ 习近平AI峰会 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Xi Jinping, Jamie Dimon, Demis Hassabis, Satya Nadella</div></summary>
+ <div class="bodyb"><div class="summary">美中 AI 竞赛正外溢至政策层面——习近平的&#x27;AI 惠及所有人&#x27;以及由中国主导、涵盖29个全球南方国家的阵营，美国施压限制 Anthropic 的 Mythos（Dimon 称广泛获取是&#x27;一个真正的问题&#x27;），以及 DeepMind 推动设立国际模型审查机构——正在重塑前沿 AI 竞争与估值。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">习近平首次提出的&#x27;AI 惠及所有人&#x27;以及由中国主导、招揽29个全球南方国家的 AI 机构，构建起一个非美国阵营，加剧了科技政策竞争，并在安全困境中赋予习近平地缘政治筹码。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/xi-vows-to-make-ai-for-all-in-debut-at-china-s-top-tech-summit" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-led-ai-body-enlists-global-south-states-to-rival-us" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-s-ai-ascendance-gives-xi-a-stage-and-a-security-dilemma" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">在美国就外国访问问题向 Anthropic 施压之际，Dimon 警告广泛获取 AI&#x27;Mythos&#x27;模型是一个真正的问题，而 DeepMind 的 Hassabis 将游说华盛顿设立国际模型审查机构。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/dimon-warns-about-broad-mythos-access-calling-it-a-real-issue" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/deepmind-ceo-to-lobby-washington-on-plan-for-group-to-vet-ai-models" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Nadella 批评 Anthropic 的 Fable&#x27;受编辑控制&#x27;，凸显了行业内部围绕 AI 产品治理的摩擦。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/16/microsoft-ceo-says-anthropic-fable-request-policy-doesnt-make-sense.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">尽管存在政策摩擦，跨境 AI 算力交易仍在推进，正如据报道的 Meta 与 Anthropic ~$10B 的算力安排。 <span class="vf">✓</span><div><a class="cite" href="https://www.nytimes.com/2026/07/17/technology/meta-anthropic-ai-computing-power.html" target="_blank" rel="noopener">🔗 nytimes</a><a class="cite" href="https://www.cnbc.com/2026/07/17/anthropic-meta-ai-compute.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#10</span><span class="tname">环孢子虫食品安全疫情冲击餐饮与食品类股</span>
+  <span class="pill high">high</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets"></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.30</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： CDC, Taylor Farms, Sweetgreen, Taco Bell</div></summary>
+ <div class="bodyb"><div class="summary">一场由 CDC 关联的环孢子虫病疫情被追溯至 Taco Bell 供应的生菜，Taylor Farms 正召回结球生菜，令餐饮类股承压——Sweetgreen 下跌 ~26%——尽管分析师预计影响将是短暂的。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">CDC 将环孢子虫病疫情与 Taco Bell 关联，拖累餐饮板块个股。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/cyclosporiasis-outbreak-linked-to-taco-bell-may-not-have-major-impact.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">美国主要农产品供应商 Taylor Farms 正召回与该寄生虫调查相关的结球生菜。 <span class="vf">✓</span><div><a class="cite" href="https://www.marketwatch.com/story/taylor-farms-to-recall-produce-that-may-be-the-cause-of-the-cyclospora-outbreak-report-e2c4cc0b?mod=mw_rss_topstories" target="_blank" rel="noopener">🔗 marketwatch</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/lettuce-grower-taylor-farms-to-recall-products-tied-to-parasite" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">由于食品安全担忧在餐饮供应链中蔓延，Sweetgreen 下跌 ~26%。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/sweetgreen-pares-26-drop-as-parasite-tied-to-taco-bell-lettuce" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">分析师预计影响短暂且将快速恢复，限制了长期损害。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/cyclosporiasis-outbreak-linked-to-taco-bell-may-not-have-major-impact.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#11</span><span class="tname">数据中心抵制与电网瓶颈威胁AI基建扩张</span>
+  <span class="pill med">med</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.29</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Bloomberg, Elon Musk / Colossus</div></summary>
+ <div class="bodyb"><div class="summary">地方反对与电网约束——马斯克的孟菲斯Colossus诉讼、Palm Beach被否决的枢纽以及伊比利亚电网瓶颈——可能拖慢支撑AI交易的实体AI基础设施建设。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">马斯克的孟菲斯Colossus被视为全国性数据中心抵制浪潮的中心，抗议与诉讼直指AI基础设施。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/16/elon-musk-memphis-ai-colossus-data-center.html" target="_blank" rel="noopener">🔗 cnbc</a></div></div><div class="point">棕榈滩县在地方抵制后否决了一项AI数据中心计划，反映出对超大规模选址的阻力。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/palm-beach-strikes-down-data-center-plan-after-local-backlash" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">西班牙和葡萄牙的数据中心热潮面临电网瓶颈，可能拖慢伊比利亚地区的建设。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/spain-and-portugal-s-data-center-boom-faces-grid-bottlenecks" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">建设在其他地区仍在继续——日本140MW的主权AI中心、TSMC耗资$265B的美国扩张以及Naturgy的储能项目——限制了该约束的整体影响。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-to-buy-nvidia-rubin-chips-to-build-sovereign-ai-for-robots" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/tsmc-to-spend-265-billion-on-us-buildout-in-key-trump-deal" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/spain-s-naturgy-to-build-344-million-australia-renewables-plant" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#12</span><span class="tname">日本主权AI推进与GPIF本土倾斜支撑日本股市</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.29</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Takaichi, Katayama, Jensen Huang / Nvidia</div></summary>
+ <div class="bodyb"><div class="summary">日本正采购Nvidia Rubin芯片用于主权AI，其机器人制造商加入了Nvidia的Cosmos联盟，官员（高市、片山）表示要引导GPIF转向本土资产——尽管芯片抛售冲击了Kioxia，但对日本股市构成支撑。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">日本计划采购~27,500块Nvidia Rubin芯片用于一座140MW的主权AI中心，其机器人制造商加入了Nvidia的Cosmos联盟，黄仁勋正在积极争取日本供应商。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-to-buy-nvidia-rubin-chips-to-build-sovereign-ai-for-robots" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-s-robot-makers-join-nvidia-s-physical-ai-cosmos-coalition" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/nvidia-s-huang-courts-japanese-suppliers-with-kanda-pork-skewers" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">高市和片山均表示要引导全球最大养老基金GPIF转向日本本土资产，对本地股市构成支撑；EQT提高对Kakaku的收购报价，增添了外资并购兴趣。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/japan-s-takaichi-says-gpif-investing-in-japan-assets-is-key" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-s-katayama-leaves-open-possibility-of-gpif-domestic-shift" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/eqt-raises-offer-price-for-kakaku-com-above-bid-by-ly-bain" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">AI抛售仍重创日本——Kioxia市值较峰值腰斩，从日本第一大公司跌至第四大。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/chipmaker-kioxia-s-market-value-halves-from-peak-on-ai-selloff" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.japantimes.co.jp/business/2026/07/17/companies/kioxia-market-value-halves/" target="_blank" rel="noopener">🔗 japantimes</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#13</span><span class="tname">GLP-1与ACA政策变化施压医疗科技增长</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.29</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Intuitive Surgical, Eli Lilly, Kalshi</div></summary>
+ <div class="bodyb"><div class="summary">医疗健康的结构性变化拖累医疗科技——Intuitive Surgical下跌~10%，因da Vinci手术量增速创四年新低，归因于ACA政策变化及GLP-1使用上升——尽管制药并购与生物科技事件市场仍保持活跃。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Intuitive Surgical盘前下跌~10%，管理层指出da Vinci手术量增速为四年来最弱，归因于ACA政策变化及GLP-1减肥药使用上升。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/intuitive-surgical-drops-as-aca-changes-glp-1s-weigh-on-growth" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">医疗健康领域其他地方的风险偏好依旧完好——Lilly收购AtaiBeckley以及Kalshi推出生物科技临床试验/药物审批博彩市场，显示活动持续。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/lilly-to-buy-psychedelic-firm-ataibeckley-for-up-to-3-8-billion" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.cnbc.com/2026/07/16/eli-lilly-to-buy-psychedelics-maker-ataibeckley-2point8-billion.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/kalshi-launches-platform-for-bets-on-biotech-trials-drug-approvals" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#14</span><span class="tname">Trump Media拟出售Truth Social帖子的快速访问权限</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets"></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:21%"></span></span><span class="heatchip">🔥 2.2k · 1 帖</span><span class="sub"> 🟠 · hottest: <a class="cite" href="https://www.reddit.com/r/investing/comments/1uyejki/trump_media_sells_faster_access_to_trumps_posts/" target="_blank" rel="noopener">reddit.com 🔥2.2k</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.27</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Trump Media</div></summary>
+ <div class="bodyb"><div class="summary">Trump Media计划向交易员出售对Truth Social热门帖子的更快访问权限，这是一款新的政治数据产品，散户间的病毒式热议将其视为引发内幕交易与监管方面的担忧。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Trump Media计划通过向交易员出售热门帖子的优先访问权限来将Truth Social变现，这是一款与政治讯息挂钩的数据产品。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/trump-media-to-sell-traders-faster-access-to-top-truth-posts" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">一条病毒式散户帖子（热度2233）认为，为对冲基金提供付费优先访问权限引发了实质性的内幕交易与监管担忧。 <span class="vf">✓</span><div><a class="cite" href="https://www.reddit.com/r/investing/comments/1uyejki/trump_media_sells_faster_access_to_trumps_posts/" target="_blank" rel="noopener">🔗 reddit <span class="eng">🔥2.2k</span></a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">该计划也可被解读为利好，即一款新的营收/数据产品，而非一项负担。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/trump-media-to-sell-traders-faster-access-to-top-truth-posts" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#15</span><span class="tname">中国汽车/电动车潮涌施压传统车企</span>
+  <span class="pill med">med</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.26</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Volvo Car, Honda, Chery</div></summary>
+ <div class="bodyb"><div class="summary">中国饱和的汽车市场（数百款新车型）与出口崛起（Chery进军英国）正挤压现有厂商——Volvo因中国市场疲弱放弃了销量目标，Honda退出美国电动车市场——尽管西班牙正在拉拢中国制造商。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Volvo Car在中国市场出现超预期恶化后，放弃了销量目标并预警盈利能力疲弱。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/volvo-car-flags-weak-profitability-on-challenging-china-market" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">中国市场充斥数百款新车型，价格竞争加剧，而Chery在英国的崛起标志着出口正加速渗透进现有厂商的高端领地。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-s-insane-car-market-flooded-with-hundreds-of-new-models" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/chery-s-temu-range-rover-highlights-china-s-ascent-in-uk-car-market" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Honda正停止销售并停产其在美国的最后一款电动车，在需求疲弱之际撤退。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/honda-to-halt-sales-of-last-ev-in-its-us-lineup" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">西班牙正以大规模工业投资与就业机会欢迎中国车企，而大型电动车对道路的损害可能促成征收重量税以对其加以限制——显示出相互抵消的政策动态。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/spain-extends-welcome-mat-for-chinese-carmakers-to-its-workers" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-s-giant-evs-are-damaging-roads-without-paying-for-repairs" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#16</span><span class="tname">逆向轮动进入中国/新兴市场价值股</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.23</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Michael Burry, Coronation, Xi Jinping</div></summary>
+ <div class="bodyb"><div class="summary">随着 AI 热潮降温，部分资金轮动至遭抛售的中国及新兴市场股票——北京对科技更为友好的立场提振了中国互联网个股，Michael Burry 称香港值得买入，Coronation 等基金经理转向印度。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">随着北京对科技转暖，中国互联网股票（Alibaba、Tencent）获得 AI 提振，Burry 公开表示当前是在香港抄底的好时机。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-internet-stocks-catch-an-ai-lift-as-beijing-warms-to-tech" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/michael-burry-says-good-time-to-chase-hong-kong-stock-bargains" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Coronation 正从台湾/韩国 AI 个股轮动至印度反弹交易，印度 AI 初创公司 Emergent 估值达到 $1.5B，凸显资金流入印度。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/coronation-trims-tsm-krx-ai-hype-boosts-india-stocks" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/indian-ai-startup-emergent-valued-at-1-5-billion-in-fundraising" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">习近平的&#x27;AI 惠及所有人&#x27;亮相以及中国主导的 AI 阵营，为中国科技情绪带来政治顺风。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/xi-vows-to-make-ai-for-all-in-debut-at-china-s-top-tech-summit" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-led-ai-body-enlists-global-south-states-to-rival-us" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">在 AI 上获利的中国对冲基金正在退出，中国芯片担忧升至四年高点，削弱了逆向买盘。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-hedge-funds-that-won-big-on-ai-start-looking-for-exits" target="_blank" rel="noopener">🔗 bloomberg</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/china-chip-stock-pullback-drives-investor-fear-to-four-year-high" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#17</span><span class="tname">交易收入激增提振银行</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Morgan Stanley</div></summary>
+ <div class="bodyb"><div class="summary">波动、由政策驱动的市场助推了华尔街股票交易激增（Morgan Stanley $6.3B），与此同时澳大利亚银行上涨至多年高点、逼空空头，Swedbank 则清除了其洗钱阴影。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">活跃的市场与地缘政治波动将 Morgan Stanley 的股票交易收入推升至 $6.3B，强化了美国大型银行的交易收入顺风。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/morgan-stanley-joins-wall-street-rivals-with-stock-trading-boon" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">澳大利亚银行股飙升至多年高点，迫使押注房贷信贷下滑的基金回补空头。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/bank-rally-hits-short-sellers-betting-on-australia-lending-slump" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Swedbank 了结了所有剩余的洗钱调查，消除了长期存在的监管阴影。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/swedbank-reaches-settlement-that-ends-all-laundering-probes" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#18</span><span class="tname">AI之外的消费者谨慎与工业疲软点</span>
+  <span class="pill low">low</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.19</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span></div>
+ <div class="voices">声音（自然涌现）： Bloomberg</div></summary>
+ <div class="bodyb"><div class="summary">在AI之外，实体经济需求信号走弱——尽管夏季炎热，泳池/休闲类股因消费者谨慎而下挫，德国化工行业仍深陷危机，OnePlus退出西方市场——暗示此轮上涨依赖于狭窄的领涨面。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">尽管夏季酷热，谨慎的消费者仍抵制消费，泳池及休闲类股因而下挫，表明季节性可选消费需求疲软。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/pool-stocks-sink-as-consumers-cautious-despite-scorching-summer" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">德国化工行业游说团体警告称，尽管出现暂时缓解，该行业仍处于结构性危机之中，令BASF/Covestro及同业承压。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/german-chemical-industry-in-crisis-despite-reprieve-lobby-says" target="_blank" rel="noopener">🔗 bloomberg</a></div></div><div class="point">Oppo在重组过程中将OnePlus撤出美国和欧洲市场，让出中端市场份额。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/oneplus-once-popular-with-tech-fans-to-pull-out-of-us-and-europe" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">大额并购交易和华尔街交易业务的繁荣表明，广泛的风险偏好远未崩溃。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/stripe-advent-offer-to-buy-paypal-for-more-than-53-billion-reuters.html" target="_blank" rel="noopener">🔗 cnbc <span class="cred">🎙 CNBC</span></a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/morgan-stanley-joins-wall-street-rivals-with-stock-trading-boon" target="_blank" rel="noopener">🔗 bloomberg</a></div></div></div></div></div>
+</details></div><button class="morebtn" data-view="equities">▸ 还有 13 条 Equities thesis — 点此打开完整的 📈 Equities 视图</button></div><div class="sector" id="sec-fixed-income" data-ac="fixed-income"><h4>🏦 Fixed Income <span class="sub">— 首页显示前 5 条（共 9 条） · 点击 Fixed Income tab 查看全部 9 条</span></h4><div class="seclist"><details class="thesis"><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">美联储鹰派反击令“更高更久”预期延续</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · equities <span class="ad">↓</span> · credit <span class="ad">↓</span> · fx <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.44</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (5 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Fed&#x27;s Schmid (KC), Fed&#x27;s Logan (Dallas), Fed&#x27;s Jefferson</div></summary>
+ <div class="bodyb"><div class="summary">一批FOMC鹰派官员——主要是堪萨斯城联储的Schmid和达拉斯联储的Logan——认为通胀由需求驱动、过热且持续过久，反驳降息预期，甚至提示7月加息风险。这是推高美债收益率的主导且最有力佐证的驱动因素。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">堪萨斯城联储的Schmid表示，通胀高于目标、过热且持续过久，由强劲需求而不仅仅是供给冲击驱动，并强调在7月会议前降息预期为时过早。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/fed-s-schmid-says-inflation-is-too-hot-above-target-too-long" target="_blank" rel="noopener">🔗 Bloomberg: Schmid too hot</a><a class="cite" href="https://www.mnimarkets.com/articles/kcs-schmid-inflation-is-primary-concern-fed-transparency-is-key-1784227028387" target="_blank" rel="noopener">🔗 MNI: Schmid primary concern</a><a class="cite" href="https://www.asiae.co.kr/en/article/2026071704115407943" target="_blank" rel="noopener">🔗 AsiaBusiness: Schmid</a><a class="cite" href="https://www.briefs.co/news/schmid-of-kansas-city-fed-inflation-still-too-hot-for-too-lo/" target="_blank" rel="noopener">🔗 Briefs: Schmid</a><a class="cite" href="https://tradevae.com/news/economy/kansas-city-feds-schmid-calls-ongoing-inflation-concerning-as-policy-focus/" target="_blank" rel="noopener">🔗 Tradevae: Schmid concerning</a></div></div><div class="point">达拉斯联储的Logan倾向于小幅加息以使通胀回落至2%，称当前政策似乎不足以抑制经济，并将中东和AI需求列为上行风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/fed-s-logan-favors-modestly-higher-rates-to-lower-inflation" target="_blank" rel="noopener">🔗 Bloomberg: Logan</a><a class="cite" href="https://www.tradevae.com/news/economy/dallas-feds-logan-urges-modest-rate-increase-ahead-of-july-meeting/" target="_blank" rel="noopener">🔗 Tradevae: Logan</a><a class="cite" href="https://www.briefs.co/news/dallas-fed-s-logan-advocates-small-rate-increase-to-curb-per/" target="_blank" rel="noopener">🔗 Briefs: Logan</a></div></div><div class="point">18位政策制定者中有一半预计2026年至少有一次25个基点的加息；美联储6月连续第四次会议将利率维持在3.5%-3.75%。 <span class="vf">✓</span><div><a class="cite" href="https://www.briefs.co/news/dallas-fed-s-logan-advocates-small-rate-increase-to-curb-per/" target="_blank" rel="noopener">🔗 Briefs: Logan/dot plot</a><a class="cite" href="https://www.briefs.co/news/schmid-of-kansas-city-fed-inflation-still-too-hot-for-too-lo/" target="_blank" rel="noopener">🔗 Briefs: rate level</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">美联储的Jefferson称政策“处于有利位置”且依赖数据，为重新考虑留有余地——语气较彻底的鹰派更为温和。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/jefferson-says-policy-well-positioned-can-reconsider-if-needed" target="_blank" rel="noopener">🔗 Bloomberg: Jefferson</a></div></div><div class="point">美联储主席候选人Warsh作证称，AI驱动的价格压力未必具有通胀性，淡化了鹰派关于上行通胀的论点之一。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/warsh-says-price-pressures-from-ai-not-necessarily-inflationary" target="_blank" rel="noopener">🔗 Bloomberg: Warsh AI</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">美债牛市的长期顶部</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · equities <span class="ad">↓</span> · credit <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Hoisington Investment Management</div></summary>
+ <div class="bodyb"><div class="summary">作为三十余年的美债多头，Hoisington 已明确转向看空久期，表明其确信在持续的财政与赤字压力下长债涨势正在终结——这是对长端收益率的结构性（而非仅仅周期性）看空理由。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">看多美国国债逾30年的 Hoisington，如今已转为看空久期，这一反转由财政/赤字压力以及对长期涨势已结束的日益增强的确信所驱动。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/hoisington-us-bond-bull-for-decades-turns-decidedly-bearish" target="_blank" rel="noopener">🔗 Bloomberg: Hoisington</a></div></div><div class="point">美联储对黏性的、需求驱动型通胀的鹰派言论，强化了长端收益率结构性走高的理由。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/fed-s-schmid-says-inflation-is-too-hot-above-target-too-long" target="_blank" rel="noopener">🔗 Bloomberg: Schmid</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/fed-s-logan-favors-modestly-higher-rates-to-lower-inflation" target="_blank" rel="noopener">🔗 Bloomberg: Logan</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">地缘政治避险——随着停火破裂，中东利差升至2022年高位——可能刺激对美债的避险需求，削弱单边看空久期的理由。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/middle-east-bond-spreads-hit-2022-high-as-ceasefire-breaks-down" target="_blank" rel="noopener">🔗 Bloomberg: ME spreads</a></div></div><div class="point">这仍是单一管理人的确信判断；池中没有其他声音呼应这一长期反转。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/hoisington-us-bond-bull-for-decades-turns-decidedly-bearish" target="_blank" rel="noopener">🔗 Bloomberg: Hoisington</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">美联储领导层与独立性受到严密审视</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · fx <span class="ad">↓</span> · equities <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Kevin Warsh</div></summary>
+ <div class="bodyb"><div class="summary">美联储主席候选人 Warsh 的提名听证会使美联储的政治独立性及其反应函数成为焦点。他承诺抵制特朗普的施压，以及对 AI 具有通胀性的否定，暗示这场领导层交接可能重塑政策路径与长端期限溢价。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Warsh 告诉参议员，他曾多次向特朗普坚持独立性，并承诺&#x27;埋头做好本职工作&#x27;，凸显了围绕领导层交接的美联储独立性风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/warsh-says-he-s-told-trump-repeatedly-he-s-an-independent-guy" target="_blank" rel="noopener">🔗 Bloomberg: Warsh independent</a></div></div><div class="point">Warsh 在参议院作证时淡化了 AI 作为通胀驱动因素的作用，暗示其反应函数可能不及当前 FOMC 鹰派那般鹰派。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/warsh-says-price-pressures-from-ai-not-necessarily-inflationary" target="_blank" rel="noopener">🔗 Bloomberg: Warsh AI</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">在任鹰派 Schmid 与 Logan 继续力主收紧政策，因此无论主席之争如何，近期利率信号仍保持鹰派。 <span class="vf">✓</span><div><a class="cite" href="https://www.mnimarkets.com/articles/kcs-schmid-inflation-is-primary-concern-fed-transparency-is-key-1784227028387" target="_blank" rel="noopener">🔗 MNI: Schmid</a><a class="cite" href="https://www.tradevae.com/news/economy/dallas-feds-logan-urges-modest-rate-increase-ahead-of-july-meeting/" target="_blank" rel="noopener">🔗 Tradevae: Logan</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#4</span><span class="tname">日本通胀预期升至2006年高位之际，日本央行走向正常化</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · fx <span class="au">↑</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： BOJ</div></summary>
+ <div class="bodyb"><div class="summary">日本家庭通胀预期已攀升至2006年以来的最高水平，且日本央行可能在按兵不动的同时上调增长预测，强化了正常化的理由以及 JGB 收益率的上行倾向。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">日本家庭通胀预期触及2006年以来的最高水平，强化了日本央行正常化的理由。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/japan-s-household-inflation-expectations-hit-highest-since-2006" target="_blank" rel="noopener">🔗 Bloomberg: JP inflation exp</a></div></div><div class="point">据称日本央行可能在即将召开的会议上上调经济增长预测，即便利率按兵不动，这也是一种鹰派倾向。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/boj-is-said-likely-to-raise-growth-forecast-stand-pat-on-rates" target="_blank" rel="noopener">🔗 Bloomberg: BOJ forecast</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">市场仍预期日本央行将在本次会议上维持利率不变，因此正常化仍是渐进且已被预告的。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/boj-is-said-likely-to-raise-growth-forecast-stand-pat-on-rates" target="_blank" rel="noopener">🔗 Bloomberg: BOJ stand pat</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#5</span><span class="tname">欧洲央行的最后一次加息与霍尔木兹能源冲击的不确定因素</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · commodities <span class="au">↑</span> · equities <span class="ad">↓</span> · fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.30</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： ECB, Lagarde</div></summary>
+ <div class="bodyb"><div class="summary">市场预期欧洲央行下周将按兵不动，随后在9月进行最后一次加息，但美国与伊朗在霍尔木兹海峡重燃的敌对行动，为&#x27;极度动荡&#x27;的前景注入了能源冲击这一不确定因素。领导层不确定性的降低（Lagarde 留任）削减了一层风险溢价。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">一项针对欧洲央行的调查显示，该行下周将维持利率稳定，随后在9月进行最后一次加息。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/ecb-set-to-wait-for-september-to-hike-one-last-time-poll-shows" target="_blank" rel="noopener">🔗 Bloomberg: ECB poll</a></div></div><div class="point">霍尔木兹海峡重燃的袭击注入了能源冲击的不确定性，迫使欧洲央行在&#x27;极度动荡&#x27;的前景下重新考量。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/ecb-interest-rates-outlook-iran-war-hormuz.html" target="_blank" rel="noopener">🔗 CNBC: Hormuz/ECB</a></div></div><div class="point">观察人士现预期 Lagarde 将完成其任期，在此前有关其离任的猜测之后降低了领导层不确定性的风险溢价。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/lagarde-watchers-cast-aside-doubts-to-say-she-ll-finish-ecb-term" target="_blank" rel="noopener">🔗 Bloomberg: Lagarde</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">霍尔木兹海峡引发的能源价格飙升是双向的：波动率升高同样可能促使欧洲央行按兵不动，而非确认9月的加息。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/15/ecb-interest-rates-outlook-iran-war-hormuz.html" target="_blank" rel="noopener">🔗 CNBC: Hormuz/ECB</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#6</span><span class="tname">全球紧缩范围扩大但仍不均衡</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">rates <span class="au">↑</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Bank of Korea, SNB</div></summary>
+ <div class="bodyb"><div class="summary">紧缩势头正扩散至主要经济体之外——韩国央行在芯片主导的繁荣下实施了自2023年初以来的首次加息——但远未同步，SNB认为无需立即回应通胀。对全球收益率净利好，但存在分化。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">韩国央行自2023年初以来首次加息，理由是芯片驱动的经济动能推升通胀。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/bok-delivers-first-rate-hike-since-early-2023-amid-chip-led-boom" target="_blank" rel="noopener">🔗 Bloomberg: BOK hike</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">SNB认为无需立即回应通胀风险，显示全球紧缩势头在各地区间并不均衡。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/snb-saw-no-immediate-need-to-respond-to-inflation-risks" target="_blank" rel="noopener">🔗 Bloomberg: SNB</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#7</span><span class="tname">信用利差在多个独立压力点扩大</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">credit <span class="ad">↓</span> · equities <span class="ad">↓</span> · commodities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： S&amp;P</div></summary>
+ <div class="bodyb"><div class="summary">特异性信用压力正在多个角落显现：S&amp;P因AI资本开支狂潮将Oracle下调至BBB-，中东利差随停火破裂触及2022年高位，中国正在遏制负债累累的LGFV发行。驱动因素各异，但每一项都抬升信用风险溢价。差异说明：Oracle资本开支被引述为$250B；数据池中无冲突数字。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">S&amp;P将Oracle下调至BBB-，仅比垃圾级高一档，因$250B的AI数据中心资本开支狂潮超过营收增长，引发融资成本担忧。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/oracle-risks-falling-behind-in-ai-race-as-spending-binge-bites" target="_blank" rel="noopener">🔗 Bloomberg: Oracle downgrade</a></div></div><div class="point">停火破裂后，中东主权与企业债利差扩大至2022年峰值，抬升了整个地区的风险溢价。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/middle-east-bond-spreads-hit-2022-high-as-ceasefire-breaks-down" target="_blank" rel="noopener">🔗 Bloomberg: ME spreads</a></div></div><div class="point">北京正在收紧对高负债LGFV的融资，对在岸及美元信用利差均构成利空。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/china-seeks-to-curb-new-bond-sales-by-lgfvs-with-increased-debt" target="_blank" rel="noopener">🔗 Bloomberg: China LGFV</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">这些是地区性和发行人特定的驱动因素，而非系统性信用事件；其他地方的私募信贷需求依然强劲（Aston Martin/HPS、Yankees/Apollo）。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/aston-martin-in-talks-with-funds-including-hps-to-raise-new-debt" target="_blank" rel="noopener">🔗 Bloomberg: Aston/HPS</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/new-york-yankees-in-talks-with-apollo-over-3-billion-financing-deal" target="_blank" rel="noopener">🔗 Bloomberg: Yankees/Apollo</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#8</span><span class="tname">美国消费者与银行信贷链条出现早期裂痕</span>
+  <span class="pill low">low</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">credit <span class="ad">↓</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.23</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span></div>
+ <div class="voices">声音（自然涌现）： —</div></summary>
+ <div class="bodyb"><div class="summary">两个不易察觉的信号指向美国消费者与银行信贷承压：年轻消费者越来越多地兑换信用卡积分以支付必需品，而中国诈骗团伙每年通过闪付欺诈套取高达 $1B。两者对金融机构均构成信贷利空，尽管尚未出现已兑现的贷款损失。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">72% 的 18-24 岁人群每月兑换信用卡积分以支付食品杂货与汽油——这是收入阶梯底端消费者信贷承压的迹象。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/americans-are-using-credit-card-rewards-to-pay-for-groceries-gas" target="_blank" rel="noopener">🔗 Bloomberg: card rewards</a></div></div><div class="point">中国有组织犯罪团伙每年通过闪付欺诈获利高达 $1B，对美国银行与零售商构成持续的运营/信贷风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/tap-pay-fraud-retail-crime.html" target="_blank" rel="noopener">🔗 CNBC: fraud rings</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">这些是预警性的行为与运营信号，而非已兑现的逾期或坏账核销；数据池中没有贷款损失数据可证实广泛的恶化。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/americans-are-using-credit-card-rewards-to-pay-for-groceries-gas" target="_blank" rel="noopener">🔗 Bloomberg: card rewards</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#9</span><span class="tname">私人信贷不断深化的触角</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">credit <span class="au">↑</span> · equities <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.22</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： HPS, Apollo</div></summary>
+ <div class="bodyb"><div class="summary">私人信贷基金持续将版图扩张至新行业：HPS 是正在洽谈向 Aston Martin 放贷的基金之一，Apollo 正在权衡与纽约扬基队约 $3B 的融资交易——这是其在美国体育领域最大的一笔押注。这表明非银信贷偏好强劲，同时因借款人在寻求新债而带有承压意味。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Aston Martin 正与包括 HPS 在内的基金洽谈发行新债，在现有股东债务之外增强流动性。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/aston-martin-in-talks-with-funds-including-hps-to-raise-new-debt" target="_blank" rel="noopener">🔗 Bloomberg: Aston/HPS</a></div></div><div class="point">Apollo 正就与纽约扬基队约 $3B 的融资交易进行洽谈——这是其迄今在美国体育领域最大的投资——凸显私人信贷向新资产类别的渗透。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/new-york-yankees-in-talks-with-apollo-over-3-billion-financing-deal" target="_blank" rel="noopener">🔗 Bloomberg: Yankees/Apollo</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">两笔交易仍处于&#x27;洽谈中&#x27;，尚未完成，而 Aston Martin 在现有股东贷款之外还需新债，这表明潜在的企业承压，而非纯粹的实力。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/aston-martin-in-talks-with-funds-including-hps-to-raise-new-debt" target="_blank" rel="noopener">🔗 Bloomberg: Aston/HPS</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/new-york-yankees-in-talks-with-apollo-over-3-billion-financing-deal" target="_blank" rel="noopener">🔗 Bloomberg: Yankees/Apollo</a></div></div></div></div></div>
+</details></div><button class="morebtn" data-view="fixed-income">▸ 还有 4 条 Fixed Income thesis — 点此打开完整的 🏦 Fixed Income 视图</button></div><div class="sector" id="sec-commodities" data-ac="commodities"><h4>🛢 Commodities <span class="sub">— 首页显示前 5 条（共 8 条） · 点击 Commodities tab 查看全部 8 条</span></h4><div class="seclist"><details class="thesis" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">霍尔木兹战争风险溢价收紧原油市场</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 美国-伊朗霍尔木兹战争 ×4</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span> · rates <span class="au">↑</span> · credit <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.47</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (7 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Centcom, Trump, India (government)</div></summary>
+ <div class="bodyb"><div class="summary">美伊冲突升级进入第六天、美国强制封锁霍尔木兹海峡，以及对油轮的直接打击，令海峡通行量骤降，并推动油价迈向最大单周涨幅，重新在原油中构筑中东供应中断风险溢价。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">美伊冲突进入第六天，打击范围从军事设施扩大至桥梁、港口和一座机场，霍尔木兹之战加剧。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/fears-mount-of-us-and-iran-escalation-after-sixth-day-of-clashes" target="_blank" rel="noopener">🔗 Bloomberg: fears mount of escalation</a><a class="cite" href="https://apnews.com/article/iran-us-hormuz-strait-war-july-17-2026-2ad0cfe592eb258cb15a9eb04411d58a" target="_blank" rel="noopener">🔗 AP: US hits bridges and a key port</a><a class="cite" href="https://gcaptain.com/us-iran-each-attack-infrastructure-in-risky-escalation/" target="_blank" rel="noopener">🔗 gCaptain: US, Iran attack infrastructure</a><a class="cite" href="https://www.businesstimes.com.sg/international/global/hormuz-traffic-slumps-iran-and-us-step-attacks" target="_blank" rel="noopener">🔗 Business Times: Hormuz traffic slumps</a></div></div><div class="point">美国正在实施霍尔木兹封锁；与伊朗有关联的油轮掉头折返、迂回航行，海峡通行量骤降，油价上涨。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/iran-linked-tankers-u-turn-and-zig-zag-as-us-enforces-blockade" target="_blank" rel="noopener">🔗 Bloomberg: tankers U-turn and zig-zag</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-launches-new-strikes-on-iran-as-hormuz-shipping-traffic-falls" target="_blank" rel="noopener">🔗 Bloomberg: US strikes as Hormuz traffic falls</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/iran-us-skirmishes-worsen-as-hormuz-shipping-traffic-dwindles" target="_blank" rel="noopener">🔗 Bloomberg: skirmishes worsen as traffic dwindles</a></div></div><div class="point">随着海湾局势再度紧张，过去10天海峡通行量骤降，油价料将录得最大单周涨幅。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/latest-oil-market-news-and-analysis-for-july-17" target="_blank" rel="noopener">🔗 Bloomberg: oil market news July 17</a></div></div><div class="point">美军在波斯湾深处打击了一艘与伊朗有关联的油轮，并在哈尔克岛石油码头附近使油轮Belma瘫痪，重新对伊朗港口实施封锁。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/us-strikes-iranian-linked-oil-tanker-deep-within-persian-gulf" target="_blank" rel="noopener">🔗 Bloomberg: US strikes tanker in Persian Gulf</a><a class="cite" href="https://www.bbc.co.uk/news/articles/clyqwkegqk0o" target="_blank" rel="noopener">🔗 BBC: US fires at oil tanker as blockade begins</a></div></div><div class="point">在阿曼近海Al Bahyah号上一名海员遇难后，一家海事风险公司的CEO称伊朗的油轮袭击是“最坏情形”，印度则禁止船员执行霍尔木兹航程，海事风险扩大。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-oil-tanker-strait-hormuz-traffic-attacks-trump.html" target="_blank" rel="noopener">🔗 CNBC: worst case scenario in Hormuz</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/india-bars-seafarers-from-strait-of-hormuz-voyages-after-attacks" target="_blank" rel="noopener">🔗 Bloomberg: India bars seafarers</a></div></div><div class="point">《金融时报》将悬而未决的问题归结为：原油市场还能吸收霍尔木兹供应冲击多久。 <span class="vf">✓</span><div><a class="cite" href="https://www.ft.com/content/55f5860b-6ef0-42ed-a87f-c49af6ef9d29" target="_blank" rel="noopener">🔗 FT: how long can oil absorb the Hormuz shock</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">伊拉克与叙利亚签署协议，重启一条绕过霍尔木兹的管道，提供了缓解咽喉要道风险的替代出口路线。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-iraq-syria-oil-pipeline-strait-hormuz.html" target="_blank" rel="noopener">🔗 CNBC: Iraq-Syria pipeline deal</a></div></div><div class="point">尽管存在战争担忧，原油市场并未失控，霍尔木兹海峡的定价重要性正有所下降，暗示迄今风险溢价温和。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/how-the-iran-war-is-rewiring-the-oil-market" target="_blank" rel="noopener">🔗 Bloomberg: how the Iran war is rewiring oil</a></div></div><div class="point">随着市场权衡供需信号，Brent稳定在每桶$84附近。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/latest-oil-market-news-and-analysis-for-july-16" target="_blank" rel="noopener">🔗 Bloomberg: oil market news July 16</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">风险溢价温和——市场正在消化冲击</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="">→</span> · equities <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.29</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： —</div></summary>
+ <div class="bodyb"><div class="summary">一种质疑性的反向叙事认为，尽管发生战争，能源市场并未失控，霍尔木兹海峡的定价重要性正在下降，布伦特原油维持在$84附近，表明这一扰动正被消化而非重新定价。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">尽管存在战争担忧，油市并未如预期般失控，霍尔木兹海峡的定价重要性有所下降，表明当前风险溢价温和。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/how-the-iran-war-is-rewiring-the-oil-market" target="_blank" rel="noopener">🔗 Bloomberg: how the Iran war is rewiring oil</a></div></div><div class="point">布伦特原油徘徊在每桶$84附近，市场稳步权衡供需，而非计入供应中断。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/latest-oil-market-news-and-analysis-for-july-16" target="_blank" rel="noopener">🔗 Bloomberg: oil market news July 16</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">随着海峡通行量骤降，油价有望录得最大单周涨幅，亚洲天然气触及数月高位——这是冲击正被计价的证据。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/latest-oil-market-news-and-analysis-for-july-17" target="_blank" rel="noopener">🔗 Bloomberg: oil market news July 17</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/asian-gas-prices-rise-to-highest-since-march-on-mideast-tensions" target="_blank" rel="noopener">🔗 Bloomberg: Asian gas at highest since March</a></div></div><div class="point">FT明确质疑，市场还能消化霍尔木兹扰动多久才会显现冲击。 <span class="vf">✓</span><div><a class="cite" href="https://www.ft.com/content/55f5860b-6ef0-42ed-a87f-c49af6ef9d29" target="_blank" rel="noopener">🔗 FT: how long can oil absorb the Hormuz shock</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">Alcoa遭遇气旋冲击致氧化铝供应收紧</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Alcoa</div></summary>
+ <div class="bodyb"><div class="summary">Alcoa在气旋相关的运营问题后下调了氧化铝产量预期，收紧了近期氧化铝供应；受此消息影响其股价下跌，标志着一次孤立但具体的金属供应冲击。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Alcoa下调氧化铝产量预期，理由是气旋导致的运营问题，收紧了近期氧化铝供应。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/alcoa-shares-tumble-after-cyclone-cuts-into-alumina-output" target="_blank" rel="noopener">🔗 Bloomberg: Alcoa shares tumble after cyclone cuts output</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#4</span><span class="tname">中东局势紧张令LNG与天然气市场收紧</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： —</div></summary>
+ <div class="bodyb"><div class="summary">中东风险正传导至天然气：亚洲现货LNG触及3月以来最高，交易员正为供应中断持续更久定价，不过一年来首船美国LNG货物运抵中国，暗示能源贸易流出现一定的对冲式正常化。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">亚洲现货LNG价格攀升至3月以来最高，因中东地缘政治风险传导至天然气基准价格，交易员为供应中断持续更久定价。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/asian-gas-prices-rise-to-highest-since-march-on-mideast-tensions" target="_blank" rel="noopener">🔗 Bloomberg: Asian gas at highest since March</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">约一年来首艘美国LNG运输船靠泊中国，标志着美中能源贸易流出现初步回暖，且新增供应正抵达一个关键买家。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/first-us-lng-carrier-in-a-year-docks-in-china-ship-data-shows" target="_blank" rel="noopener">🔗 Bloomberg: first US LNG carrier docks in China</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#5</span><span class="tname">油轮战蔓延至俄乌战场</span>
+  <span class="pill low">low</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Putin, Trump</div></summary>
+ <div class="bodyb"><div class="summary">除海湾地区外，莫斯科与基辅正扩大对俄罗斯油轮的相互打击，开辟了能源物流风险的第二战线，加剧全球海运原油供应的不确定性。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">莫斯科与基辅正扩大对俄罗斯油轮的相互打击，增添了对能源物流具有影响的第二条地缘政治战线。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/iran-and-ukraine-bring-limits-of-air-campaigns-into-sharp-focus" target="_blank" rel="noopener">🔗 Bloomberg: Iran and Ukraine and limits of air campaigns</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#6</span><span class="tname">绕行霍尔木兹的管道缓解咽喉要道压力</span>
+  <span class="pill med">med</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 美国-伊朗霍尔木兹战争 ×4</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="ad">↓</span> · equities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.28</span><span class="sigtag">🎙 free news</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Mohammed Shia&#x27; al-Zaidi, Trump</div></summary>
+ <div class="bodyb"><div class="summary">新建出口基础设施——尤其是重启的伊拉克-叙利亚管道——被视为绕开霍尔木兹海峡的替代路线，可能为原油风险溢价设置上限，不过怀疑者认为这些管道仍面临伊朗方面破坏的风险。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">伊拉克与叙利亚签署协议，重启一条直连输油管道，提供替代出口通道，缓解原油流动面临的霍尔木兹咽喉要道风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-iraq-syria-oil-pipeline-strait-hormuz.html" target="_blank" rel="noopener">🔗 CNBC: Iraq-Syria pipeline deal</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">拟建的绕行霍尔木兹管道所提供的保障有限，仍易受破坏，且无法消除伊朗对原油出口的威胁。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/16/oil-pipeline-iran-strait-hormuz-red-sea-iraq-uae-saudi.html" target="_blank" rel="noopener">🔗 CNBC: pipelines won&#x27;t end the threat</a></div></div><div class="point">无论是否有新的管道路线，持续的油轮袭击及美国实施的封锁仍在扰乱海湾地区的能源流动。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-oil-tanker-strait-hormuz-traffic-attacks-trump.html" target="_blank" rel="noopener">🔗 CNBC: worst case scenario in Hormuz</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/iran-linked-tankers-u-turn-and-zig-zag-as-us-enforces-blockade" target="_blank" rel="noopener">🔗 Bloomberg: tankers U-turn and zig-zag</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#7</span><span class="tname">黑德兰港罢工及中国与 BHP 冲突带来的铁矿石与铜供应风险</span>
+  <span class="pill high">high</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">commodities <span class="au">↑</span> · equities <span class="ad">↓</span> · fx <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.24</span><span class="sigtag">🎙 premium press</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： BHP, Beijing</div></summary>
+ <div class="bodyb"><div class="summary">BHP 自 2000 年以来在黑德兰港的首次罢工，恰逢铁矿石与铜产量走软及北京针对该矿商的行动，为澳大利亚海运出口叠加了运营与地缘政治供应风险——尽管对 BHP 股票构成压力，但对铁矿石价格构成支撑。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">BHP 皮尔巴拉铁矿石员工发起自 2000 年以来在黑德兰港的首次劳工行动，加大了近期海运供应中断风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/bhp-iron-ore-workers-stage-first-port-hedland-strike-since-2000" target="_blank" rel="noopener">🔗 Bloomberg: BHP workers stage first Port Hedland strike</a></div></div><div class="point">随着黑德兰港罢工开始，BHP 公布的铁矿石与铜产量走软，加剧了近期供应风险。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/bhp-s-iron-ore-copper-output-slip-as-top-miner-plans-for-growth" target="_blank" rel="noopener">🔗 Bloomberg: BHP output slips as miner plans growth</a></div></div><div class="point">罢工期间北京正针对 BHP，增添了地缘政治压力，威胁澳大利亚对华铁矿石出口量。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/china-turns-on-the-australian-iron-ore-miner-it-helped-grow" target="_blank" rel="noopener">🔗 Bloomberg: China turns on the Australian miner</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">BHP 阐述了增长计划，且下周将安排进一步的谈判回合，暗示此次中断可能是短暂的。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/bhp-s-iron-ore-copper-output-slip-as-top-miner-plans-for-growth" target="_blank" rel="noopener">🔗 Bloomberg: BHP output slips as miner plans growth</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/bhp-iron-ore-workers-stage-first-port-hedland-strike-since-2000" target="_blank" rel="noopener">🔗 Bloomberg: BHP workers stage first Port Hedland strike</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#8</span><span class="tname">橄榄油进入结构性新阶段</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets"></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.20</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： —</div></summary>
+ <div class="bodyb"><div class="summary">全球最大的橄榄油生产商宣布市场已“确定无疑地”进入一个结构性新阶段，预计供应将在不同季节之间大幅波动——这是一种有别于能源和金属题材的软商品动态。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">全球最大的橄榄油生产商表示，市场已确定无疑地进入一个新阶段，分析师警告称供应可能在不同季节之间大幅波动。 <span class="vf">✓</span><div><a class="cite" href="https://www.cnbc.com/2026/07/17/spain-olive-oil-europe-heat-climate.html" target="_blank" rel="noopener">🔗 CNBC: olive oil market enters new phase</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details></div><button class="morebtn" data-view="commodities">▸ 还有 3 条 Commodities thesis — 点此打开完整的 🛢 Commodities 视图</button></div><div class="sector" id="sec-crypto" data-ac="crypto"><h4>₿ Crypto <span class="sub">— 5 theses</span></h4><div class="seclist"><details class="thesis" data-fam="" id="th-"><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">地缘政治避险——特朗普对中国的选举数据指控</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><button class="famchip" onclick="famFilter('');event.stopPropagation()">⚡ 中国干预选举指控 ×2</button><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span> · equities <span class="ad">↓</span> · fx <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.34</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Donald Trump</div></summary>
+ <div class="bodyb"><div class="summary">特朗普在黄金时段声称中国获取了220M份美国选民档案,震动市场,并在计划中的峰会前威胁到中美停火,推动比特币跌破$63,000,因为避险宏观冲击正传导至加密货币。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">比特币在特朗普发出指控后直接跌破$63,000,这一事态激化使超级大国间的停火面临风险。 <span class="vf">✓</span><div><a class="cite" href="https://cryptobriefing.com/trump-china-allegations-threaten-truce-bitcoin/" target="_blank" rel="noopener">🔗 Cryptobriefing — Trump China allegations</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">特有的采用催化因素(Visa、Tether)在同一周持续落地,表明这一宏观冲击是情绪事件,而非结构性逆转。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/visa-is-expanding-its-crypto-push-with-new-stablecoin-platform" target="_blank" rel="noopener">🔗 Bloomberg — Visa stablecoin</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">支付与稳定币采用的顺风</span>
+  <span class="pill high">high</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="au">↑</span> · equities <span class="au">↑</span></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:100%"></span></span><span class="heatchip">🔥 10.7k · 1 帖</span><span class="sub"> • · hottest: <a class="cite" href="https://stocktwits.com/CUPandHANDLE_CHARTS/message/659407946" target="_blank" rel="noopener">stocktwits.com 🔥10.7k</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.31</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (3 sources)</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Visa, Tether, Uala</div></summary>
+ <div class="bodyb"><div class="summary">传统与原生支付玩家正在深化稳定币基础设施：Visa 正推出新的稳定币结算平台，而 Tether 则通过对阿根廷 Uala 的 $20M 持股进军拉丁美洲——这是一个结构性看多的机构化主题。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Visa 正推出新的稳定币平台，将稳定币整合进其全球结算网络。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/visa-is-expanding-its-crypto-push-with-new-stablecoin-platform" target="_blank" rel="noopener">🔗 Bloomberg — Visa stablecoin</a></div></div><div class="point">Tether 对阿根廷金融科技公司 Uala 的 $20M 投资，标志着稳定币发行方正进军区域数字支付。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/tether-invests-20-million-in-argentina-s-uala-expanding-latin-america-push" target="_blank" rel="noopener">🔗 Bloomberg — Tether Uala</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">采用的顺风在近期正被宏观避险情绪以及所谓投资者资金撤离加密货币的仓位轮动所抵消。 <span class="vf">✓</span><div><a class="cite" href="https://cryptobriefing.com/trump-china-allegations-threaten-truce-bitcoin/" target="_blank" rel="noopener">🔗 Cryptobriefing — Trump China allegations</a><a class="cite" href="https://stocktwits.com/CUPandHANDLE_CHARTS/message/659407946" target="_blank" rel="noopener">🔗 stocktwits — Novogratz brotation <span class="eng">🔥10.7k</span></a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">大轮动（The Great Brotation）——资金从加密货币轮动至 AI/半导体</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span><span class="lens">🔥 social</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span> · equities <span class="au">↑</span> · commodities <span class="au">↑</span></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:100%"></span></span><span class="heatchip">🔥 10.7k · 1 帖</span><span class="sub"> • · hottest: <a class="cite" href="https://stocktwits.com/CUPandHANDLE_CHARTS/message/659407946" target="_blank" rel="noopener">stocktwits.com 🔥10.7k</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.30</span><span class="sigtag">🎙 premium press</span><span class="sigtag">convergence (2 sources)</span><span class="sigtag">hot (recent coverage)</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Mike Novogratz, Galaxy Digital</div></summary>
+ <div class="bodyb"><div class="summary">Galaxy Digital 的 Mike Novogratz 称，2026年加密货币投资者已转投 AI 存储与半导体交易，勾勒出一场对加密风险偏好的资金迁移式抽血。这一说法搭上了超乎寻常的病毒式传播热潮，表明轮动叙事在散户中引发共鸣。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Novogratz 明确指出投资者正从加密货币轮出至 AI 存储/半导体（SMH、QQQ）与黄金（GLD），形成一场&#x27;brotation&#x27;（兄弟轮动）——该帖互动量巨大（热度 10670）。 <span class="vf">✓</span><div><a class="cite" href="https://stocktwits.com/CUPandHANDLE_CHARTS/message/659407946" target="_blank" rel="noopener">🔗 stocktwits — Novogratz brotation <span class="eng">🔥10.7k</span></a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">与此同时，结构性的加密货币采用仍在深化——Visa 的新稳定币平台与 Tether 的拉美扩张表明资金与基础设施正在积累，而非一致性地撤离。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/visa-is-expanding-its-crypto-push-with-new-stablecoin-platform" target="_blank" rel="noopener">🔗 Bloomberg — Visa stablecoin</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/tether-invests-20-million-in-argentina-s-uala-expanding-latin-america-push" target="_blank" rel="noopener">🔗 Bloomberg — Tether Uala</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#4</span><span class="tname">MicroStrategy 供应集中/巨鲸逼仓恐慌</span>
+  <span class="pill low">low</span><span class="lens">🔥 social</span>
+  <span class="senti bear">🔴 看空</span><span class="tdate">📅 Jul 17</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span> · equities <span class="ad">↓</span></span></div>
+ 
+ <div class="top heatrow"><span class="sub">社媒热度</span><span class="barwrap"><span class="bar heatbar" style="width:11%"></span></span><span class="heatchip">🔥 1.2k · 1 帖</span><span class="sub"> • · hottest: <a class="cite" href="https://stocktwits.com/Samurai0/message/659405099" target="_blank" rel="noopener">stocktwits.com 🔥1.2k</a></span></div>
+ <div class="sig"><span class="mat">materiality 0.25</span><span class="sigtag">🎙 free news</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Michael Saylor, MicroStrategy</div></summary>
+ <div class="bodyb"><div class="summary">一则匿名爆款帖称，MicroStrategy 持有的约 800,000 枚 BTC 相当于流通供应的约 5%（计入丢失币量后占比更高），并猜测 Saylor 可能在流动性紧缩期间打压 BTC 以逼仓供应。互动热度高（热度 1159），但未经证实，属于投机性推断。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">该帖指出，MicroStrategy 约 800k 枚 BTC 的囤积在计入损失后约占供应的 5%，并在流动性紧缩论调下提出一种看空逼仓操作。 <span class="vf">✓</span><div><a class="cite" href="https://stocktwits.com/Samurai0/message/659405099" target="_blank" rel="noopener">🔗 stocktwits — MSTR supply <span class="eng">🔥1.2k</span></a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#5</span><span class="tname">加密预测/博彩市场受到审视</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 15</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">crypto <span class="ad">↓</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.14</span><span class="sigtag">🎙 premium press</span></div>
+ <div class="voices">声音（自然涌现）： Stanford (researchers), Polymarket, CXMT</div></summary>
+ <div class="bodyb"><div class="summary">加密原生预测平台因诚信问题和业务边界扩张而受到关注：斯坦福大学的一项研究发现Polymarket上主要的比特币市场可能存在操纵行为，而加密市场如今还提供针对中国芯片制造商CXMT的代币化pre-IPO押注——模糊了投机、预测市场与私募股权之间的界限。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">斯坦福大学的研究人员在Polymarket最热门的BTC博彩市场中识别出操纵模式，引发对其诚信的担忧。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/polymarket-traders-may-be-manipulating-crypto-bets-study-says" target="_blank" rel="noopener">🔗 Bloomberg — Polymarket manipulation</a></div></div><div class="point">加密平台正在向代币化pre-IPO敞口（CXMT）扩张，拓展了数字资产平台的投机范围。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/crypto-market-offers-pre-ipo-bets-on-chinese-chipmaker-cxmt" target="_blank" rel="noopener">🔗 Bloomberg — pre-IPO CXMT bets</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details></div></div><div class="sector" id="sec-fx" data-ac="fx"><h4>💱 FX <span class="sub">— 3 theses</span></h4><div class="seclist"><details class="thesis"><summary>
+ <div class="top"><span class="rank">#1</span><span class="tname">卢比双向波动率仓位累积</span>
+  <span class="pill med">med</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">fx <span class="">→</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.26</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： Citigroup (Citi)</div></summary>
+ <div class="bodyb"><div class="summary">Citi报告称，印度企业与投资者客户正转向卢比波动率策略，这一仓位/对冲信号指向对USD/INR双向风险的预期，而非方向性押注。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">Citi认为印度客户正将重心转向卢比波动率策略，暗示对冲USD/INR双向风险的需求上升。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/citi-india-clients-shift-focus-gain-rupee-volatility" target="_blank" rel="noopener">🔗 Bloomberg — Citi India clients shift focus to rupee volatility</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point sub">—</div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#2</span><span class="tname">特异性新兴市场基本面支撑部分本币</span>
+  <span class="pill med">med</span>
+  <span class="senti bull">🟢 看多</span><span class="tdate">📅 Jul 16</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">fx <span class="au">↑</span> · credit <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.24</span><span class="sigtag">🎙 premium press</span><span class="sigtag">hot (recent coverage)</span></div>
+ <div class="voices">声音（自然涌现）： President Kast, Chile Senate, Nigeria (government)</div></summary>
+ <div class="bodyb"><div class="summary">国别层面的改善——智利的改革胜利与尼日利亚不断上升的侨汇——正通过财政授权与外部收支渠道，而非共同的全球驱动因素，来强化个别新兴市场货币。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">智利参议院批准了 Kast 总统涵盖广泛的税收、投资与劳工改革方案，强化了行政部门的改革授权及 CLP 前景。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/chile-senate-hands-kast-a-win-on-key-economic-reform-bill" target="_blank" rel="noopener">🔗 Bloomberg — Chile Senate hands Kast a win on reform bill</a></div></div><div class="point">尼日利亚预计到年底散居侨民汇款将攀升至每月 $1 billion，支撑奈拉的外部收支与经常账户。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/nigeria-expects-remittances-to-hit-1-billion-a-month-by-year-end" target="_blank" rel="noopener">🔗 Bloomberg — Nigeria expects remittances to hit $1B a month</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">挥之不去的中美贸易摩擦是广泛的新兴市场情绪风险，可能抵消国别层面的顺风因素，并无差别地压制新兴市场外汇。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/trump-s-aides-see-china-cheating-on-trade-but-shun-retaliation" target="_blank" rel="noopener">🔗 Bloomberg — Trump&#x27;s aides see China cheating on trade</a></div></div></div></div></div>
+</details><details class="thesis"><summary>
+ <div class="top"><span class="rank">#3</span><span class="tname">尽管抱怨合规问题，美国仍软化对华近期贸易立场</span>
+  <span class="pill med">med</span><span class="lens">🏛 macro</span>
+  <span class="senti mix">⚪ 分歧</span><span class="tdate">📅 Jul 15</span><span class="caret">▾</span></div>
+ <div class="top" style="margin-top:6px"><span class="assets">fx <span class="au">↑</span> · equities <span class="au">↑</span> · commodities <span class="au">↑</span></span></div>
+ 
+ 
+ <div class="sig"><span class="mat">materiality 0.19</span><span class="sigtag">🎙 premium press</span><span class="sigtag">cross-asset macro reach</span></div>
+ <div class="voices">声音（自然涌现）： Trump administration aides, Trump</div></summary>
+ <div class="bodyb"><div class="summary">有关政府内部的报道显示，对中国不遵守协议感到不满，但不愿采取报复措施，暗示美国近期贸易姿态趋于软化，从而降低升级风险，并对风险资产及CNY构成温和利好，相对利空避险货币USD。</div>
+  <div class="ev"><div class="col for"><h4>▲ 支持</h4><div class="point">尽管认为中国在贸易休战中作弊，特朗普的助手们仍回避采取报复措施，表明美国近期贸易立场趋于软化，升级风险有所下降。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/trump-s-aides-see-china-cheating-on-trade-but-shun-retaliation" target="_blank" rel="noopener">🔗 Bloomberg — Trump&#x27;s aides shun retaliation on China</a></div></div></div>
+   <div class="col against"><h4>▼ 反对 / 对冲</h4><div class="point">同一报道显示，助手们认为中国在协议上作弊；悬而未决的不满情绪可能以升级和USD/CNY剧烈波动的形式重新浮现，因此局势缓和并无保证。 <span class="vf">✓</span><div><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-15/trump-s-aides-see-china-cheating-on-trade-but-shun-retaliation" target="_blank" rel="noopener">🔗 Bloomberg — Trump&#x27;s aides see China cheating on trade</a></div></div></div></div></div>
+</details></div></div></div>
+   
+  </div>
+  <div>
+   <div class="panel cal"><h3>日历 / 催化剂 <span class="sub">— 真实前瞻事件 · 最近优先</span></h3>
+    <table><tr data-ac="crypto"><td><b>Jul 21-22</b></td><td>Blockchain Futurist Conference (Toronto)<div class="sub">Crypto</div></td><td class="imp low">⚪ low</td></tr><tr data-ac="equities"><td><b>Jul 22</b></td><td>Alphabet Q2 earnings<div class="sub">Equities</div></td><td class="imp high">🔴 high</td></tr><tr data-ac="crypto"><td><b>Jul 23</b></td><td>Pragma Lisbon (ETHGlobal) · ETH &#x27;Glamsterdam&#x27; testnet (Jul-Aug)<div class="sub">Crypto</div></td><td class="imp low">⚪ low</td></tr></table>
+    <div class="calempty">窗口内该类没有已标注日期的催化剂。</div></div>
+   <div class="panel home-only"><h3>已发生 — 事实时间线</h3><ul class="tl"><li><span class="when">2026-07-17</span>美国股指期货下滑，Moonshot近乎开源权重的Kimi K3在上海发布，宣称以远低的成本比肩OpenAI/Anthropic，重新点燃廉价中国AI的担忧并引发全球芯片抛售。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/moonshot-ai-kimi-k3-model-openai-anthropic-china.html" target="_blank" rel="noopener">🔗 CNBC: Kimi K3 model</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/china-s-powerful-new-moonshot-ai-model-closes-gap-with-us-rivals" target="_blank" rel="noopener">🔗 Bloomberg: Moonshot closes gap with US rivals</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/us-stock-index-futures-slide-as-jitters-grow-on-chip-selloff" target="_blank" rel="noopener">🔗 Bloomberg: futures slide on chip selloff</a></li><li><span class="when">2026-07-17</span>特朗普解密的指控称中国干预了2020年大选，扰动市场，并在计划中的9月特朗普-习近平峰会前威胁脆弱的贸易休战。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/trump-accuses-china-of-election-meddling-putting-ties-at-risk" target="_blank" rel="noopener">🔗 Bloomberg: Trump accuses China of election meddling</a></li><li><span class="when">2026-07-17</span>美国-伊朗冲突第六天升级：伊朗称美国空袭击中民用基础设施，并将攻击扩大至叙利亚和巴林，同时油轮在霍尔木兹海峡面临&#x27;最坏情形&#x27;。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/fears-mount-of-us-and-iran-escalation-after-sixth-day-of-clashes" target="_blank" rel="noopener">🔗 Bloomberg: fears mount after sixth day of clashes</a><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-us-trump-syria-bahrain.html" target="_blank" rel="noopener">🔗 CNBC: Iran expands attacks to Syria, Bahrain</a><a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-oil-tanker-strait-hormuz-traffic-attacks-trump.html" target="_blank" rel="noopener">🔗 CNBC: Hormuz tankers worst-case scenario</a></li><li><span class="when">2026-07-17</span>伊拉克与叙利亚签署协议以修复一条绕开霍尔木兹的替代路线输油管道，ConocoPhillips收购BP在伊拉克的42%股权，此时美国着手削弱伊朗的能源掌控——部分封顶了原油风险溢价。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/iran-war-iraq-syria-oil-pipeline-strait-hormuz.html" target="_blank" rel="noopener">🔗 CNBC: Iraq–Syria Hormuz-bypass pipeline</a><a class="cite" href="https://www.cnbc.com/2026/07/17/bp-conocophillips-to-back-iraq-with-major-energy-investment-.html" target="_blank" rel="noopener">🔗 CNBC: Conoco buys BP&#x27;s Iraq stake</a></li><li><span class="when">2026-07-17</span>进口价格意外上涨，来自中国的商品成本创2008年以来最高——关税传导正输入通胀渠道。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/import-prices-post-surprise-gain-as-costs-of-goods-from-china-hit-highest-since-2008.html" target="_blank" rel="noopener">🔗 CNBC: import prices post surprise gain</a></li><li><span class="when">2026-07-17</span>CNBC一项调查发现经济前景恶化，特朗普日益受到指责，同时购房者负担能力连续第五个月下滑——尽管硬数据仍然坚挺，市场情绪已转弱。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/economic-outlook-is-worsening-and-trump-is-getting-blamed-cnbc-survey-finds.html" target="_blank" rel="noopener">🔗 CNBC: outlook worsening, Trump blamed</a></li><li><span class="when">2026-07-17</span>SpaceX在Starship最后一秒中止发射后，自纳入Nasdaq-100以来暴跌约23%，有望抹去约$1T的价值——打击IPO/AI狂热。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/spacex-stock-starship-test-flight-aborted.html" target="_blank" rel="noopener">🔗 CNBC: SpaceX stock cratered</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/spacex-set-to-wipe-out-1-trillion-in-value-as-shares-slide" target="_blank" rel="noopener">🔗 Bloomberg: SpaceX set to wipe out $1T</a></li><li><span class="when">2026-07-17</span>一起与Taco Bell供应的生菜相关的环孢子虫病疫情压制餐饮类股——Sweetgreen收窄了约26%的跌幅，Taylor Farms召回产品——尽管分析师预计长期影响有限。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/sweetgreen-pares-26-drop-as-parasite-tied-to-taco-bell-lettuce" target="_blank" rel="noopener">🔗 Bloomberg: Sweetgreen pares 26% drop</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/lettuce-grower-taylor-farms-to-recall-products-tied-to-parasite" target="_blank" rel="noopener">🔗 Bloomberg: Taylor Farms recall</a></li><li><span class="when">2026-07-17</span>Apple与Nvidia争夺全球市值最高公司的桂冠，投资者在超大盘科技股内部轮动，Nvidia在2026年落后。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/apple-nvidia-aapl-nvda-market-cap.html" target="_blank" rel="noopener">🔗 CNBC: Apple, Nvidia vie for most valuable</a></li><li><span class="when">2026-07-17</span>习近平在中国最高科技峰会上首次亮相时誓言&#x27;让AI惠及所有人&#x27;，拉拢发展中世界并警告安全管控过度——加剧美中AI领导权之争。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/xi-vows-to-make-ai-for-all-in-debut-at-china-s-top-tech-summit" target="_blank" rel="noopener">🔗 Bloomberg: Xi vows AI for all</a></li><li><span class="when">2026-07-17</span>美国公司内部人士正以接近纪录的速度抛售——回撤中的仓位警示信号。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/us-corporate-insiders-are-selling-stocks-at-a-near-record-pace" target="_blank" rel="noopener">🔗 Bloomberg: insiders selling at near-record pace</a></li><li><span class="when">2026-07-17</span>各国央行维持鹰派路径：日本央行可能在按兵不动的同时上调增长预期，一项调查显示欧洲央行将等到9月实施最后一次加息。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/boj-is-said-likely-to-raise-growth-forecast-stand-pat-on-rates" target="_blank" rel="noopener">🔗 Bloomberg: BOJ to raise growth forecast, stand pat</a><a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-17/ecb-set-to-wait-for-september-to-hike-one-last-time-poll-shows" target="_blank" rel="noopener">🔗 Bloomberg: ECB to wait for September hike</a></li><li><span class="when">2026-07-17</span>Anthropic正与Meta进行早期洽谈以获取算力——凸显即便在芯片抛售之际前沿AI基础设施需求依然火热。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/17/anthropic-meta-ai-compute.html" target="_blank" rel="noopener">🔗 CNBC: Anthropic in talks with Meta for compute</a></li><li><span class="when">2026-07-16</span>Netflix公布Q2业绩并对Q3给出低于预期的指引——创约4年来最大跌幅——并表示将减少互动数据更新，对超大盘科技股情绪造成早期打击。 <span class="vf">✓</span> <a class="cite" href="https://www.cnbc.com/2026/07/16/netflix-nflx-earnings-q2-2026.html" target="_blank" rel="noopener">🔗 CNBC: Netflix earnings</a></li><li><span class="when">2026-07-16</span>Uber同意收购Delivery Hero，外卖行业加速整合——这是支撑股市风险偏好的广泛并购浪潮的一部分。 <span class="vf">✓</span> <a class="cite" href="https://www.bloomberg.com/news/articles/2026-07-16/uber-agrees-to-buy-delivery-hero-as-food-sector-consolidates" target="_blank" rel="noopener">🔗 Bloomberg: Uber–Delivery Hero</a></li></ul></div>
+   <div class="panel delta home-only"><h3>信任与覆盖</h3>
+    <div class="sub">198 路跨资产 Exa 检索 → 296 个去重信源，覆盖宏观、股票、固收、大宗、加密与外汇。每条 for/against 均引用 pool 内 URL。可信度、情绪与 materiality 是 <b>AI 判断</b>，与被引事实分列。</div></div>
+   <div class="panel home-only"><h3>验证备注 <span class="houseflag">— 只标记，不混合</span></h3><div class="vn">同一报道内&#x27;财富大转移&#x27;的规模估算相差约3倍——$36T对$100T+——因此在估算得到调和之前，&#x27;结构性资产流动驱动&#x27;的说法可信度较低。</div><div class="vn">大宗商品论点对战争是否真的在重新定价石油存在分歧：&#x27;霍尔木兹战争风险溢价收紧原油/最大单周涨幅&#x27;对&#x27;风险溢价温和——Brent守在$84附近&#x27;。应将原油溢价的幅度视为存有争议、尚无定论。</div><div class="vn">Kimi K3在论点层面的具体细节（约2.8T参数、&#x27;以远低成本比肩OpenAI/Anthropic&#x27;）未被所引记录佐证，后者仅称该模型&#x27;缩小了差距&#x27;/&#x27;实现了升级&#x27;——将参数量与比肩程度标记为未经核实。</div><div class="vn">Apple超越Nvidia的&#x27;桂冠&#x27;仅建立在约$0.02T的微小差距上（约$4.88T对约$4.86T）；所引记录仅称二者&#x27;争夺&#x27;，因此该排名处于日内噪音范围内，很可能反转。</div><div class="vn">中国诈骗团伙的压力在固定收益论点中被量化为&#x27;每年最高$1B&#x27;，而来源记录仅称&#x27;数十亿&#x27;——两者的量级不一致。</div><div class="vn">SpaceX的细节（约$8.7B卖空者利润、低于$135的IPO价格）仅出现在论点层面；所引记录证实了约23%的跌幅和约$1T的价值蒸发，但未证实卖空利润或IPO价格数据。</div></div>
+  </div>
+ </div>
+
+ <div class="panel home-only"><h3>本台观点 <span class="houseflag">— 描述性观点 · 非投资建议</span></h3>
+  <div class="house"><div class="hp"><b>📉 技术面</b><br><span class="sub">格局呈避险但轮动的特征，并非全面降总敞口。直接驱动因素是Kimi K3引发的芯片抛售拖累期货和半导体，接近纪录的内部人抛售以及高知名度个股崩跌（SpaceX约-23%、朝着约$1T的蒸发，Netflix多年来最大跌幅）予以印证。拥挤的杠杆动量AI多头和加密货币（BTC跌破$63k）正被平仓，但市场广度正由能源、银行/交易、并购标的和中国/新兴市场价值股回填——逢低买盘涌现（SpaceX多头仍在坚守，交易撮合意愿完好），因此这更像是一次领导权轮动和降险，而非恐慌抛售。关键的摆动因素是消息面风险：霍尔木兹的任何升级或美中关系的硬性破裂都会将其从有序轮动转为跳空低开；反之，芯片抛售企稳加上完好无损的前沿AI买盘（Anthropic-Meta算力）将为反弹奠定基础。</span></div>
+   <div class="hp"><b>🏛 基本面</b><br><span class="sub">核心宏观争论在于滞胀对软着陆。通胀风险正在积聚——进口价格意外走高、中国商品成本创2008年以来最贵，关税正在扩围（加拿大/巴西/瑞士），且央行（美联储鹰派、日本央行正常化、欧洲央行的最后一次加息）坚定维持更高更久——而劳动力和消费的硬数据在情绪走弱之际仍保持韧性。股票盈利引擎面临两线作战的考验：对AI资本开支回报的质疑加上廉价中国AI的威胁施压于超大盘溢价，但TSMC/ASML的超预期、主权AI需求和强劲的并购浪潮令长期逻辑和风险偏好得以维系。地缘政治（美国-伊朗/霍尔木兹、美中干预选举的决裂）是可能将原油风险溢价转化为真正增长冲击的肥尾。机构立场：谨慎且哑铃式——偏好实物资产/能源、优质现金创造型标的以及精选的中国/新兴市场价值股；鉴于财政与鹰派压力，低配拥挤的杠杆动量AI和长久期美债；针对霍尔木兹/美中的尾部风险保留对冲。</span></div></div></div>
+
+ <div class="note">全市场 dashboard（altitude 1）— 两遍跨资产综合（gather → cluster → 逐 thesis for/against 检索 → verify → 热度前置排序 → render）。Agent 只提出主张；验证与确定性的 score/sov/cap 由代码完成。数字冲突只标记、从不平均。</div>
+ <script>
+(function(){
+ function setView(v){
+  document.body.dataset.view=v;
+  document.querySelectorAll('.tab').forEach(function(t){
+   t.classList.toggle('active',t.dataset.view===v);});
+  var cal=document.querySelector('.cal table');
+  var note=document.querySelector('.calempty');
+  if(cal&&note){
+   var vis=Array.prototype.filter.call(cal.querySelectorAll('tr'),function(r){
+    return r.offsetParent!==null;});
+   note.classList.toggle('show',vis.length===0);}
+  window.scrollTo(0,0);
+ }
+ // Match ONLY the tab/nav buttons — not any element inside body[data-view].
+ // (body carries data-view for the CSS Home/focus state, so a bare
+ // '[data-view]' selector matches body on every click and would preventDefault
+ // the native <details> toggle and citation links.)
+ document.addEventListener('click',function(e){
+  var el=e.target.closest('button[data-view]');
+  if(el){e.preventDefault();setView(el.dataset.view);}});
+})();
+
+var activeFam=null;
+function famFilter(fid){
+ if(activeFam===fid){return famClear();}
+ activeFam=fid;
+ document.body.classList.add('famfiltered');
+ var n=0;
+ document.querySelectorAll('details.thesis').forEach(function(el){
+  var hit=el.dataset.fam===fid;
+  el.classList.toggle('famshow',hit);
+  if(hit){el.open=true;n++;}
+ });
+ document.querySelectorAll('.sector').forEach(function(s){
+  s.style.display=s.querySelector('details.famshow')?'':'none';
+ });
+ document.querySelectorAll('.famchip').forEach(function(c){c.classList.remove('active');});
+ var nav=document.getElementById('nav-'+fid);
+ if(nav){nav.classList.add('active');}
+ var bar=document.getElementById('filterbar');
+ bar.style.display='block';
+ document.getElementById('filtertext').textContent=
+  '⚡ 事件族过滤中 — 只显示该族 '+n+' 条 thesis（再点一次族 chip 或「显示全部」还原）';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function famClear(){
+ activeFam=null;
+ document.body.classList.remove('famfiltered');
+ document.querySelectorAll('.sector').forEach(function(s){s.style.display='';});
+ document.querySelectorAll('.famchip').forEach(function(c){c.classList.remove('active');});
+ document.getElementById('filterbar').style.display='none';
+}
+
+function langSwap(){
+ var p=location.pathname,t;
+ if(/\.zh\.html$/.test(p)){t=p.replace(/\.zh\.html$/,'.html');}
+ else if(/\/$/.test(p)){t=p+'index.zh.html';}
+ else if(/index\.html$/.test(p)){t=p.replace(/index\.html$/,'index.zh.html');}
+ else {t=p.replace(/\.html$/,'.zh.html');}
+ location.href=t;
+}
+</script>
+</div></body></html>
