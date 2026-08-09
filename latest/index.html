@@ -44,15 +44,18 @@ code{font-family:var(--mono);}
 
 .section-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-mute);margin:6px 0 10px;}
 
-/* ── issue #35: site nav (home/archive/permalink/lang) — only rendered when
-   --site-base is supplied. Deliberately quiet (this page's own chrome, not
-   its content), sits above the sticky anchor nav. ─────────────────────── */
+/* ── issue #35: site nav (lang switch) — only rendered when --site-base is
+   supplied. Deliberately quiet (this page's own chrome, not its content),
+   sits above the sticky anchor nav. 2026-08-09: the home/archive/permalink
+   links this row used to also carry were removed at the user's request;
+   `.sitenav` is now a single-child row (just `.snlang`) — `gap`/`flex-wrap`
+   are harmless no-ops left in place rather than stripped for a rule this
+   small. ─────────────────────────────────────────────────────────────── */
 .sitenav{display:flex;flex-wrap:wrap;align-items:center;gap:14px;
   font-size:11px;color:var(--text-mute);margin:0 0 10px;padding-bottom:8px;
   border-bottom:1px solid var(--border-soft);}
 .sitenav a{color:var(--text-mute);text-decoration:none;}
 .sitenav a:hover{color:var(--text-dim);text-decoration:underline;}
-.sitenav .snperma{color:var(--accent-text);font-family:var(--mono);font-size:10.5px;}
 .sitenav .snlang{margin-left:auto;font-family:var(--mono);}
 
 /* ── issue #32 (quotes strip) / #31 (TL;DR) — page-header-area, above the
@@ -1074,7 +1077,7 @@ body.mode-demo .demobar,body.mode-probing .demobar{display:block;}
       <span data-tab="themes">Research Themes</span>
     </div>
   </div>
-  <nav class="sitenav" id="sitenav" aria-label="Site navigation"><a class="snhome" href="https://stevensshi.github.io/market-view/">Home</a><a class="snarchive" href="https://stevensshi.github.io/market-view/">Archive</a><a class="snperma" href="https://stevensshi.github.io/market-view/views/2026-08-09.html">Permalink</a><a class="snlang" href="index.zh.html">中文</a></nav>
+  <nav class="sitenav" id="sitenav" aria-label="Site navigation"><a class="snlang" href="index.zh.html">中文</a></nav>
   <nav class="anav" id="anchor-nav" aria-label="Section index"><a href="#sec-macro" data-key="macro" style="--hue:oklch(70% .11 300)"><span>Macro</span><b>6</b></a><a href="#sec-equity" data-key="equity" style="--hue:oklch(70% .11 250)"><span>Equities</span><b>9</b></a><a href="#sec-ficc" data-key="ficc" style="--hue:oklch(70% .11 200)"><span>Rates &amp; FX</span><b>7</b></a><a href="#sec-commodities" data-key="commodities" style="--hue:oklch(70% .11 60)"><span>Commodities</span><b>8</b></a><a href="#sec-crypto" data-key="crypto" style="--hue:oklch(70% .11 130)"><span>Crypto</span><b>3</b></a></nav>
   <div class="qstrip" id="qstrip"><span class="tk">S&amp;P 500 <em class="up">7,758 (+0.6%)</em></span><span class="tk">Nasdaq <em class="up">26,691 (+1.3%)</em></span><span class="tk">Dow <em class="up">54,037 (+0.3%)</em></span><span class="tk">10Y UST <em class="dn">4.66% (-1bp)</em></span><span class="tk">WTI <em class="up">$78 (+0.2%)</em></span><span class="tk">Gold <em class="up">$4,341 (+0.4%)</em></span><span class="tk">BTC <em class="up">$65,037 (+0.2%)</em></span><span class="tk">DXY <em class="dn">99.6 (-0.4%)</em></span><span class="tk">USD/JPY <em class="dn">157.7 (-0.5%)</em></span><span class="qasof">Quotes as of 2026-08-08 20:50 UTC</span></div>
   <div class="tldr" id="tldr"><div class="tldr-h">Today&#x27;s TL;DR<span class="regime-badge tone-mixed"><span class="regime-lbl">Regime</span><span class="regime-val">MIXED</span></span></div><div class="tldr-body">Markets are caught between a soft U.S. jobs surprise that fuels rate-cut expectations and a tech/AI rebound that pushes indices to records, while escalating geopolitical risks (Iran, trade wars, Fed politicization) and commodity supply fears keep volatility high. The bull case rests on AI monetization, institutional cash deployment, and crypto adoption; the bear case warns of debt indigestion, Fed splits, and supply-chain disruptions.</div></div>
@@ -2678,6 +2681,6 @@ updatePill();
   });
 })();
 </script>
-
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8b0cf5be457c4bd0aa1a24b1dfa337a5"}'></script>
 </body>
 </html>

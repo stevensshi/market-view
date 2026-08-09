@@ -85,12 +85,11 @@ fetch('manifest.json').then(r=>r.json()).then(m=>{
   ).join('');
 }).catch(()=>{document.getElementById('archive').textContent='no builds yet';});
 </script>
-<!-- Cloudflare Web Analytics — DISABLED until a real token exists. To turn on:
-     replace __CF_BEACON_TOKEN__ with the site token from the Cloudflare dashboard
-     (Web Analytics -> Add a site -> Manage site), then uncomment the line below.
-     Left commented deliberately: a live tag with a placeholder token would load a
-     third-party script on every visit and report nothing.
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "__CF_BEACON_TOKEN__"}'></script>
--->
+<!-- Cloudflare Web Analytics (site: stevensshi.github.io, enabled 2026-08-09).
+     This landing page is hand-maintained, so the token is inline here; the
+     daily pages get it from CF_BEACON_TOKEN via scripts/render_chat_page.py's
+     _analytics_html. The token is a public site identifier, not a secret —
+     it ships in the page source by design. -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8b0cf5be457c4bd0aa1a24b1dfa337a5"}'></script>
 </body>
 </html>
