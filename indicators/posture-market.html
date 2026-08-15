@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场姿态监控 · 市场详情</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0d0f13;color:#a5abb8;font-family:'Space Grotesk',system-ui,sans-serif}
+::selection{background:#2a3244;color:#fff}
+.mono{font-family:'IBM Plex Mono',monospace}
+.page{min-height:100vh;background:#111318;max-width:1160px;margin:0 auto;
+ border-left:1px solid #1a1d24;border-right:1px solid #1a1d24}
+.navbar{display:flex;gap:18px;padding:10px 24px;border-bottom:1px solid #1a1d24}
+.navlink{font-size:12px;color:#7a8090;text-decoration:none}
+.navlink:hover{color:#c7ccd6}
+.navlink.active{color:#eceef2;font-weight:600}
+.hdr{padding:16px 24px;border-bottom:1px solid #23262e}
+.hdrmain{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.brand{font-size:17px;font-weight:600;color:#eceef2;white-space:nowrap}
+.crumb{font-size:11.5px;color:#7a8090;font-family:'IBM Plex Mono',monospace}
+.hdrsub{font-size:11px;color:#5a6070;margin-top:6px}
+.verdict{margin:16px 24px;font-size:19px;font-weight:600;line-height:1.6;color:#eceef2}
+.eyebrow{font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.boardnote{font-size:10.5px;color:#5a6070;margin:-4px 0 10px;text-transform:none;letter-spacing:0}
+.panel{margin:14px 24px;background:#14161c;border:1px solid #23262e;border-radius:10px;padding:14px 16px}
+.statechip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+ border-radius:6px;padding:3px 9px;white-space:nowrap}
+.statechip.lg{font-size:13px;padding:6px 14px;border-radius:8px}
+.twolights{display:flex;gap:14px;margin:14px 24px;flex-wrap:wrap}
+.twolights .warncard,.twolights .ovcard{margin:0;flex:1 1 380px}
+.warncard{background:#181b22;border:1px solid #262a34;border-radius:12px;padding:16px 20px 14px}
+.swtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.swlabel{font-size:11px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em}
+.trigchip{font-size:11px;color:#9aa2b2;background:rgba(154,162,178,.08);border-radius:6px;
+ padding:3px 9px;font-family:'IBM Plex Mono',monospace;margin-left:auto}
+.swreason{font-size:15px;font-weight:500;line-height:1.6;color:#eceef2;margin-top:10px}
+.swdetail{font-size:11.5px;color:#9aa2b2;line-height:1.6;margin-top:6px;
+ font-family:'IBM Plex Mono',monospace}
+.swfine{font-size:10.5px;color:#5a6070;margin-top:8px;line-height:1.6}
+.swdetails{margin-top:12px}
+.swdetails summary{cursor:pointer;user-select:none;font-size:11px;color:#9aa2b2;
+ list-style:none;outline:none}
+.swdetails summary::-webkit-details-marker{display:none}
+.swdetails summary::before{content:"▸ ";color:#5a6070}
+.swdetails[open] summary::before{content:"▾ ";color:#5a6070}
+.swdetails summary:hover{color:#c7ccd6}
+.swrulebody{margin-top:10px;background:#111318;border-radius:8px;padding:12px 14px}
+.swruleh{font-size:10px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em;
+ margin:10px 0 6px}
+.swruleh:first-child{margin-top:0}
+.swruleline{font-size:11.5px;line-height:1.7;color:#8a91a0;margin-bottom:4px}
+.ovcard{background:#181b22;border:1px solid #262a34;border-radius:10px;padding:14px 16px}
+.ovlabel{font-size:11px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.ovtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ovregime{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+ border-radius:6px;padding:4px 10px}
+.ovprob{font-size:15px;font-weight:600;color:#eceef2;font-family:'IBM Plex Mono',monospace}
+.ovstats{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.ovstat{display:flex;flex-direction:column;gap:2px}
+.ovk{font-size:10px;color:#5a6070}
+.ovv{font-size:13px;color:#eceef2;font-family:'IBM Plex Mono',monospace}
+.tblwrap{overflow-x:auto}
+.mtable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:560px}
+.mtable.explain{min-width:720px}
+.mtable th{text-align:left;font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;
+ padding:0 10px 8px 0;font-weight:600}
+.mtable td{padding:9px 10px 9px 0;border-top:1px solid #1f232b;vertical-align:middle}
+.mtable tr:first-child td{border-top:none}
+.mtable tr.hot{background:rgba(255,179,110,.08)}
+.mname{color:#eceef2;white-space:nowrap;max-width:220px}
+.msub{color:#7a8090;font-weight:400;display:block;font-size:10.5px;
+ white-space:normal;max-width:230px;margin-top:2px}
+.msub.rownote{color:#5a6070;font-style:italic}
+.mval{font-family:'IBM Plex Mono',monospace;color:#c7ccd6;white-space:nowrap}
+.mval.wrap{white-space:normal;max-width:280px;font-family:inherit;color:#a5abb8}
+.mexplain{color:#8a91a0;font-size:11.5px;line-height:1.5;white-space:normal;max-width:320px}
+.valflag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;
+ border-radius:5px;padding:1px 7px;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
+.metriccell{display:flex;flex-direction:column;gap:4px}
+.pctbar{display:flex;align-items:center;gap:8px}
+.pctbar .track{width:64px;height:6px;border-radius:3px;background:#262a34;flex:none}
+.pctbar .fill{height:6px;border-radius:3px}
+.pctval{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#9aa2b2;white-space:nowrap}
+.rolechip{font-size:10px;color:#9aa2b2;background:rgba(154,162,178,.1);border-radius:10px;
+ padding:2px 9px;white-space:nowrap;cursor:default}
+.dimgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.dimcard{background:#181b22;border:1px solid #262a34;border-radius:10px;padding:12px 14px}
+.dimcard.nodata{opacity:.62}
+.dimlbl{font-size:11.5px;color:#a5abb8;margin-bottom:6px}
+.dimen{display:block;font-size:9.5px;color:#5a6070;font-weight:400;margin-top:1px}
+.dimscore{font-size:26px;font-weight:600;color:#eceef2}
+.dimnote{font-size:10px;color:#5a6070;margin-top:2px}
+.dimstate{margin-top:6px}
+.dimgap{font-size:10.5px;color:#5a6070;margin-top:6px;line-height:1.5}
+.entrygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.entrycard{display:block;background:#181b22;border:1px solid #262a34;border-radius:10px;
+ padding:14px 16px;text-decoration:none;color:inherit}
+.entrycard:hover{border-color:#3a3f4a;background:#1b1f27}
+.entrytop{display:flex;align-items:center;justify-content:space-between}
+.entrytitle{font-size:14px;font-weight:600;color:#eceef2}
+.entryen{font-size:10.5px;color:#7a8090;font-weight:400}
+.entryarrow{color:#7a8090;font-size:14px}
+.entrytier{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#7a8090}
+.entrypreview{font-size:12px;color:#a5abb8;margin-top:8px;line-height:1.5}
+.tiercard{margin:14px 24px;background:#181b22;border:1px solid #262a34;border-radius:10px;
+ padding:14px 16px}
+.tierlbl{font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tierbig{margin-bottom:8px}
+.tierreason{font-size:12.5px;color:#a5abb8;line-height:1.5}
+.ftr{padding:18px 24px 26px;border-top:1px solid #23262e;margin-top:16px;font-size:10.5px;color:#5a6070}
+.ftrrow{margin-bottom:5px}
+.ftrdisc{color:#7a8090;font-weight:600}
+@media(max-width:640px){
+ .dimgrid{grid-template-columns:repeat(2,1fr)}
+ .entrygrid{grid-template-columns:1fr}
+ .twolights{flex-direction:column}
+ .ovstats{gap:12px}
+ .verdict{font-size:16px}
+}
+</style></head>
+<body><div class="page"><div class="navbar"><a class="navlink" href="posture.html">← 市场总览</a><span class="navlink active">市场详情</span><a class="navlink" href="posture-semis.html">半导体</a><a class="navlink" href="posture-memory.html">存储</a></div><div class="hdr"><div class="hdrmain"><span class="brand">市场姿态监控</span><span class="crumb">as of 2026-08-14 · generated 2026-08-15</span></div><div class="hdrsub">全部数值由代码计算，AI 不产生数字</div></div><div class="verdict">市场整体偏进攻：波动率低、信用面中性、上涨参与面广；但估值处于十年第99百分位的高位，泡沫维读数偏高。</div><div class="twolights"><div class="ovcard"><div class="ovlabel">风险开关 Risk Switch</div><div class="ovtop"><span class="ovregime" style="color:#6ecf8e;background:#6ecf8e1a">● risk-on / 风险偏好</span><span class="ovprob">risk-off 概率 22.6%</span></div><div class="ovstats"><div class="ovstat"><span class="ovk">VIX十年百分位</span><span class="ovv">28.8</span></div><div class="ovstat"><span class="ovk">信用压力风险分量</span><span class="ovv">45.7</span></div><div class="ovstat"><span class="ovk">SPY&lt;200DMA</span><span class="ovv">否</span></div><div class="ovstat"><span class="ovk">市场宽度风险分量</span><span class="ovv">1.9</span></div></div></div></div><div class="panel"><div class="eyebrow">监控指标 · Monitor Indicators</div><div class="tblwrap"><table class="mtable explain"><thead><tr><th>指标</th><th>当前值</th><th>十年百分位</th><th>状态</th><th>角色</th><th>白话解释</th></tr></thead><tbody><tr><td class="mname">板块相对强度—XLF<span class="msub">Relative Strength</span></td><td class="mval">+9.8pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:95%;background:rgba(255,179,110,0.86)"></div></div><span class="pctval">94.7</span></div></td><td class="mstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 关注</span></td><td class="mrole"><span class="rolechip">先行</span></td><td class="mexplain">近 63 个交易日比标普 500 多涨/少涨多少——衡量资金是否正涌向某个板块</td></tr><tr><td class="mname">市场宽度<span class="msub">Market Breadth</span></td><td class="mval">+5.55%</td><td class="mpct"><div class="metriccell"><div class="pctbar"><div class="track"><div class="fill" style="width:98%;background:rgba(255,179,110,0.89)"></div></div><span class="pctval">98.1</span></div><span class="msub">第98百分位（参与面广）</span></div></td><td class="mstate"><span class="statechip" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span></td><td class="mrole"><span class="rolechip">先行</span></td><td class="mexplain">上涨由多少股票共同参与——参与面越窄，行情越依赖少数股票</td></tr><tr><td class="mname">200日乖离率—最热板块<span class="msub">% above 200-DMA</span></td><td class="mval">+10.2%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:72%;background:rgba(255,179,110,0.7)"></div></div><span class="pctval">72.3</span></div></td><td class="mstate"><span class="statechip" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span></td><td class="mrole"><span class="rolechip">先行</span></td><td class="mexplain">价格比过去 200 个交易日的平均价高多少——偏离越极端，回落空间越大</td></tr><tr><td class="mname">CBOE SKEW<span class="msub">Tail-risk Hedge Demand</span></td><td class="mval">138.36</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:57%;background:rgba(255,179,110,0.59)"></div></div><span class="pctval">56.8</span></div></td><td class="mstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 关注</span></td><td class="mrole"><span class="rolechip">半先行</span></td><td class="mexplain">机构为极端下跌买保险的需求强度——越高，越多人担心尾部风险</td></tr><tr><td class="mname">VIX<span class="msub">Implied Volatility Index</span></td><td class="mval">14.25</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:29%;background:rgba(255,179,110,0.39)"></div></div><span class="pctval">28.8</span></div></td><td class="mstate"><span class="statechip" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span></td><td class="mrole"><span class="rolechip">同步</span></td><td class="mexplain">期权市场对未来 30 天波动的定价——市场的紧张程度，低=平静</td></tr><tr><td class="mname">信用代理<span class="msub">Credit proxy (HYG/IEF)</span></td><td class="mval">+1.59%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:46%;background:rgba(255,179,110,0.51)"></div></div><span class="pctval">45.7</span></div></td><td class="mstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 关注</span></td><td class="mrole"><span class="rolechip">同步</span></td><td class="mexplain">高收益企业债相对国债的表现——企业信用环境的松紧</td></tr><tr><td class="mname">SPY距252日高点回撤<span class="msub">Drawdown from 52-wk high</span></td><td class="mval">-0.20%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:24%;background:rgba(255,179,110,0.35)"></div></div><span class="pctval">24.1</span></div></td><td class="mstate"><span class="statechip" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span></td><td class="mrole"><span class="rolechip">状态</span></td><td class="mexplain">大盘距过去一年最高点还差多少</td></tr><tr><td class="mname">SPY 200日乖离率<span class="msub">% above 200-DMA</span></td><td class="mval">+10.5%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:78%;background:rgba(255,179,110,0.74)"></div></div><span class="pctval">78.3</span></div></td><td class="mstate"><span class="statechip" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span></td><td class="mrole"><span class="rolechip">状态</span></td><td class="mexplain">大盘价格比过去 200 个交易日均价高多少</td></tr><tr><td class="mname">10Y-13W 国债利差<span class="msub">10Y–13W Treasury spread</span></td><td class="mval">+1.00pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:34%;background:rgba(255,179,110,0.43)"></div></div><span class="pctval">34.2</span></div></td><td class="mstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 关注</span></td><td class="mrole"><span class="rolechip">慢变量</span></td><td class="mexplain">长短期国债利率之差——倒挂（负值）历史上常先于衰退出现</td></tr><tr><td class="mname">Shiller CAPE (P/E10)<span class="msub">Cyclically-Adjusted P/E</span></td><td class="mval">42.56</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:100%;background:rgba(255,179,110,0.9)"></div></div><span class="pctval">99.5</span></div></td><td class="mstate"><span class="statechip" style="color:#ff7a6e;background:#ff7a6e1a">■ 预警</span></td><td class="mrole"><span class="rolechip">慢变量</span></td><td class="mexplain">股价相对过去十年平均盈利的倍数——长期估值贵贱的标准量尺</td></tr></tbody></table></div></div><div class="panel"><div class="eyebrow">板块相对强度板 · Sector Heat Board</div><div class="tblwrap"><table class="mtable"><thead><tr><th>板块</th><th>63日超额</th><th>相对强度百分位</th><th>200日乖离率</th><th>乖离率百分位</th></tr></thead><tbody><tr><td class="mname">XLF</td><td class="mval">+9.8pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:95%;background:rgba(255,179,110,0.86)"></div></div><span class="pctval">94.7</span></div></td><td class="mval">+10.2%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:72%;background:rgba(255,179,110,0.7)"></div></div><span class="pctval">72.3</span></div></td></tr><tr><td class="mname">XBI</td><td class="mval">+12.8pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:87%;background:rgba(255,179,110,0.8)"></div></div><span class="pctval">86.7</span></div></td><td class="mval">+20.0%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:89%;background:rgba(255,179,110,0.82)"></div></div><span class="pctval">89.2</span></div></td></tr><tr><td class="mname">XLE</td><td class="mval">+3.3pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:71%;background:rgba(255,179,110,0.69)"></div></div><span class="pctval">71.2</span></div></td><td class="mval">+17.1%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:86%;background:rgba(255,179,110,0.8)"></div></div><span class="pctval">85.8</span></div></td></tr><tr><td class="mname">XLK</td><td class="mval">+1.9pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:48%;background:rgba(255,179,110,0.53)"></div></div><span class="pctval">48.3</span></div></td><td class="mval">+20.8%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:94%;background:rgba(255,179,110,0.86)"></div></div><span class="pctval">94.4</span></div></td></tr><tr><td class="mname">SOX</td><td class="mval">-1.2pp</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:29%;background:rgba(255,179,110,0.39)"></div></div><span class="pctval">29.0</span></div></td><td class="mval">+30.7%</td><td class="mpct"><div class="pctbar"><div class="track"><div class="fill" style="width:93%;background:rgba(255,179,110,0.85)"></div></div><span class="pctval">93.0</span></div></td></tr></tbody></table></div><div class="boardnote">XLF金融/XLK科技/XLE能源/XBI生物科技(ETF)·SOX费城半导体指数</div></div><div class="ftr"><div class="ftrrow">数据源：yfinance（VIX/SKEW/SPY/RSP/HYG/IEF/^TNX/^IRX/^SOX/XLK/XLE/XLF/XBI/MU/EWY/005930.KS/000660.KS/KRW=X）· multpl.com（Shiller CAPE）· slickcharts.com（S&amp;P500前十权重，当前403缺口）</div><div class="ftrrow">预警规则由 2026-06/07 半导体暴跌单一事件校准（n=1），待更多历史事件检验</div><div class="ftrrow ftrdisc">非投资建议</div></div></div></body></html>

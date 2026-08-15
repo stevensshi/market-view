@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场姿态监控 · 总览</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0d0f13;color:#a5abb8;font-family:'Space Grotesk',system-ui,sans-serif}
+::selection{background:#2a3244;color:#fff}
+.mono{font-family:'IBM Plex Mono',monospace}
+.page{min-height:100vh;background:#111318;max-width:1160px;margin:0 auto;
+ border-left:1px solid #1a1d24;border-right:1px solid #1a1d24}
+.navbar{display:flex;gap:18px;padding:10px 24px;border-bottom:1px solid #1a1d24}
+.navlink{font-size:12px;color:#7a8090;text-decoration:none}
+.navlink:hover{color:#c7ccd6}
+.navlink.active{color:#eceef2;font-weight:600}
+.hdr{padding:16px 24px;border-bottom:1px solid #23262e}
+.hdrmain{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.brand{font-size:17px;font-weight:600;color:#eceef2;white-space:nowrap}
+.crumb{font-size:11.5px;color:#7a8090;font-family:'IBM Plex Mono',monospace}
+.hdrsub{font-size:11px;color:#5a6070;margin-top:6px}
+.verdict{margin:16px 24px;font-size:19px;font-weight:600;line-height:1.6;color:#eceef2}
+.eyebrow{font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.boardnote{font-size:10.5px;color:#5a6070;margin:-4px 0 10px;text-transform:none;letter-spacing:0}
+.panel{margin:14px 24px;background:#14161c;border:1px solid #23262e;border-radius:10px;padding:14px 16px}
+.statechip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+ border-radius:6px;padding:3px 9px;white-space:nowrap}
+.statechip.lg{font-size:13px;padding:6px 14px;border-radius:8px}
+.twolights{display:flex;gap:14px;margin:14px 24px;flex-wrap:wrap}
+.twolights .warncard,.twolights .ovcard{margin:0;flex:1 1 380px}
+.warncard{background:#181b22;border:1px solid #262a34;border-radius:12px;padding:16px 20px 14px}
+.swtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.swlabel{font-size:11px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em}
+.trigchip{font-size:11px;color:#9aa2b2;background:rgba(154,162,178,.08);border-radius:6px;
+ padding:3px 9px;font-family:'IBM Plex Mono',monospace;margin-left:auto}
+.swreason{font-size:15px;font-weight:500;line-height:1.6;color:#eceef2;margin-top:10px}
+.swdetail{font-size:11.5px;color:#9aa2b2;line-height:1.6;margin-top:6px;
+ font-family:'IBM Plex Mono',monospace}
+.swfine{font-size:10.5px;color:#5a6070;margin-top:8px;line-height:1.6}
+.swdetails{margin-top:12px}
+.swdetails summary{cursor:pointer;user-select:none;font-size:11px;color:#9aa2b2;
+ list-style:none;outline:none}
+.swdetails summary::-webkit-details-marker{display:none}
+.swdetails summary::before{content:"▸ ";color:#5a6070}
+.swdetails[open] summary::before{content:"▾ ";color:#5a6070}
+.swdetails summary:hover{color:#c7ccd6}
+.swrulebody{margin-top:10px;background:#111318;border-radius:8px;padding:12px 14px}
+.swruleh{font-size:10px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em;
+ margin:10px 0 6px}
+.swruleh:first-child{margin-top:0}
+.swruleline{font-size:11.5px;line-height:1.7;color:#8a91a0;margin-bottom:4px}
+.ovcard{background:#181b22;border:1px solid #262a34;border-radius:10px;padding:14px 16px}
+.ovlabel{font-size:11px;color:#7a8090;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.ovtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ovregime{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+ border-radius:6px;padding:4px 10px}
+.ovprob{font-size:15px;font-weight:600;color:#eceef2;font-family:'IBM Plex Mono',monospace}
+.ovstats{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.ovstat{display:flex;flex-direction:column;gap:2px}
+.ovk{font-size:10px;color:#5a6070}
+.ovv{font-size:13px;color:#eceef2;font-family:'IBM Plex Mono',monospace}
+.tblwrap{overflow-x:auto}
+.mtable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:560px}
+.mtable.explain{min-width:720px}
+.mtable th{text-align:left;font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;
+ padding:0 10px 8px 0;font-weight:600}
+.mtable td{padding:9px 10px 9px 0;border-top:1px solid #1f232b;vertical-align:middle}
+.mtable tr:first-child td{border-top:none}
+.mtable tr.hot{background:rgba(255,179,110,.08)}
+.mname{color:#eceef2;white-space:nowrap;max-width:220px}
+.msub{color:#7a8090;font-weight:400;display:block;font-size:10.5px;
+ white-space:normal;max-width:230px;margin-top:2px}
+.msub.rownote{color:#5a6070;font-style:italic}
+.mval{font-family:'IBM Plex Mono',monospace;color:#c7ccd6;white-space:nowrap}
+.mval.wrap{white-space:normal;max-width:280px;font-family:inherit;color:#a5abb8}
+.mexplain{color:#8a91a0;font-size:11.5px;line-height:1.5;white-space:normal;max-width:320px}
+.valflag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;
+ border-radius:5px;padding:1px 7px;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
+.metriccell{display:flex;flex-direction:column;gap:4px}
+.pctbar{display:flex;align-items:center;gap:8px}
+.pctbar .track{width:64px;height:6px;border-radius:3px;background:#262a34;flex:none}
+.pctbar .fill{height:6px;border-radius:3px}
+.pctval{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#9aa2b2;white-space:nowrap}
+.rolechip{font-size:10px;color:#9aa2b2;background:rgba(154,162,178,.1);border-radius:10px;
+ padding:2px 9px;white-space:nowrap;cursor:default}
+.dimgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.dimcard{background:#181b22;border:1px solid #262a34;border-radius:10px;padding:12px 14px}
+.dimcard.nodata{opacity:.62}
+.dimlbl{font-size:11.5px;color:#a5abb8;margin-bottom:6px}
+.dimen{display:block;font-size:9.5px;color:#5a6070;font-weight:400;margin-top:1px}
+.dimscore{font-size:26px;font-weight:600;color:#eceef2}
+.dimnote{font-size:10px;color:#5a6070;margin-top:2px}
+.dimstate{margin-top:6px}
+.dimgap{font-size:10.5px;color:#5a6070;margin-top:6px;line-height:1.5}
+.entrygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.entrycard{display:block;background:#181b22;border:1px solid #262a34;border-radius:10px;
+ padding:14px 16px;text-decoration:none;color:inherit}
+.entrycard:hover{border-color:#3a3f4a;background:#1b1f27}
+.entrytop{display:flex;align-items:center;justify-content:space-between}
+.entrytitle{font-size:14px;font-weight:600;color:#eceef2}
+.entryen{font-size:10.5px;color:#7a8090;font-weight:400}
+.entryarrow{color:#7a8090;font-size:14px}
+.entrytier{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#7a8090}
+.entrypreview{font-size:12px;color:#a5abb8;margin-top:8px;line-height:1.5}
+.tiercard{margin:14px 24px;background:#181b22;border:1px solid #262a34;border-radius:10px;
+ padding:14px 16px}
+.tierlbl{font-size:10px;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tierbig{margin-bottom:8px}
+.tierreason{font-size:12.5px;color:#a5abb8;line-height:1.5}
+.ftr{padding:18px 24px 26px;border-top:1px solid #23262e;margin-top:16px;font-size:10.5px;color:#5a6070}
+.ftrrow{margin-bottom:5px}
+.ftrdisc{color:#7a8090;font-weight:600}
+@media(max-width:640px){
+ .dimgrid{grid-template-columns:repeat(2,1fr)}
+ .entrygrid{grid-template-columns:1fr}
+ .twolights{flex-direction:column}
+ .ovstats{gap:12px}
+ .verdict{font-size:16px}
+}
+</style></head>
+<body><div class="page"><div class="navbar"><span class="navlink active">市场总览</span><a class="navlink" href="posture-market.html">市场详情</a><a class="navlink" href="posture-semis.html">半导体</a><a class="navlink" href="posture-memory.html">存储</a></div><div class="hdr"><div class="hdrmain"><span class="brand">市场姿态监控</span><span class="crumb">as of 2026-08-14 · generated 2026-08-15</span></div><div class="hdrsub">全部数值由代码计算，AI 不产生数字</div></div><div class="verdict">市场整体偏进攻：波动率低、信用面中性、上涨参与面广；但估值处于十年第99百分位的高位，泡沫维读数偏高。</div><div class="twolights"><div class="ovcard"><div class="ovlabel">风险开关 Risk Switch</div><div class="ovtop"><span class="ovregime" style="color:#6ecf8e;background:#6ecf8e1a">● risk-on / 风险偏好</span><span class="ovprob">risk-off 概率 22.6%</span></div><div class="ovstats"><div class="ovstat"><span class="ovk">VIX十年百分位</span><span class="ovv">28.8</span></div><div class="ovstat"><span class="ovk">信用压力风险分量</span><span class="ovv">45.7</span></div><div class="ovstat"><span class="ovk">SPY&lt;200DMA</span><span class="ovv">否</span></div><div class="ovstat"><span class="ovk">市场宽度风险分量</span><span class="ovv">1.9</span></div></div></div><div class="warncard" style="border-left:4px solid #6ecf8e"><div class="swtop"><span class="swstate" style="color:#6ecf8e;background:#6ecf8e1a">● 正常</span><span class="swlabel">结构预警灯</span><span class="trigchip">最热板块 XLF</span></div><div class="swreason">最强板块为金融（XLF），但市场上涨参与面广，未出现“单一板块过热且涨势集中”的预警形态。</div><div class="swdetail">XLF 63 日超额收益 +9.8pp（十年第95百分位） · 市场宽度第98百分位（参与面广） · XLF 200 日乖离率 +10.2%（第72百分位）</div><div class="swfine">阈值由 2026-06/07 半导体暴跌单一事件校准（n=1）</div><details class="swdetails"><summary>触发规则详情</summary><div class="swrulebody"><div class="swruleh">三个观察量</div><div class="swruleline">板块相对强度＝某板块最近一个季度比大盘多涨的幅度（拥挤度的价格代理）</div><div class="swruleline">市场宽度＝上涨由多少股票共同参与（等权指数跑输市值加权=宽度收窄）</div><div class="swruleline">200日乖离率＝价格高出自身200日均线的百分比（技术分析标准指标 BIAS）</div><div class="swruleh">灯的判定</div><div class="swruleline">🔴 红：最热板块相对强度进入十年前5%（≥95）且市场宽度收窄进入前10%（≥90）——两个同时成立</div><div class="swruleline">🟡 黄：相对强度≥95但市场宽度只到≥60；或相对强度、200日乖离率任一进入前1%（≥99）</div><div class="swruleline">🟢 绿：其余情况</div><div class="swruleline">红灯亮过后不会直接跳回绿：要等相对强度退出前20%或市场宽度收窄退出前60%才回绿，中间停在黄（防止反复闪烁）</div><div class="swruleline">任何数据缺失显示「缺数据」，绝不默认绿灯</div></div></details></div></div><div class="panel"><div class="eyebrow">八个问题 · Eight Questions</div><div class="dimgrid"><div class="dimcard"><div class="dimlbl">贵不贵<span class="dimen">Value</span></div><div class="dimscore mono">99.5</div><div class="dimnote">= 十年第 99.5 百分位</div><div class="dimstate"><span class="statechip" style="color:#ff7a6e;background:#ff7a6e1a">■ 偏贵</span></div></div><div class="dimcard nodata"><div class="dimlbl">增长<span class="dimen">Growth</span></div><div class="dimscore mono">—</div><div class="dimgap">市场级盈利增速无免费源，待接研报库</div></div><div class="dimcard nodata"><div class="dimlbl">质量<span class="dimen">Quality</span></div><div class="dimscore mono">—</div><div class="dimgap">市场级质量指标无免费源，待接研报库</div></div><div class="dimcard nodata"><div class="dimlbl">预期<span class="dimen">Expectations</span></div><div class="dimscore mono">—</div><div class="dimgap">待接自建研报库 pt_table 修正流水</div></div><div class="dimcard"><div class="dimlbl">风险<span class="dimen">Risk</span></div><div class="dimscore mono">34.7</div><div class="dimnote">= 3 项子指标百分位均值</div><div class="dimstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 中等</span></div></div><div class="dimcard"><div class="dimlbl">情绪<span class="dimen">Sentiment</span></div><div class="dimscore mono">57.2</div><div class="dimnote">= 恐惧贪婪合成分数（0–100，越高越贪婪）</div><div class="dimstate"><span class="statechip" style="color:#ffb36e;background:#ffb36e1a">▲ 中性</span></div></div><div class="dimcard nodata"><div class="dimlbl">仓位<span class="dimen">Positioning</span></div><div class="dimscore mono">—</div><div class="dimgap">FINRA margin debt 未接入；散户流数据在研报库 Retail Radar，待接</div></div><div class="dimcard"><div class="dimlbl">泡沫<span class="dimen">Bubble Risk</span></div><div class="dimscore mono">88.9</div><div class="dimnote">= 2 项子指标百分位均值</div><div class="dimstate"><span class="statechip" style="color:#ff7a6e;background:#ff7a6e1a">■ 偏高</span></div></div></div></div><div class="panel"><div class="eyebrow">板块入口 · Drill Down</div><div class="entrygrid"><a class="entrycard" href="posture-market.html"><div class="entrytop"><span class="entrytitle">市场整体 <span class="entryen">Market</span></span><span class="entryarrow">→</span></div><div class="entrypreview">risk-off 概率 22.6% · 参与面广</div></a><a class="entrycard" href="posture-semis.html"><div class="entrytop"><span class="entrytitle">半导体 <span class="entryen">Semiconductors</span></span><span class="entryarrow">→</span></div><div class="entrytier">风险档位 <span class="statechip lg" style="color:#ffb36e;background:#ffb36e1a">▲ 中</span></div><div class="entrypreview">价格比 200 日均线高 +30.7%（十年第93百分位）——高度未消化</div></a><a class="entrycard" href="posture-memory.html"><div class="entrytop"><span class="entrytitle">存储 <span class="entryen">Memory</span></span><span class="entryarrow">→</span></div><div class="entrytier">风险档位 <span class="statechip lg" style="color:#ffb36e;background:#ffb36e1a">▲ 中</span></div><div class="entrypreview">价格比 200 日均线高 +60.2%（十年第92百分位）——高度未消化</div></a></div></div><div class="ftr"><div class="ftrrow">数据源：yfinance（VIX/SKEW/SPY/RSP/HYG/IEF/^TNX/^IRX/^SOX/XLK/XLE/XLF/XBI/MU/EWY/005930.KS/000660.KS/KRW=X）· multpl.com（Shiller CAPE）· slickcharts.com（S&amp;P500前十权重，当前403缺口）</div><div class="ftrrow">预警规则由 2026-06/07 半导体暴跌单一事件校准（n=1），待更多历史事件检验</div><div class="ftrrow">维度详情页后续开放</div><div class="ftrrow ftrdisc">非投资建议</div></div></div></body></html>
