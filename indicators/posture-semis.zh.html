@@ -84,7 +84,12 @@ body{margin:0;background:var(--bg);color:var(--text2);
 .twolights>*{flex:1 1 380px;margin-top:0}
 .swtop,.ovtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .swlabel,.ovlabel{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
-.ovlabel{margin-bottom:8px}
+.ovlabel{margin-bottom:2px}
+/* "it answers what" subtitle under a status-card title (see _PANEL_SUBTITLE)
+   — 2px below the title line; its own bottom margin re-carries the 8px/12px
+   gap that used to sit directly under the title, so inserting this line
+   never squeezes the space above whatever content already followed it. */
+.panelsub{font-size:12px;color:var(--text3);margin:2px 0 8px}
 .trigchip{font-size:11px;color:var(--text2);margin-left:auto;white-space:nowrap}
 .swreason{font-size:14px;line-height:1.6;color:var(--text);margin-top:12px}
 .swdetail{font-size:11.5px;color:var(--text2);line-height:1.6;margin-top:6px}
@@ -138,15 +143,32 @@ body{margin:0;background:var(--bg);color:var(--text2);
 .rolechip{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;
  color:var(--text3);border:1px solid var(--border);border-radius:2px;padding:1px 6px}
 
-/* eight-question grid */
-.dimgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);
- border-left:1px solid var(--border)}
+/* eight-question grid — .dimgrid now holds ONLY dimensions with a score;
+   --dimcols (set inline per render, see _dim_grid) sizes the desktop row to
+   however many that is today (4) instead of a fixed 4/8 split; the 900px/
+   480px breakpoints below still cap it at 2/1 regardless of --dimcols. */
+.dimgrid{display:grid;grid-template-columns:repeat(var(--dimcols,4),1fr);
+ border-top:1px solid var(--border);border-left:1px solid var(--border)}
 .dimcell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);
  padding:16px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
-.dimcell.nodata{opacity:.7}
 .dimlbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);
  font-weight:600}
 .dimnote{font-size:11px;color:var(--text3)}
+
+/* pending-dimensions bar (_dim_gap_bar) — replaces the old ghost-arc
+   dimcells for dimensions with no score yet; one compact line + a trailing
+   native <details> ("why") listing each pending dimension's own existing
+   gap sentence. Sits under .dimgrid inside the same panel. */
+.dimgap{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-top:12px;
+ padding:10px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:3px}
+.dimgaptxt{font-size:12px;color:var(--text3);flex:1 1 auto}
+.dimgapdetails{flex:none;font-size:12px;color:var(--text3)}
+.dimgapdetails summary{cursor:pointer;color:var(--text2);list-style:none;user-select:none;outline:none}
+.dimgapdetails summary::-webkit-details-marker{display:none}
+.dimgapdetails[open]{flex:1 1 100%}
+.dimgapbody{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.dimgapline{font-size:11.5px;color:var(--text2);line-height:1.6;margin-bottom:4px}
+.dimgapline:last-child{margin-bottom:0}
 
 /* drill-down index rows */
 .idxlist{border-top:1px solid var(--border)}
@@ -191,7 +213,6 @@ body{margin:0;background:var(--bg);color:var(--text2);
 }
 @media(max-width:480px){
  .dimgrid{grid-template-columns:1fr}
- .dimcell.nodata .arcsvg{display:none}
 }
 </style></head>
 <body><!--
