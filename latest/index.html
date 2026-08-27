@@ -3857,25 +3857,15 @@ details.theme-card[open]{
   html{scroll-behavior:auto}
 }
 
-/* ── [9] mobile `.anav` overflow has no scroll affordance, and the base
-   page's own right-edge mask-image fade (see base _CSS `.anav`) doesn't
-   play well with the backdrop-filter this skin adds to the same element —
-   masking a blurred layer cuts it to a hard edge instead of fading it.
-   Drop the mask on mobile, replace it with a real painted-on fade via
-   ::after. `.anav` is already position:sticky at every breakpoint (a
-   positioned ancestor, same as position:relative for this purpose), so
-   the ::after's position:absolute already has a containing block without
-   needing to touch `.anav`'s own position and risk breaking its sticky
-   behavior on mobile. Scoped to the same mobile breakpoint the rest of
-   this file's `.anav` mobile tweaks already use. ───────────────────────── */
-@media(max-width:640px){
-  .anav{-webkit-mask-image:none;mask-image:none;}
-  .anav::after{
-    content:"";position:absolute;top:0;right:0;bottom:0;width:28px;
-    background:linear-gradient(90deg, transparent, rgba(8,9,13,.85));
-    pointer-events:none;
-  }
-}
+/* ── [9] RETIRED (2026-08-27 late, user report with phone screenshot):
+   the ::after scroll-fade replacement positioned itself in the scroll
+   container's CONTENT coordinate space, so the dark fade TRAVELLED with
+   the pills when the strip was swiped ("黑影跟着 tab 走") instead of
+   staying glued to the strip's visible tail. The base page's own
+   mask-image fade — which this item had disabled — masks the visible box
+   and never scrolls, i.e. it was correct all along (and the base already
+   combined it with its own backdrop-blur without issue). No rules here:
+   base behavior restored by removing the override. ─────────────────────── */
 
 /* ── [10] mobile header type overflow. ──────────────────────────────── */
 @media(max-width:640px){
@@ -3911,26 +3901,18 @@ details.theme-card[open]{
     0 5px 16px -12px rgba(0,0,0,.4);
 }
 
-/* ── [14] pinned page header (2026-08-27 late, user request: "Today 改名
-   News,然后这一整栏置顶"). The brand/date/News-Research-Indicators row
-   becomes a sticky glass capsule above everything (z 40 > .anav's 30).
-   Desktop: the section-pill capsule pins BELOW it (top pushed past the
-   header's ~56px). Mobile (<=640px): the pill row stops pinning entirely —
-   two stacked sticky bars would eat a phone viewport; the header alone
-   stays. ─────────────────────────────────────────────────────────────── */
-.page-header{
-  position:sticky;top:8px;z-index:40;
-  padding:10px 16px;margin:0 0 14px;
-  border-radius:16px;border:1px solid rgba(255,255,255,.12);
-  background:rgba(12,14,20,.6);
-  backdrop-filter:blur(30px) saturate(170%);
-  -webkit-backdrop-filter:blur(30px) saturate(170%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 5px 16px -12px rgba(0,0,0,.4);
-}
-.anav:not(.indnav){top:64px;}
-@media(max-width:640px){
-  .anav:not(.indnav){position:static;}
-  .page-header{top:4px;padding:8px 12px;}
+/* ── [14] v2 (2026-08-27 late, user correction of v1: "我只是让你把这三个
+   tab 置顶…结果你把 logo 也置顶了,大错特错,还增加了玻璃胶囊也更错,全部
+   改回"). v1's sticky glass-capsule page header is fully reverted — the
+   brand/date row scrolls away normally again, no capsule, and .anav keeps
+   its own base pinning. ONLY the News/Research/Indicators tab strip stays
+   on screen: fixed to the viewport's top-right, aligned to the 1080px
+   content column (24px side padding), no decorative ground — just a soft
+   text-shadow so the labels survive passing content. ──────────────────── */
+.page-header .tabs{
+  position:fixed;top:14px;z-index:60;
+  right:max(24px, calc((100vw - 1080px)/2 + 24px));
+  text-shadow:0 1px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.7);
 }
 .qstrip{
   box-shadow:
