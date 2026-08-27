@@ -3778,7 +3778,10 @@ details.theme-card[open]::before{
 body{
   background-color:#08090d;
   background-repeat:no-repeat,no-repeat,no-repeat;
-  background-attachment:fixed,fixed,fixed;
+  /* scroll, not fixed (2026-08-27 late, user report): viewport-fixed
+     ambient made the dark field travel with the sticky tab bar ("黑影跟着
+     tab 走"); document-anchored shading stays at the banner, as asked. */
+  background-attachment:scroll,scroll,scroll;
   background-image:
     radial-gradient(1040px 740px at 8% -8%,  rgba(99,150,255,.27), transparent 62%),
     radial-gradient(900px 760px at 92% 2%,   rgba(180,120,255,.23), transparent 64%),
@@ -3894,6 +3897,24 @@ details.theme-card[open]{
 .qstrip .tk{font-size:10px}
 .tldr-body{font-size:12.5px}
 .card-title{font-size:13.5px}
+
+/* ── [13] the pinned tab bar dragged a heavy black halo down the page
+   (2026-08-27 late, user report: "黑影跟着 tab 走了…应该固定在 banner
+   尾部"). The capsule keeps its specular edge and a tight contact shadow
+   only; the strong dark separation now lives statically on the quote
+   strip at the banner's tail, which scrolls away with the banner instead
+   of following the viewport. Pairs with the ambient background switching
+   from viewport-fixed to document-anchored in the body rule above. ───── */
+.anav:not(.indnav){
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 5px 16px -12px rgba(0,0,0,.4);
+}
+.qstrip{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 22px 40px -24px rgba(0,0,0,.6);
+}
 
 /* ── KNOWN ISSUE (2026-08-27, deliberately NOT patched): under SOFTWARE
    rendering only (headless --disable-gpu / GPU-less hosts), a large
