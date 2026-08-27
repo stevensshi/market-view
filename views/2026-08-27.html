@@ -3074,6 +3074,17 @@ function switchTab(key){
 document.querySelectorAll(".tabs span").forEach(function(tab){
   tab.addEventListener("click", function(){ switchTab(tab.getAttribute("data-tab")); });
 });
+/* Pinned-state material for the sticky tab strip (2026-08-27): past the
+   sticky threshold the strip gains a frosted ground (CSS .tabs.pinned,
+   narrow viewports only) so it stays legible over scrolling text; at rest
+   it stays bare per the no-capsule ruling. */
+(function(){
+  var tabsEl = document.querySelector(".tabs");
+  if(!tabsEl) return;
+  addEventListener("scroll", function(){
+    tabsEl.classList.toggle("pinned", scrollY > 40);
+  }, {passive:true});
+})();
 
 /* ── Indicators tab panel's OWN sub-tabs (2026-08-16, see
    _indicators_panel_html) — same toggle-class-on + toggle-display shape as
@@ -3921,8 +3932,21 @@ details.theme-card[open]{
   text-shadow:0 1px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.7);
 }
 .tabs span{pointer-events:auto;}
-@media(max-width:640px){
-  .tabs{margin-top:-34px;}
+/* Below 900px the EN labels ("News Research Indicators") are too wide to
+   share the brand row — the overlay collided with the date on real phones
+   (user screenshot, 2026-08-27 late). Narrow viewports give the strip its
+   own right-aligned row instead, and the pinned section-pill capsule
+   drops below the pinned tabs so the two never stamp on each other. */
+@media(max-width:899px){
+  .tabs{margin:-6px 0 12px;top:8px;}
+  .anav:not(.indnav){top:44px;}
+  /* material appears ONLY once pinned (JS toggles .pinned past the sticky
+     threshold) — at rest the strip stays bare, per the owner's no-capsule
+     ruling; pinned over scrolling text it needs a ground to stay legible
+     (real-device screenshot, 2026-08-27 late). iOS-style. */
+  .tabs.pinned{background:rgba(10,12,18,.74);backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    padding:6px 12px;margin-left:auto;width:max-content;border-radius:999px;}
 }
 .qstrip{
   box-shadow:
