@@ -10,37 +10,44 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
 :root{
-  --bg:#0a0d13; --bg2:#0e121a; --panel:#11151f; --panel2:#151a25;
-  --card:#131824; --card-hover:#171d2b; --border:#232a3a; --border-soft:#1c2230;
-  --text:#e7eaf1; --text-dim:#a8b0c2; --text-mute:#727d92; --text-faint:#4d5670;
-  --accent:#e3b34b; --accent-soft:#3a3120; --accent-text:#f0c869;
-  --blue:#5aa9ff; --blue-soft:#152437;
-  --green:#3fcf8e; --green-soft:#0f2a22;
-  --red:#ef5b6a; --red-soft:#2c1620;
+  /* Two surfaces, not five. --card/--panel2 are aliased to the raised step so
+     the ~150 plumbing rules that still name them cannot reintroduce a third. */
+  --bg:#0b0d11; --bg2:#0b0d11; --panel:#101318; --panel2:#14171d;
+  --card:transparent; --card-hover:#14171d; --border:#20242c; --border-soft:#191c23;
+  --text:#e6e8ec; --text-dim:#b3b8c2; --text-mute:#9096a1; --text-faint:#666c78;
+  /* ONE accent. It marks state and one primary action — never a repeated button. */
+  --accent:#e0a736; --accent-soft:#1e1a12; --accent-text:#e8b95c;
+  --blue:#6aa5f0; --blue-soft:#12161f;
+  --green:#3fbf86; --green-soft:#0f1a17;
+  --red:#e5606d; --red-soft:#1c1316;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
-  --radius: 10px;
+  --radius: 6px;
+  --measure: 78ch;
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
-::selection{background:rgba(227,179,75,.25);}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;}
+::selection{background:rgba(224,167,54,.22);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px;}
 a{color:inherit;}
 code{font-family:var(--mono);}
 ::-webkit-scrollbar{width:8px;height:8px;}
-::-webkit-scrollbar-thumb{background:#2a3244;border-radius:8px;}
+::-webkit-scrollbar-thumb{background:#262b34;border-radius:8px;}
 ::-webkit-scrollbar-track{background:transparent;}
 
-.page-content{max-width:1240px;margin:0 auto;padding:18px 20px 60px;min-width:0;}
+.page-content{max-width:1080px;margin:0 auto;padding:26px 24px 80px;min-width:0;}
 .page-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
 .page-header .ph-left{display:flex;align-items:baseline;gap:10px;}
-.page-header .brand{font-weight:700;font-size:16px;letter-spacing:-.01em;}
+.page-header .brand{font-weight:640;font-size:20px;letter-spacing:-.022em;}
 .page-header .brand .dot{color:var(--accent);}
 .page-header .date{font-size:12px;color:var(--text-mute);font-family:var(--mono);}
 .page-header .tabs{display:flex;gap:16px;font-size:13px;color:var(--text-mute);}
 .page-header .tabs span{cursor:pointer;padding-bottom:2px;border-bottom:2px solid transparent;transition:color .15s;}
 .page-header .tabs span:hover{color:var(--text-dim);}
 .page-header .tabs span.on{color:var(--text);border-bottom-color:var(--accent);}
+.page-header .tabs span{font-weight:500;}
 
 .section-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-mute);margin:6px 0 10px;}
 
@@ -76,11 +83,13 @@ code{font-family:var(--mono);}
    .dn/.fl verbatim (ARROW_CLS, same grammar _assets_html already uses). ── */
 .qstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;}
 .qstrip .qasof{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-faint);}
-.tldr{margin:0 0 16px;border:1px solid var(--border-soft);border-radius:var(--radius);
-  background:linear-gradient(180deg,#0f131c,#0d1119);padding:10px 13px 11px;}
-.tldr-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:6px;}
-.tldr-body{font-size:12.5px;line-height:1.6;color:var(--text-dim);}
+/* The day's conclusion is the one passage that earns reading, so it is set
+   as a passage: no ground, no outline, a rule above it and a real measure. */
+.tldr{margin:0 0 22px;border:none;border-top:1px solid var(--border);border-radius:0;
+  background:none;padding:14px 0 0;}
+.tldr-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--text-faint);margin-bottom:9px;}
+.tldr-body{font-size:14px;line-height:1.7;color:var(--text-dim);max-width:var(--measure);}
 /* .verdicthint (posture-verdict "see the Indicators tab" pointer) removed
    2026-08-25 along with _posture_verdict_html — see that removal's own
    tombstone comment above _tldr_html. */
@@ -91,8 +100,8 @@ code{font-family:var(--mono);}
    reset to none here (unlike the uppercase .tldr-h it sits in) because
    conviction/breadth are free-form prose, not a short label token. */
 .regime-badge{margin-left:auto;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:5px;
-  font-size:10px;font-weight:700;letter-spacing:.02em;text-transform:none;max-width:100%;
-  padding:2px 8px;border-radius:10px;border:1px solid var(--border-soft);}
+  font-size:11px;font-weight:600;letter-spacing:.02em;text-transform:none;max-width:100%;
+  padding:0;border-radius:0;border:none;background:none !important;}
 .regime-badge .regime-lbl{color:var(--text-mute);font-weight:600;}
 .regime-badge .regime-val{font-family:var(--mono);}
 .regime-badge .regime-sub{color:var(--text-faint);font-weight:500;font-family:var(--sans);}
@@ -102,9 +111,11 @@ code{font-family:var(--mono);}
 
 /* ── sticky anchor nav — replaces the old third (asset-class) tab ───────── */
 .anav{position:sticky;top:0;z-index:30;display:flex;gap:2px;overflow-x:auto;
-  scrollbar-width:none;padding:10px 0 0;margin:2px 0 12px;
-  background:rgba(10,13,19,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border);}
+  scrollbar-width:none;padding:12px 0 0;margin:2px 0 18px;
+  background:rgba(11,13,17,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);
+  mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);}
 .anav::-webkit-scrollbar{display:none;}
 .anav a{display:flex;align-items:baseline;gap:6px;padding:0 14px 10px 0;margin-right:14px;
   font-size:12px;font-weight:600;color:var(--text-mute);white-space:nowrap;text-decoration:none;
@@ -154,58 +165,75 @@ code{font-family:var(--mono);}
 .tsec{scroll-margin-top:52px;margin-bottom:28px;}
 .tsec:last-child{margin-bottom:0;}
 .tsech{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;
-  padding:2px 0 10px;border-bottom:1px solid var(--border);margin-bottom:14px;}
-.tsech h2{margin:0;font-size:15px;font-weight:700;color:var(--text);}
+  padding:2px 0 12px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.tsech h2{margin:0;font-size:18px;font-weight:600;color:var(--text);letter-spacing:-.015em;}
 .tsecn{font-size:11px;font-family:var(--mono);color:var(--text-mute);white-space:nowrap;}
-.famgrp{margin-bottom:18px;}
+.famgrp{margin-bottom:10px;}
 .famgrp:last-child{margin-bottom:0;}
-.famhd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px;padding:0 2px;}
-.famname{font-size:12.5px;font-weight:650;color:var(--text-dim);}
-.famcount{font-size:10.5px;font-family:var(--mono);color:var(--text-faint);
-  background:#161b27;border:1px solid var(--border-soft);border-radius:10px;padding:1px 7px;}
+.famhd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:30px 0 2px;padding:0 12px 0 12px;}
+.famgrp:first-child .famhd{margin-top:18px;}
+.famname{font-size:12px;font-weight:600;color:var(--text-mute);letter-spacing:.04em;text-transform:uppercase;}
+.famcount{font-size:11px;font-family:var(--mono);color:var(--text-faint);
+  background:none;border:none;border-radius:0;padding:0;}
 .famhd .ask-btn{margin-left:auto;}
 .theme-grid.loose{margin-top:2px;}
 
-.theme-grid{display:flex;flex-direction:column;gap:10px;}
+/* 110 arguments a day is an INDEX, not a card grid. Rows share one hairline
+   rail; nothing is boxed, raised, or rounded until the reader opens it. */
+.theme-grid{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border-soft);}
 .theme-card{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:13px 14px 11px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;
-  position:relative;
+  background:none;border:none;border-bottom:1px solid var(--border-soft);border-radius:0;
+  padding:14px 12px 13px;cursor:pointer;transition:background .13s ease;position:relative;
 }
-.theme-card:hover{background:var(--card-hover);border-color:#324061;}
-.theme-card:active{transform:scale(.997);}
-.theme-card.active{border-color:var(--accent);background:#171307;box-shadow:0 0 0 1px rgba(227,179,75,.25) inset;}
+.theme-card:hover{background:var(--card-hover);}
+.theme-card.active{background:var(--card-hover);}
+.theme-card.active::before,details.theme-card[open]::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--accent);}
 .card-firms{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px;min-height:1px;}
+/* Direction + firm readings used to be three tinted pills stacked above the
+   headline — four coloured objects competing before a word was read. They are
+   now one quiet meta line: ink only, hairline separators, no ground. */
+.card-firms{gap:0 !important;align-items:baseline;}
 .firm-chip{
-  font-size:10px;font-weight:600;color:var(--text-dim);background:#1a2130;
-  border:1px solid var(--border-soft);border-radius:4px;padding:2px 6px;letter-spacing:.01em;
+  font-size:11px;font-weight:500;color:var(--text-mute);background:none;
+  border:none;border-radius:0;padding:0 9px 0 0;margin-right:9px;letter-spacing:.01em;
+  border-right:1px solid var(--border-soft);
 }
+.card-firms .firm-chip:last-child{border-right:none;margin-right:0;padding-right:0;}
 /* 看多/看空/分歧 + 多 N/空 N direction chips (see _dir_chip_cls) — same
    tinted-background + colored-text grammar as `.pol.l`/`.pol.s` (研报视角's
    own ▲多/▼空 chip) and `.cons.cs`/`.cons.sp` (consensus/split), reusing the
    SAME --green/--red/--accent-text tokens + soft-bg/border pairs so every
    colored chip on this page reads as one design language. */
-.firm-chip.dir-long{color:var(--green);background:var(--green-soft);border-color:#1e4436;}
-.firm-chip.dir-short{color:var(--red);background:var(--red-soft);border-color:#4a2129;}
-.firm-chip.dir-mixed{color:var(--accent-text);background:var(--accent-soft);border-color:#4a3c1f;}
+.firm-chip.dir-long{color:var(--green);font-variant-numeric:tabular-nums;}
+.firm-chip.dir-short{color:var(--red);font-variant-numeric:tabular-nums;}
+.firm-chip.dir-mixed{color:var(--accent-text);}
 /* inline 多/空 count text (family-group detail_scope prose — not a chip
    row) — same green/red as the 今日全景 panorama's own `.pcnt .l`/`.pcnt .s`
    spans, via the shared --green/--red tokens. */
 .dc.l{color:var(--green);}
 .dc.s{color:var(--red);}
-.card-title{font-size:13.5px;font-weight:650;line-height:1.4;color:var(--text);margin-bottom:5px;}
+.card-title{font-size:15px;font-weight:560;line-height:1.42;color:var(--text);
+  margin-bottom:6px;max-width:none;letter-spacing:-.008em;text-wrap:pretty;}
 .card-argument{
-  font-size:12px;line-height:1.6;color:var(--text-mute);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:9px;
+  font-size:13px;line-height:1.65;color:var(--text-mute);max-width:var(--measure);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px;
 }
 .card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .card-meta{font-size:11px;color:var(--text-faint);font-family:var(--mono);}
+/* This button repeats ~110 times. Solid amber made page chrome the loudest
+   thing on a page whose content is the argument, so it is a ghost control:
+   it earns the accent on hover and on the open row, never at rest. */
 .ask-btn{
-  font-size:11.5px;font-weight:650;color:#1a1305;background:var(--accent);border:none;border-radius:6px;
-  padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:filter .15s;flex:0 0 auto;
+  font-size:12px;font-weight:500;color:var(--text-faint);background:none;
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:4px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;
+  transition:color .13s,border-color .13s;flex:0 0 auto;
 }
-.ask-btn:hover{filter:brightness(1.08);}
-.theme-card.active .ask-btn{background:#e7eaf1;}
+.theme-card:hover .ask-btn,.famhd:hover .ask-btn{color:var(--text-mute);border-color:#2b303a;}
+.ask-btn:hover{color:var(--accent-text) !important;border-color:#4a3c1f !important;}
+details.theme-card[open] .ask-btn{color:var(--accent-text);border-color:#4a3c1f;}
+.theme-card.active .ask-btn{color:var(--accent-text);border-color:#4a3c1f;}
 
 /* §11 W1 (2026-08-03): the OLD capability-gate rule that lived here — a
    body-level class that hid every `.ask-btn` until a live health probe
@@ -220,11 +248,11 @@ code{font-family:var(--mono);}
    everything below only exists once the reader opens it. Elevation stays
    state, not decoration. */
 details.theme-card{padding:0;}
-details.theme-card>summary{list-style:none;display:block;padding:13px 14px 11px;
-  border-radius:var(--radius);outline-offset:-2px;}
+details.theme-card>summary{list-style:none;display:block;padding:14px 12px 13px;
+  border-radius:0;outline-offset:-2px;}
 details.theme-card>summary::-webkit-details-marker{display:none;}
-details.theme-card[open]{background:var(--card-hover);border-color:#324061;}
-details.theme-card[open]>summary{padding-bottom:8px;}
+details.theme-card[open]{background:var(--card-hover);}
+details.theme-card[open]>summary{padding-bottom:10px;}
 details.theme-card[open] .card-title{color:#fff;}
 details.theme-card[open] .card-argument{-webkit-line-clamp:unset;display:block;
   overflow:visible;color:var(--text-dim);}
@@ -249,11 +277,15 @@ details.theme-card[open] .tcaret{transform:rotate(180deg);color:var(--accent-tex
   background:var(--accent-soft);border:1px solid #4a3c1f;border-radius:4px;
   padding:1px 6px;margin-left:10px;letter-spacing:.02em;}
 .trow2{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:9px;}
-.sig{font-size:10px;color:var(--text-mute);background:#161b27;
-  border:1px solid var(--border-soft);border-radius:4px;padding:2px 6px;}
-.tk{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);background:#161b27;
-  border:1px solid var(--border-soft);border-radius:4px;padding:2px 7px;white-space:nowrap;}
-.tk em{font-style:normal;font-weight:700;}
+.sig{font-size:11px;color:var(--text-faint);background:none;
+  border:none;border-radius:0;padding:0 9px 0 0;margin-right:9px;border-right:1px solid var(--border-soft);}
+/* Ticker/asset readings are DATA, not chips: no ground, no border, no radius.
+   A hairline divider carries the separation the old pill outline used to. */
+.tk{font-family:var(--mono);font-size:11px;color:var(--text-mute);background:none;
+  border:none;border-radius:0;padding:0 11px 0 0;margin-right:11px;white-space:nowrap;
+  border-right:1px solid var(--border-soft);}
+.qstrip .tk:last-of-type{border-right:none;}
+.tk em{font-style:normal;font-weight:600;color:var(--text-dim);}
 .tk em.up{color:var(--green);} .tk em.dn{color:var(--red);} .tk em.fl{color:var(--text-mute);}
 .tvoices{display:flex;flex-wrap:wrap;align-items:baseline;margin-top:10px;
   font-size:11.5px;line-height:1.6;color:var(--text-mute);}
@@ -262,18 +294,21 @@ details.theme-card[open] .tcaret{transform:rotate(180deg);color:var(--accent-tex
   font-family:var(--mono);font-size:10.5px;line-height:1.7;color:var(--text-mute);}
 .tsocial a{color:var(--blue);text-decoration:none;}
 .tsocial a:hover{text-decoration:underline;}
-.tsq{margin-top:12px;padding:3px 0 3px 11px;border-left:2px solid #4a3c1f;
-  font-size:12px;line-height:1.65;color:var(--text-dim);}
+.tsq{margin-top:14px;padding:3px 0 3px 12px;border-left:1px solid #4a3c1f;
+  font-size:13px;line-height:1.7;color:var(--text-dim);max-width:var(--measure);}
 .tsq b{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--accent-text);
   margin-right:8px;letter-spacing:.02em;}
 
 /* ── the two registers: 多 (long) / 空 (short) ───────────────────────────── */
-.regs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px;align-items:start;}
-.reg{border-radius:8px;padding:10px 12px 11px;min-width:0;}
-.reg.long{background:rgba(63,207,142,.05);border:1px solid rgba(63,207,142,.2);}
-.reg.short{background:rgba(239,91,106,.05);border:1px solid rgba(239,91,106,.2);}
-.regh{display:flex;align-items:baseline;gap:8px;font-size:11.5px;font-weight:700;
-  letter-spacing:.08em;margin-bottom:9px;}
+.regs{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:16px;align-items:start;}
+/* Two nested tinted boxes inside an already-raised row was three surfaces
+   deep. The register is now a column under a 1px coloured rule — the only
+   place the state colours touch structure. */
+.reg{border-radius:0;padding:9px 0 0;min-width:0;background:none;border:none;border-top:1px solid var(--border);}
+.reg.long{border-top-color:rgba(63,191,134,.5);}
+.reg.short{border-top-color:rgba(229,96,109,.5);}
+.regh{display:flex;align-items:baseline;gap:8px;font-size:11px;font-weight:600;
+  letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;}
 .reg.long .regh{color:var(--green);}
 .reg.short .regh{color:var(--red);}
 .regh em{font-style:normal;font-family:var(--mono);font-size:10px;font-weight:400;
@@ -291,12 +326,12 @@ details.theme-card[open] .tcaret{transform:rotate(180deg);color:var(--accent-tex
 /* research rows — the sell-side channel reads as a substrate: a firm chip,
    a 1px inset rail, and a mono ¶ file reference where a public URL would
    sit on a news row. */
-.evi.res{background:rgba(190,214,228,.035);border-left:2px solid #2f3a4a;
-  border-radius:0 6px 6px 0;padding:8px 10px;}
+.evi.res{background:none;border-left:1px solid #2b323d;
+  border-radius:0;padding:2px 0 2px 11px;}
 .evi.res .x{color:var(--text-dim);}
 .rhd{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:6px;}
-.attr{font-size:9.5px;font-weight:600;color:var(--text-mute);background:#1a2130;
-  border:1px solid var(--border-soft);border-radius:4px;padding:2px 6px;}
+.attr{font-size:11px;font-weight:600;color:var(--text-dim);background:none;
+  border:none;border-radius:0;padding:0;letter-spacing:.02em;}
 .why{margin-top:6px;font-size:10.5px;line-height:1.65;color:var(--text-mute);}
 .why b{font-weight:600;color:#9fc4ff;margin-right:6px;}
 .q{margin-top:6px;font-size:10.5px;line-height:1.6;color:var(--text-mute);}
@@ -496,15 +531,17 @@ details.theme-card[open] .tcaret{transform:rotate(180deg);color:var(--accent-tex
 /* ── 今日全景 speed-read strip: one line per event family. Quiet, mono-
    accented, section-hued dot — deliberately lighter than a .tsech header
    (no rule under it competing with the section rules, no 15px type). ─── */
-.pano{margin:0 0 22px;border:1px solid var(--border-soft);border-radius:var(--radius);
-  background:linear-gradient(180deg,#0f131c,#0d1119);padding:8px 0 5px;}
-.panoh{display:flex;align-items:baseline;gap:9px;padding:0 13px 7px;
-  border-bottom:1px solid var(--border-soft);margin-bottom:2px;}
+/* Once every thesis row lost its box, this panel was the only boxed object
+   left on the page and read as a leftover. Gradients are gone page-wide. */
+.pano{margin:0 0 26px;border:none;border-radius:0;background:none;padding:2px 0 0;}
+.panoh{display:flex;align-items:baseline;gap:9px;padding:0 12px 8px;
+  border-bottom:1px solid var(--border);margin-bottom:0;}
 .panoh span{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--text-mute);}
 .panoh em{font-style:normal;font-family:var(--mono);font-size:10px;
   color:var(--text-faint);margin-left:auto;}
-.panorow{display:flex;align-items:baseline;gap:9px;padding:5px 13px;
-  text-decoration:none;border-left:2px solid transparent;
+.panorow{display:flex;align-items:baseline;gap:9px;padding:7px 12px;
+  text-decoration:none;border-left:1px solid transparent;
+  border-bottom:1px solid var(--border-soft);
   transition:background .12s,border-color .12s;}
 .panorow:hover{background:#151a25;border-left-color:var(--hue,var(--accent));}
 .pdot{width:5px;height:5px;border-radius:50%;background:var(--hue,#9aa2b2);
@@ -776,12 +813,13 @@ details.theme-card.enriched[open] .card-argument{display:none;}
 .chiprow{padding:0 0 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .chiplbl{font-size:10px;color:var(--text-faint);text-transform:uppercase;
   letter-spacing:.08em;margin-right:2px;}
-.famchip{font-size:11.5px;border:none;border-radius:6px;padding:4px 10px;
+.famchip{font-size:12px;border:none;border-radius:0;padding:0 12px 0 0;margin-right:12px;
   white-space:nowrap;cursor:pointer;user-select:none;font-family:inherit;
-  text-decoration:none;color:#9aa2b2;background:rgba(154,162,178,.08);
-  transition:filter .15s;}
-.famchip.hot{color:#ffb36e;background:rgba(255,179,110,.09);}
-.famchip:hover{filter:brightness(1.25);}
+  text-decoration:none;color:var(--text-mute);background:none;
+  border-right:1px solid var(--border-soft);transition:color .13s;}
+.famchip:last-child{border-right:none;margin-right:0;padding-right:0;}
+.famchip.hot{color:var(--accent-text);background:none;}
+.famchip:hover{color:var(--text);}
 
 @media(max-width:760px){
   .chiprow{gap:7px;}
@@ -815,9 +853,9 @@ details.theme-card.enriched[open] .card-argument{display:none;}
    in-flow dock at the true end of the document ─────────────────────────── */
 .askpill{position:fixed;right:18px;bottom:18px;z-index:40;
   display:flex;align-items:center;gap:8px;padding:8px 14px 8px 12px;border-radius:22px;
-  font-family:inherit;font-size:12.5px;font-weight:650;color:var(--text);
+  font-family:inherit;font-size:12.5px;font-weight:500;color:var(--text);
   background:rgba(21,26,37,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid #4a3c1f;box-shadow:0 10px 28px -10px rgba(0,0,0,.75),0 0 0 1px rgba(227,179,75,.10) inset;
+  border:1px solid var(--border);box-shadow:0 8px 24px -8px rgba(0,0,0,.7);
   cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;
   transition:opacity .22s ease,transform .22s cubic-bezier(.2,.8,.25,1),right .3s cubic-bezier(.2,.8,.25,1);}
 .askpill.show{opacity:1;transform:none;pointer-events:auto;}
@@ -839,8 +877,8 @@ body.mode-probing .askpill .pdemo{color:var(--text-faint);letter-spacing:.2em;}
 body.mode-demo .askpill{border-color:#2f3a4e;box-shadow:0 10px 28px -10px rgba(0,0,0,.75);}
 body.mode-demo .askpill .pi{animation:none !important;}
 
-.askdock{margin:26px 0 2px;padding:14px 16px 15px;border-radius:var(--radius);
-  border:1px solid var(--border-soft);background:linear-gradient(180deg,#0f131c,#0d1119);}
+.askdock{margin:30px 0 2px;padding:16px 0 0;border-radius:0;
+  border:none;border-top:1px solid var(--border);background:none;}
 .askdock-h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
   padding-bottom:9px;border-bottom:1px dashed #242e3d;margin-bottom:11px;}
 .askdock-h span{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--text-mute);}
@@ -1184,9 +1222,70 @@ body.ddv-open{overflow:hidden;}
   .ddv-head{padding:calc(10px + env(safe-area-inset-top, 0px)) 12px 10px 14px;}
   .ddv-title{font-size:12.5px;}
 }
+/* ── The instrument rail ────────────────────────────────────────────────
+   The collapsed row spent a whole line on direction chips above the headline
+   while the right third of a 1030px row sat empty. On desktop the summary
+   becomes a two-column grid: the argument keeps a real measure on the left,
+   every direction reading lands on ONE right-hand rail, so 110 rows can be
+   scanned down a single column. Below 900px the grid never engages and the
+   readings stay an inline meta line under the title. */
+@media(min-width:900px){
+  details.theme-card>summary,.theme-card:not(details){
+    display:grid;grid-template-columns:minmax(0,1fr) 148px;column-gap:28px;
+    grid-template-areas:"title instr" "arg instr" "footer instr";
+  }
+  .theme-card .card-title{grid-area:title;}
+  .theme-card .card-argument{grid-area:arg;}
+  .theme-card .card-footer{grid-area:footer;}
+  .theme-card .card-firms{
+    grid-area:instr;align-content:start;justify-content:flex-start;
+    flex-direction:column;align-items:flex-end;gap:3px 0 !important;text-align:right;
+    margin-bottom:0;}
+  .theme-card .card-firms .firm-chip{
+    border-right:none;margin-right:0;padding-right:0;font-size:11.5px;}
+  /* A grid item's display is blockified, which kills -webkit-line-clamp, so
+     the collapsed snippet is clamped by height, ending on a soft fade so
+     truncation reads as intentional rather than a sliced glyph. */
+  .theme-card .card-argument{max-height:calc(1.65em * 3);overflow:hidden;
+    -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 15px),transparent);
+    mask-image:linear-gradient(180deg,#000 calc(100% - 15px),transparent);}
+  details.theme-card[open] .card-argument{max-height:none;
+    -webkit-mask-image:none;mask-image:none;}
+  /* 研报主题 rows carry up to a dozen firm names in the same rail the 今日
+     rows use for three direction readings. Stacked they would set the row
+     height; wrapped right-to-left they stay a caption beside the argument. */
+  #grid-themes .theme-card .card-firms{
+    flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-content:start;
+    gap:2px 0 !important;max-height:calc(1.65em * 3);overflow:hidden;}
+  #grid-themes .theme-card .card-firms .firm-chip{
+    padding:0 8px 0 0;margin-right:8px;border-right:1px solid var(--border-soft);}
+  #grid-themes .theme-card .card-firms .firm-chip:last-child{
+    border-right:none;margin-right:0;padding-right:0;}
+}
 </style>
 </head>
 <body class="mode-probing">
+<!-- IMPECCABLE DIRECTION CONTRACT · marketview-daily-2026-08-27
+THESIS: A day is 110 competing arguments, so this page is an INDEX, not a feed.
+  It refuses the card grid the category ships: nothing is boxed, raised, or
+  rounded until the reader opens it.
+OWN-WORLD: Two surfaces only (#0b0d11 ground, #14171d raised-on-open), #20242c
+  hairlines, a three-tier neutral ink family, ONE amber accent (#e0a736) spent
+  on state and one primary action - never on repeated chrome. Long/short live
+  as ink on tabular numerals, never as tinted pills. Radius 6px, interactive
+  controls only.
+STORY: The operator scans the day down one hairline rail, reads direction and
+  counts on a quiet meta line, opens the three or four rows that matter, and
+  asks from inside the opened row.
+FIRST VIEWPORT: brand + date, tab strip, sticky asset-class rail, the ticker
+  reading as data (no pills), then the day's conclusion as one 78ch passage
+  under a rule. No hero, no metric tiles.
+FORM: canon (standing exit) executed straight - user-pinned direction
+  "Linear / Stripe modern product craft", answered 2026-08-27. No roll: a
+  user-pinned direction beats the roll.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the
+  finish review, the verdict, and DESIGN.md
+-->
 <div class="page-content">
   <div class="page-header">
     <div class="ph-left">
@@ -2963,12 +3062,14 @@ var grids = {
 var sectionLabel = document.getElementById("section-label");
 var anchorNav = document.getElementById("anchor-nav");
 var hotSocial = document.getElementById("hot-social");
+var tldrBox = document.getElementById("tldr");
 function switchTab(key){
   document.querySelectorAll(".tabs span").forEach(function(t){ t.classList.toggle("on", t.getAttribute("data-tab") === key); });
   Object.keys(grids).forEach(function(k){ grids[k].style.display = (k === key) ? "" : "none"; });
   sectionLabel.textContent = LABELS[key];
   if(anchorNav) anchorNav.style.display = (key === "today") ? "" : "none";
   if(hotSocial) hotSocial.style.display = (key === "today") ? "" : "none";
+  if(tldrBox) tldrBox.style.display = (key === "today") ? "" : "none";
 }
 document.querySelectorAll(".tabs span").forEach(function(tab){
   tab.addEventListener("click", function(){ switchTab(tab.getAttribute("data-tab")); });
@@ -3199,5 +3300,602 @@ updatePill();
 })();
 </script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8b0cf5be457c4bd0aa1a24b1dfa337a5"}'></script>
+<style id="glass-skin">/* 2026-08-27 — LIQUID GLASS SKIN — user-approved direction (dark refractive):
+   Apple iOS-26 glass material layered over the hairline index. Two sub-blocks
+   kept verbatim in approval order; block 2 intentionally overrides parts of
+   block 1 (e.g. dissolves section panes in favor of per-thesis tiles). Do not
+   merge or reorder. Performance contract: zero backdrop-filter on .theme-card
+   at rest — only :hover/[open] and page chrome. */
+
+/* ══════════════════════════════════════════════════════════════════════
+   Candidate C — 折射玻璃 (Refractive, vivid)
+   Liquid Glass material layer over the existing Linear/Stripe information
+   design. Zero DOM changes; every selector below either overrides an
+   existing rule via normal cascade (same specificity, later wins) or adds
+   new pseudo-elements for ambient light / specular highlights. Glass is
+   reserved for CONTAINERS: sticky nav, ticker bar, TL;DR pane, the five
+   top-level section panes, and true chip/pill controls — never applied to
+   the ~110 repeating theme-card rows themselves.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── ambient environment: the field the glass refracts ─────────────────
+   Five soft fixed glows (blue / violet / amber / teal / violet-crypto)
+   plus a very low-opacity conic sheen, all pinned to the viewport via
+   background-attachment:fixed so every glass pane above shows a slightly
+   different slice of it as the page scrolls underneath. */
+body{
+  background-color:#0a0c11;
+  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat;
+  background-attachment:fixed,fixed,fixed,fixed,fixed,fixed;
+  background-image:
+    radial-gradient(880px 620px at 10% -6%,  rgba(96,150,255,.18), transparent 60%),
+    radial-gradient(760px 640px at 90% 4%,   rgba(176,120,255,.15), transparent 62%),
+    radial-gradient(980px 720px at 46% 38%,  rgba(224,167,54,.11), transparent 65%),
+    radial-gradient(820px 620px at 92% 94%,  rgba(56,196,182,.13), transparent 60%),
+    radial-gradient(760px 560px at 4% 98%,   rgba(158,110,240,.13), transparent 62%),
+    conic-gradient(from 200deg at 50% 22%,
+      rgba(120,150,255,.05), rgba(200,140,255,.045) 20%,
+      rgba(255,190,120,.045) 40%, rgba(90,220,190,.045) 60%,
+      rgba(150,110,240,.05) 80%, rgba(120,150,255,.05) 100%);
+}
+
+/* ── per-section tint tokens (set on the pane, read by its children) ─── */
+#sec-macro       { --tint:99,142,255;   }  /* Macro — cool blue        */
+#sec-equity      { --tint:224,167,54;   }  /* Equities — warm amber    */
+#sec-ficc        { --tint:56,196,182;   }  /* Rates & FX — teal        */
+#sec-commodities { --tint:196,120,66;   }  /* Commodities — bronze     */
+#sec-crypto      { --tint:158,110,240;  }  /* Crypto — violet          */
+
+/* ── section-level panes: tinted glass, gradient hairline border ──────── */
+.tsec{
+  --tint:255,255,255;
+  position:relative;
+  margin:0 0 34px;
+  padding:24px 22px 28px;
+  border-radius:22px;
+  border:1px solid transparent;
+  background:
+    linear-gradient(160deg, rgba(15,18,25,.60), rgba(10,12,17,.66)) padding-box,
+    linear-gradient(135deg, rgba(255,255,255,.20), rgba(var(--tint),.42) 38%,
+      rgba(255,255,255,.04) 78%) border-box;
+  backdrop-filter: blur(30px) saturate(170%);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 24px 60px -24px rgba(0,0,0,.55),
+    0 0 90px -46px rgba(var(--tint),.5);
+  overflow:hidden;
+}
+.tsec::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,0) 34%);
+}
+.tsech{border-bottom-color:rgba(var(--tint),.32);position:relative;}
+.tsech h2::before{
+  content:"";display:inline-block;width:7px;height:7px;border-radius:2px;
+  margin-right:9px;vertical-align:1px;background:rgb(var(--tint));
+  box-shadow:0 0 10px 1px rgba(var(--tint),.65);
+}
+/* hairlines read better against a coloured glass fill than against flat
+   black — brighten them slightly, text tokens are untouched. */
+.tsec .theme-grid{border-top-color:rgba(255,255,255,.09);}
+.tsec .theme-card{border-bottom-color:rgba(255,255,255,.07);}
+.tsec .theme-card:hover{background:rgba(255,255,255,.045);}
+.tsec details.theme-card[open]{background:rgba(255,255,255,.05);}
+.tsec .card-firms .firm-chip{border-right-color:rgba(255,255,255,.09);}
+.tsec .sig,.tsec .tk{border-right-color:rgba(255,255,255,.09);}
+
+@media(max-width:640px){
+  .tsec{padding:18px 14px 22px;border-radius:16px;margin-bottom:24px;}
+}
+
+/* ── sticky header/nav: detached floating glass capsule ────────────────
+   Same element the base page already made position:sticky + blurred; this
+   redoes the recipe to the Liquid Glass spec and gives it a real gap from
+   the viewport edge so it reads as floating rather than docked. */
+.anav{
+  top:12px;
+  padding:14px 20px 12px;
+  margin:10px 0 26px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(14,17,24,.52);
+  backdrop-filter:blur(32px) saturate(180%);
+  -webkit-backdrop-filter:blur(32px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 16px 40px -18px rgba(0,0,0,.6);
+}
+
+@media(max-width:640px){
+  .anav{padding:12px 14px 10px;border-radius:16px;margin:8px 0 20px;top:8px;}
+}
+
+/* ── the ticker bar: a floating glass lens with a specular streak ──────── */
+.qstrip{
+  position:relative;
+  padding:12px 18px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(16,19,26,.50);
+  backdrop-filter:blur(34px) saturate(185%);
+  -webkit-backdrop-filter:blur(34px) saturate(185%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 18px 44px -22px rgba(0,0,0,.55);
+  overflow:hidden;
+}
+.qstrip::before{
+  content:"";position:absolute;top:0;left:7%;right:7%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+}
+@media(max-width:640px){
+  .qstrip{padding:10px 12px;border-radius:14px;}
+}
+
+/* ── TL;DR: the one passage that earns a real glass pane ────────────────
+   Was "no ground" ink-on-rule; Candidate C gives it the material treatment
+   explicitly, with an amber-tinted halo tying it back to the brand hue. */
+.tldr{
+  position:relative;
+  padding:20px 22px 22px;
+  border-radius:20px;
+  border:1px solid rgba(224,167,54,.20);
+  background:rgba(16,19,26,.55);
+  backdrop-filter:blur(30px) saturate(175%);
+  -webkit-backdrop-filter:blur(30px) saturate(175%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 26px 60px -28px rgba(0,0,0,.55),
+    0 0 70px -34px rgba(224,167,54,.28);
+  overflow:hidden;
+}
+.tldr::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 38%);
+}
+@media(max-width:640px){
+  .tldr{padding:16px 16px 18px;border-radius:16px;}
+}
+
+/* ── chips / pills: true glass pills (not the ~110-row instrument rail,
+   which stays ink-only per the hard rule) ──────────────────────────────── */
+.qchip,.ctx-chip,.scopechip{
+  border-radius:999px;
+  backdrop-filter:blur(18px) saturate(175%);
+  -webkit-backdrop-filter:blur(18px) saturate(175%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 6px 16px -8px rgba(0,0,0,.55);
+}
+.qchip{background:rgba(22,27,39,.55);border-color:rgba(255,255,255,.13);}
+.qchip:hover{
+  background:rgba(30,37,54,.72);border-color:rgba(224,167,54,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 0 22px -6px rgba(224,167,54,.4);
+}
+.ctx-chip.c-theme{background:rgba(74,60,31,.42);border-color:rgba(224,167,54,.38);}
+.ctx-chip.c-extract{background:rgba(38,64,99,.42);border-color:rgba(90,169,255,.34);}
+.ctx-chip.c-index{background:rgba(30,68,54,.42);border-color:rgba(63,207,142,.34);}
+.scopechip{background:rgba(74,60,31,.46);border-color:rgba(224,167,54,.42);}
+
+/* ── ghost Ask buttons: resting state untouched (ink, per the hard rule —
+   no blur behind ~110 repeating rows), a soft tinted glass glow on hover
+   only, when at most a couple are ever active at once. ────────────────── */
+.ask-btn:hover{
+  backdrop-filter:blur(14px) saturate(165%);
+  -webkit-backdrop-filter:blur(14px) saturate(165%);
+  background:rgba(74,60,31,.34);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 0 20px -6px rgba(224,167,54,.45);
+}
+details.theme-card[open] .ask-btn,.theme-card.active .ask-btn{
+  backdrop-filter:blur(14px) saturate(165%);
+  -webkit-backdrop-filter:blur(14px) saturate(165%);
+  background:rgba(74,60,31,.28);
+}
+
+/* ── floating chat entry pill: already glass in the base page — bring it
+   up to the same recipe as the other pills. ────────────────────────────── */
+.askpill{
+  background:rgba(18,22,31,.58);
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 14px 34px -14px rgba(0,0,0,.6);
+}
+.askpill:hover{background:rgba(26,31,44,.68);}
+
+/* ── block 2 (Candidate E — dark refractive v2): cascade-overrides parts of block 1 above, verbatim, approval order preserved ── */
+
+/* ══════════════════════════════════════════════════════════════════════
+   Candidate E — 折射玻璃推一档 (Dark Refractive v2)
+   Second cascade layer on top of #glass-skin (Candidate C). Same rules as
+   before: zero DOM changes, CSS-only, later-wins overrides at equal-or-
+   matched specificity. This pass does two things C did not:
+     1. pushes the whole material one level bolder (bigger ambient glows,
+        more pronounced radii/shadows, real presence on section headers)
+     2. turns every one of the ~110 <details class="theme-card"> rows into
+        its own separate floating glass tile with a real vertical gap,
+        per the owner's verdict that theses "都连在一起" under C.
+   DECISION (see task notes): the five .tsec section panes are DISSOLVED
+   here — C's heavy frosted pane behind ~20 tiles fought the new tile
+   separation (one big blurred box behind many small ones reads as one
+   object again). Panes are stripped to nothing; only the header keeps
+   presence (tinted underline glow + chip), and tiles float directly on
+   the ambient background, each carrying its own section --tint.
+   PERFORMANCE: zero backdrop-filter on .theme-card at rest — glass is
+   faked with layered rgba/gradient fills. Real backdrop-filter only on
+   :hover / .active / [open], matching the existing chrome-only rule.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── ambient environment, pushed bolder: bigger glows, richer conic sheen,
+   plus one new low-opacity diagonal band so the iridescence in the glass
+   below reads as intentional rather than a coincidence of color choices.
+   A fallback --tint lets cards OUTSIDE the five #sec-* sections (the
+   research-themes tab, #grid-themes) still pick up a tint via normal
+   inheritance instead of falling back to plain white. ─────────────────── */
+body{
+  --tint:132,152,224;
+  background-color:#08090d;
+  background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat;
+  background-attachment:fixed,fixed,fixed,fixed,fixed,fixed,fixed;
+  background-image:
+    repeating-linear-gradient(115deg,
+      rgba(255,255,255,.022) 0px, rgba(150,190,255,.034) 60px,
+      rgba(255,255,255,.016) 120px, rgba(255,190,230,.03) 180px,
+      rgba(255,255,255,.02) 240px),
+    radial-gradient(1040px 740px at 8% -8%,  rgba(99,150,255,.27), transparent 62%),
+    radial-gradient(900px 760px at 92% 2%,   rgba(180,120,255,.23), transparent 64%),
+    radial-gradient(1140px 840px at 46% 36%, rgba(224,167,54,.17), transparent 66%),
+    radial-gradient(960px 740px at 94% 96%,  rgba(56,196,182,.20), transparent 62%),
+    radial-gradient(900px 680px at 2% 98%,   rgba(158,110,240,.20), transparent 64%),
+    conic-gradient(from 200deg at 50% 22%,
+      rgba(120,150,255,.08), rgba(200,140,255,.075) 20%,
+      rgba(255,190,120,.075) 40%, rgba(90,220,190,.075) 60%,
+      rgba(150,110,240,.08) 80%, rgba(120,150,255,.08) 100%);
+}
+
+/* ── section header: real presence — bigger type, glowing dot, gradient
+   underline halo, count badge promoted to a small tinted glass chip ────── */
+.tsech{
+  position:relative;
+  border-bottom-width:2px;
+  border-bottom-color:rgba(var(--tint),.4);
+  padding-bottom:15px;
+  margin-bottom:16px;
+}
+.tsech::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:12px;
+  background:linear-gradient(180deg, rgba(var(--tint),.38), transparent);
+  filter:blur(7px);
+  pointer-events:none;
+}
+.tsech h2{
+  font-size:21px;font-weight:700;letter-spacing:-.012em;
+  text-shadow:0 0 24px rgba(var(--tint),.4);
+}
+.tsech h2::before{
+  width:10px;height:10px;border-radius:3px;margin-right:11px;
+  box-shadow:0 0 18px 2px rgba(var(--tint),.75), 0 0 3px rgba(var(--tint),.95);
+}
+.tsecn{
+  padding:4px 11px;border-radius:999px;
+  background:rgba(var(--tint),.12);
+  border:1px solid rgba(var(--tint),.26);
+  color:var(--text-dim);
+}
+
+/* ── section panes: dissolved. Tiles now do the separation work, so the
+   pane goes back to plain flow — no fill, no blur, no border — with just
+   enough bottom margin to keep sections apart. overflow:visible so a
+   hovered/opened tile near the section edge can still show its full lift
+   shadow without being clipped by the (now invisible) pane box. ───────── */
+.tsec{
+  padding:0;
+  margin:0 0 42px;
+  border:none;
+  border-radius:0;
+  background:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  box-shadow:none;
+  overflow:visible;
+}
+.tsec::before{content:none;}
+@media(max-width:640px){
+  .tsec{margin:0 0 30px;}
+}
+
+/* ── the row rail becomes a gapped stack: kill the shared hairlines, let
+   spacing between tiles carry the separation instead. ──────────────────── */
+.theme-grid{
+  border-top:none;
+  gap:11px;
+}
+.tsec .theme-grid{border-top:none;}
+@media(max-width:640px){
+  .theme-grid{gap:9px;}
+}
+
+/* ── the thesis tile itself: dark glass, section-tinted hairline border,
+   layered rgba/gradient fill (NO backdrop-filter at rest), inset top
+   specular highlight, soft drop shadow + faint tinted glow. Reads as its
+   own floating object even before the reader's eye reaches the content. */
+.theme-card{
+  position:relative;
+  border:1px solid rgba(var(--tint),.2);
+  border-radius:15px;
+  overflow:hidden;
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.054), rgba(255,255,255,.022) 55%, rgba(255,255,255,.01)),
+    linear-gradient(135deg, rgba(var(--tint),.1), rgba(var(--tint),0) 62%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 14px 32px -22px rgba(0,0,0,.72),
+    0 0 36px -26px rgba(var(--tint),.55);
+  transition:transform .18s cubic-bezier(.2,.8,.25,1), box-shadow .2s ease,
+    border-color .2s ease, background .2s ease;
+}
+.theme-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,0) 40%);
+}
+@media(max-width:640px){
+  .theme-card{border-radius:13px;}
+}
+
+/* hover / active / open: this is where real blur is allowed. Lifts off
+   the page, tint deepens, a proper glass blur kicks in behind the row. */
+.theme-card:hover,
+.theme-card.active,
+details.theme-card[open]{
+  border-color:rgba(var(--tint),.52);
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.092), rgba(255,255,255,.04) 58%),
+    linear-gradient(135deg, rgba(var(--tint),.2), rgba(var(--tint),0) 66%);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 22px 46px -24px rgba(0,0,0,.78),
+    0 0 58px -22px rgba(var(--tint),.62);
+  transform:translateY(-2px);
+}
+.theme-card.active::before,
+details.theme-card[open]::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,0) 46%),
+    linear-gradient(90deg, rgba(var(--tint),.85), rgba(var(--tint),0) 3px);
+}
+
+/* Re-assert the two properties C already scoped with a `.tsec` ancestor
+   (higher specificity than plain .theme-card) so this pass's tint/glass
+   wins for cards inside the five macro/equity/ficc/commodities/crypto
+   sections too — everything else above (radius, shadow, blur, lift) has
+   no competing C rule and already applies there via normal inheritance. */
+.tsec .theme-card{border-color:rgba(var(--tint),.24);}
+.tsec .theme-card:hover,
+.tsec .theme-card.active,
+.tsec details.theme-card[open]{
+  border-color:rgba(var(--tint),.55);
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.092), rgba(255,255,255,.04) 58%),
+    linear-gradient(135deg, rgba(var(--tint),.22), rgba(var(--tint),0) 66%);
+}
+
+/* ── chrome, pushed one level bolder: bigger radii, deeper detachment
+   shadows, a second static specular streak on the ticker lens. ────────── */
+.anav{
+  border-radius:24px;
+  margin:14px 0 30px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 26px 56px -22px rgba(0,0,0,.65),
+    0 0 60px -34px rgba(140,165,255,.35);
+}
+.qstrip{
+  border-radius:20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 24px 52px -24px rgba(0,0,0,.6);
+}
+.qstrip::after{
+  content:"";position:absolute;top:-40%;bottom:-40%;left:-12%;width:24%;
+  background:linear-gradient(75deg, transparent, rgba(255,255,255,.09) 45%,
+    rgba(255,255,255,.15) 50%, rgba(255,255,255,.09) 55%, transparent);
+  transform:skewX(-18deg);
+  pointer-events:none;
+}
+.tldr{
+  border-radius:22px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 30px 66px -30px rgba(0,0,0,.6),
+    0 0 84px -36px rgba(224,167,54,.34);
+}
+.qchip:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24), 0 0 26px -6px rgba(224,167,54,.45);
+}
+.askpill{
+  border-radius:999px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 18px 40px -16px rgba(0,0,0,.65);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   FIXPACK 2026-08-27 — post-bughunt corrections (5-inspector adversarial
+   audit); overrides below intentionally re-declare and win by cascade
+   order.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── [2] chat drawer had zero glass (flat #101318 next to a glassed page).
+   Same recipe as the other chrome pieces above (.anav/.qstrip/.tldr/
+   .askpill): translucent fill + blur/saturate. Box-shadow specular is
+   split by breakpoint because #panel already carries its own elevation
+   shadow on the mobile bottom-sheet (`0 -10px 30px -8px rgba(0,0,0,.55)`,
+   see base _CSS's `@media(max-width:1023px)` block) — re-declared here
+   alongside the new top/left highlight so it isn't clobbered, not because
+   it changed. Layout/positioning (position/width/transform/etc.) is left
+   untouched. .panel-input's input and .msg bubbles already carry their
+   own opaque fills (#0d111a / #1a2130 / #161c28) so they read fine
+   unchanged against the new translucent ground. ────────────────────────── */
+#panel{
+  background:rgba(16,19,24,.62);
+  backdrop-filter:blur(30px) saturate(170%);
+  -webkit-backdrop-filter:blur(30px) saturate(170%);
+}
+@media(min-width:1024px){
+  #panel{
+    box-shadow:
+      inset 1px 0 0 rgba(255,255,255,.10),
+      inset 0 1px 0 rgba(255,255,255,.16);
+  }
+}
+@media(max-width:1023px){
+  #panel{
+    box-shadow:
+      inset 1px 0 0 rgba(255,255,255,.10),
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 -10px 30px -8px rgba(0,0,0,.55);
+  }
+}
+
+/* ── [3] `#grid-themes .theme-card .card-firms` clamps to 3 lines +
+   overflow:hidden inside the 900px instrument-rail layout (base _CSS) with
+   no [open] escape — firms past line 3 were unreachable. The #grid-themes-
+   qualified selector matches that rule's own (1,2,0) specificity so it
+   reliably wins; the bare `details.theme-card[open] .card-firms` variant
+   is kept alongside it in case a future today-tab card ever grows the
+   same clamp. ───────────────────────────────────────────────────────── */
+@media(min-width:900px){
+  #grid-themes details.theme-card[open] .card-firms,
+  details.theme-card[open] .card-firms{max-height:none;overflow:visible;}
+}
+
+/* ── [4] scroll-void under software rendering: bisection pointed at the
+   repeating-linear-gradient sheen block 2 added to body's background
+   stack. Re-declare the whole stack simplified — flat base + 3 fixed
+   radial glows (blue/violet/amber kept, teal/violet-corner and the
+   conic sheen dropped). repeat/attachment lists are re-declared to match
+   the new 3-layer count rather than left to the old 7-item lists. ────── */
+body{
+  background-color:#08090d;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-attachment:fixed,fixed,fixed;
+  background-image:
+    radial-gradient(1040px 740px at 8% -8%,  rgba(99,150,255,.27), transparent 62%),
+    radial-gradient(900px 760px at 92% 2%,   rgba(180,120,255,.23), transparent 64%),
+    radial-gradient(1140px 840px at 46% 36%, rgba(224,167,54,.17), transparent 66%);
+}
+
+/* ── [5] equities open/hover cards read muddy brown: the `.tsec`-scoped
+   [open]/:hover tint gradient sits at alpha .22 and, combined with
+   `saturate(180%)` on the amber tint, desaturates into brown. Re-declare
+   both at lower strength — .12 fading to 0 by 66%, saturate(130%). The
+   backdrop-filter rule is the unscoped one (applies to every section's
+   tint, not just equities') so all five hues get the calmer saturation. ── */
+.tsec .theme-card:hover,
+.tsec .theme-card.active,
+.tsec details.theme-card[open]{
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.092), rgba(255,255,255,.04) 58%),
+    linear-gradient(135deg, rgba(var(--tint),.12), rgba(var(--tint),0) 66%);
+}
+.theme-card:hover,
+.theme-card.active,
+details.theme-card[open]{
+  backdrop-filter:blur(22px) saturate(130%);
+  -webkit-backdrop-filter:blur(22px) saturate(130%);
+}
+
+/* ── [6] Research tab's only heading over 51 cards was `#section-label`
+   (a plain div, 11px muted caption — verified against the emitted DOM,
+   not `.tsech`, which only exists inside the five #sec-* panes). Raise it
+   to 15-16px/brighter ink and give it the same glass-dot + soft-glow
+   language `.tsech h2::before` uses, on the neutral fallback --tint
+   (132,152,224, set on body above) since this label sits outside every
+   #sec-* pane and never gets a hue of its own. ID selector used (not
+   `.section-label`) since it's unambiguous either way and this element
+   is unique on the page. ────────────────────────────────────────────── */
+#section-label{
+  position:relative;
+  padding-left:16px;
+  font-size:16px;
+  font-weight:700;
+  color:var(--text);
+  text-shadow:0 0 18px rgba(var(--tint),.35);
+}
+#section-label::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:8px;height:8px;border-radius:2px;
+  background:rgb(var(--tint));
+  box-shadow:0 0 12px 1px rgba(var(--tint),.65);
+}
+
+/* ── [7] block 1's `.anav{...}` (single-class, same specificity as
+   `.indnav`, declared later in the file) leaks background/backdrop-filter/
+   border/box-shadow/border-radius/padding/margin onto the Indicators sub-
+   nav, which renders `class="anav indnav"` and was deliberately kept flat.
+   Re-assert the base `.indnav` rule (see base _CSS) verbatim, plus zero
+   out the properties block 1/2 introduced that `.indnav` never had reason
+   to reset before (border/border-radius/box-shadow) — `top` is skipped on
+   purpose since `.indnav` stays position:static, where `top` has no
+   effect. ────────────────────────────────────────────────────────────── */
+.indnav{
+  position:static;overflow-x:visible;flex-wrap:wrap;
+  padding:0;margin:2px 0 12px;
+  background:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  border:none;border-bottom:none;border-radius:0;box-shadow:none;
+}
+
+/* ── [8] no prefers-reduced-motion guard for the new tile lift — mirrors
+   the base page's own `@media(prefers-reduced-motion:reduce)` pattern
+   (see base _CSS, `.tdet`/`.tcaret`). ───────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  .theme-card{transition:none}
+  .theme-card:hover,details.theme-card[open]{transform:none}
+  html{scroll-behavior:auto}
+}
+
+/* ── [9] mobile `.anav` overflow has no scroll affordance, and the base
+   page's own right-edge mask-image fade (see base _CSS `.anav`) doesn't
+   play well with the backdrop-filter this skin adds to the same element —
+   masking a blurred layer cuts it to a hard edge instead of fading it.
+   Drop the mask on mobile, replace it with a real painted-on fade via
+   ::after. `.anav` is already position:sticky at every breakpoint (a
+   positioned ancestor, same as position:relative for this purpose), so
+   the ::after's position:absolute already has a containing block without
+   needing to touch `.anav`'s own position and risk breaking its sticky
+   behavior on mobile. Scoped to the same mobile breakpoint the rest of
+   this file's `.anav` mobile tweaks already use. ───────────────────────── */
+@media(max-width:640px){
+  .anav{-webkit-mask-image:none;mask-image:none;}
+  .anav::after{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:28px;
+    background:linear-gradient(90deg, transparent, rgba(8,9,13,.85));
+    pointer-events:none;
+  }
+}
+
+/* ── [10] mobile header type overflow. ──────────────────────────────── */
+@media(max-width:640px){
+  .tsech h2{font-size:18px}
+  .tsecn{padding:3px 9px;font-size:10.5px}
+}
+
+/* ── [11] drawer scrim had no blur. ─────────────────────────────────── */
+.scrim{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+
+/* ── KNOWN ISSUE (2026-08-27, deliberately NOT patched): under SOFTWARE
+   rendering only (headless --disable-gpu / GPU-less hosts), a large
+   instant scroll jump can leave a transient unpainted band where the
+   ambient body gradients should be; the pre-glass page did not do this,
+   so the skin's paint load is the trigger. Two candidate mitigations were
+   implemented and A/B-measured: `transform:translateZ(0)` layer promotion
+   on `.anav` (byte-identical output — zero effect) and a duplicate
+   `html{scroll-behavior:smooth}` (already in the base CSS at global
+   scope, so also a no-op). Both were removed rather than shipped as
+   placebo. Real GPU-composited browsers are expected clean; if an
+   artifact is ever seen on real hardware, the next lever is reducing the
+   chrome backdrop-filter radii in the two approved blocks above — a
+   design change to be negotiated, not slipped in here. ───────────────── */
+</style>
 </body>
 </html>
