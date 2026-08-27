@@ -3883,6 +3883,17 @@ details.theme-card[open]{
 /* ── [11] drawer scrim had no blur. ─────────────────────────────────── */
 .scrim{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
 
+/* ── [12] type-size trims (2026-08-27 late, user request): the top-of-page
+   chrome read one step too large in the glass world — section tab pills,
+   the market-quote strip, and the TL;DR body. `.tk` is scoped to `.qstrip`
+   because the bare class also badges number chips across the whole page;
+   `.anav` is scoped :not(.indnav) so the Indicators sub-nav keeps its base
+   sizing (same deliberate opt-out as fixpack item [7]). ───────────────── */
+.anav:not(.indnav) a{font-size:11px}
+.anav:not(.indnav) a b{font-size:10px}
+.qstrip .tk{font-size:10px}
+.tldr-body{font-size:12.5px}
+
 /* ── KNOWN ISSUE (2026-08-27, deliberately NOT patched): under SOFTWARE
    rendering only (headless --disable-gpu / GPU-less hosts), a large
    instant scroll jump can leave a transient unpainted band where the
