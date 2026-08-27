@@ -43,11 +43,11 @@ code{font-family:var(--mono);}
 .page-header .brand{font-weight:640;font-size:20px;letter-spacing:-.022em;}
 .page-header .brand .dot{color:var(--accent);}
 .page-header .date{font-size:12px;color:var(--text-mute);font-family:var(--mono);}
-.page-header .tabs{display:flex;gap:16px;font-size:13px;color:var(--text-mute);}
-.page-header .tabs span{cursor:pointer;padding-bottom:2px;border-bottom:2px solid transparent;transition:color .15s;}
-.page-header .tabs span:hover{color:var(--text-dim);}
-.page-header .tabs span.on{color:var(--text);border-bottom-color:var(--accent);}
-.page-header .tabs span{font-weight:500;}
+.tabs{display:flex;gap:16px;font-size:13px;color:var(--text-mute);}
+.tabs span{cursor:pointer;padding-bottom:2px;border-bottom:2px solid transparent;transition:color .15s;}
+.tabs span:hover{color:var(--text-dim);}
+.tabs span.on{color:var(--text);border-bottom-color:var(--accent);}
+.tabs span{font-weight:500;}
 
 .section-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-mute);margin:6px 0 10px;}
 
@@ -146,7 +146,7 @@ code{font-family:var(--mono);}
    `<section class="indembed" data-ind="...">`, styled by its OWN scoped
    `<style>` block that ships inside the embed package — nothing here
    reaches into `.indembed`'s own rules). `.indtabs` mirrors
-   `.page-header .tabs`'s flat underline-tab syntax verbatim (same markup
+   `.tabs`'s flat underline-tab syntax verbatim (same markup
    shape: `<span class="on" data-*="...">`), just renamed for this second,
    independent tab strip so the two never collide on selector or on
    click-handler wiring (see _JS's own indtabs block). ─────────────────── */
@@ -518,7 +518,7 @@ details.theme-card[open] .tcaret{transform:rotate(180deg);color:var(--accent-tex
   .tsech{flex-wrap:wrap;}
 }
 @media(max-width:640px){
-  .page-header .tabs{gap:11px;font-size:12px;}
+  .tabs{gap:11px;font-size:12px;}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -1292,11 +1292,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the
       <div class="brand">Market<span class="dot">View</span></div>
       <div class="date">2026-08-27</div>
     </div>
-    <div class="tabs">
-      <span class="on" data-tab="today">News</span>
-      <span data-tab="themes">Research</span>
-      <span data-tab="indicators">Indicators</span>
-    </div>
+  </div>
+  <div class="tabs">
+    <span class="on" data-tab="today">News</span>
+    <span data-tab="themes">Research</span>
+    <span data-tab="indicators">Indicators</span>
   </div>
   <nav class="sitenav" id="sitenav" aria-label="Site navigation"><button type="button" class="snxlate" id="snxlate" translate="no">中文</button></nav>
   <nav class="anav" id="anchor-nav" aria-label="Section index"><a href="#sec-macro" data-key="macro" style="--hue:oklch(70% .11 300)"><span>Macro</span><b>12</b></a><a href="#sec-equity" data-key="equity" style="--hue:oklch(70% .11 250)"><span>Equities</span><b>33</b></a><a href="#sec-ficc" data-key="ficc" style="--hue:oklch(70% .11 200)"><span>Rates &amp; FX</span><b>12</b></a><a href="#sec-commodities" data-key="commodities" style="--hue:oklch(70% .11 60)"><span>Commodities</span><b>6</b></a><a href="#sec-crypto" data-key="crypto" style="--hue:oklch(70% .11 130)"><span>Crypto</span><b>7</b></a></nav>
@@ -3905,14 +3905,24 @@ details.theme-card[open]{
    tab 置顶…结果你把 logo 也置顶了,大错特错,还增加了玻璃胶囊也更错,全部
    改回"). v1's sticky glass-capsule page header is fully reverted — the
    brand/date row scrolls away normally again, no capsule, and .anav keeps
-   its own base pinning. ONLY the News/Research/Indicators tab strip stays
-   on screen: fixed to the viewport's top-right, aligned to the 1080px
-   content column (24px side padding), no decorative ground — just a soft
-   text-shadow so the labels survive passing content. ──────────────────── */
-.page-header .tabs{
-  position:fixed;top:14px;z-index:60;
-  right:max(24px, calc((100vw - 1080px)/2 + 24px));
+   its own base pinning. v3 (same night, user clarification "和
+   macro tab 一样,滑下去以后置顶"): the tab strip is its OWN element in
+   flow now (markup moved out of .page-header; base selectors renamed
+   .page-header .tabs -> .tabs to follow), overlaid onto the brand row's
+   right side at rest via negative margin, and position:sticky like .anav —
+   it scrolls normally at the top, pins once scrolled past. No decorative
+   ground, just a text-shadow; pointer-events:none on the full-width row so
+   the transparent left half never blocks clicks on the brand. ──────────────────── */
+.tabs{
+  position:sticky;top:16px;z-index:60;
+  justify-content:flex-end;
+  margin:-40px 0 18px;
+  pointer-events:none;
   text-shadow:0 1px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.7);
+}
+.tabs span{pointer-events:auto;}
+@media(max-width:640px){
+  .tabs{margin-top:-34px;}
 }
 .qstrip{
   box-shadow:
