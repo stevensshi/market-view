@@ -2895,6 +2895,16 @@ function jumpTo(key){
   } else go();
 }
 
+/* email/RSS deep links (2026-08-28): #thesis:t9 / #theme:3 open + scroll to that card */
+function jumpFromHash(){
+  var h = location.hash || "";
+  if(h.indexOf("#thesis:") === 0 || h.indexOf("#theme:") === 0){
+    try { jumpTo(decodeURIComponent(h.slice(1))); } catch(e) {}
+  }
+}
+addEventListener("hashchange", jumpFromHash);
+if(document.readyState === "loading") addEventListener("DOMContentLoaded", jumpFromHash); else jumpFromHash();
+
 closeBtn.addEventListener("click", closePanel);
 if(expandBtn) expandBtn.addEventListener("click", function(){
   setExpanded(!panel.classList.contains("expanded"));
