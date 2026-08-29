@@ -223,6 +223,97 @@ body{margin:0;background:var(--bg);color:var(--text2);
 @media(max-width:480px){
  .dimgrid{grid-template-columns:1fr}
 }
+</style>
+<style id="glass-skin">
+/* ── ambient environment: the daily page's FIXPACK 3-glow, scroll-
+   attachment ground (see this constant's header comment for the ground-
+   colour deviation) ─────────────────────────────────────────────────── */
+body{
+ background-color:#0a0c11;
+ background-repeat:no-repeat,no-repeat,no-repeat;
+ background-attachment:scroll,scroll,scroll;
+ background-image:
+  radial-gradient(1040px 740px at 8% -8%,  rgba(99,150,255,.27), transparent 62%),
+  radial-gradient(900px 760px at 92% 2%,   rgba(180,120,255,.23), transparent 64%),
+  radial-gradient(1140px 840px at 46% 36%, rgba(224,167,54,.17), transparent 66%);
+}
+
+/* ── page chrome: the masthead becomes a floating glass capsule; nav
+   active-state underline recoloured to the daily page's amber ─────────── */
+.masthead{
+ background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.14);
+ border-radius:16px;
+ backdrop-filter:blur(18px) saturate(160%);
+ -webkit-backdrop-filter:blur(18px) saturate(160%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 18px 40px -22px rgba(0,0,0,.65);
+}
+.navlink:hover{color:#fff}
+.navlink.active{border-bottom-color:#e0a736}
+.navlang:hover{color:var(--text2)}
+
+/* ── verdict line: soft hairline instead of the hard border, stronger ink */
+.verdict{border-bottom-color:rgba(255,255,255,.10)}
+.verdicttxt{color:#e8ebf2}
+
+/* ── panels / overview cards: glass tiles (see header comment re: the
+   backdrop-filter-at-rest performance contract) ────────────────────────── */
+.panel{
+ background:rgba(255,255,255,.035);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:14px;
+ backdrop-filter:blur(14px) saturate(140%);
+ -webkit-backdrop-filter:blur(14px) saturate(140%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.09), 0 18px 40px -28px rgba(0,0,0,.7);
+}
+
+/* ── eight-question grid: dissolve the shared hairline grid into gapped
+   glass tiles (see header comment re: the neutral tint) ────────────────── */
+.dimgrid{border-top:none;border-left:none;gap:10px}
+.dimcell{
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:12px;
+ background:linear-gradient(158deg, rgba(140,165,255,.06), rgba(255,255,255,.018) 60%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 10px 24px -18px rgba(0,0,0,.6);
+}
+
+/* ── tables stay dense; hover becomes a glass wash instead of a flat
+   panel2 fill; .tblwrap keeps doing the horizontal scroll, untouched ───── */
+.mtable tr:hover{background:rgba(255,255,255,.05)}
+.swrulebody{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.10)}
+
+/* ── chips / pills: translucent fill + hairline + full pill radius; the
+   semantic dot/text colour (currentColor, from .stamp's own inline style)
+   is untouched. No backdrop-filter — these repeat once per table row /
+   grid cell (see header comment). ──────────────────────────────────────── */
+.stamp{border:1px solid rgba(255,255,255,.12);border-radius:999px}
+.rolechip{
+ border:1px solid rgba(255,255,255,.12);border-radius:999px;
+ background:rgba(255,255,255,.04);
+}
+.trigchip{
+ border:1px solid rgba(255,255,255,.12);border-radius:999px;
+ background:rgba(255,255,255,.04);padding:2px 10px;
+}
+
+/* ── drill-down rows / footer: soften hairlines to the glass palette;
+   footer ink dimmed a step further ─────────────────────────────────────── */
+.idxlist{border-top-color:rgba(255,255,255,.10)}
+.idxrow{border-bottom-color:rgba(255,255,255,.10)}
+.idxrow:hover{background:rgba(255,255,255,.05)}
+.ftr{border-top-color:rgba(255,255,255,.10);color:rgba(255,255,255,.34)}
+
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+}
+
+@media(max-width:640px){
+ .masthead{padding:12px 14px;border-radius:14px}
+ .panel{padding:14px}
+}
+
+/* pending-dimensions note bar: same tile recipe (was still the flat base panel) */
+.dimgap{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);}
 </style></head>
 <body><!--
 THESIS: The category standard executed straight: a dark professional market dashboard at TradingView craft level - the user's deliberate canon choice; meters pinned by the user.
