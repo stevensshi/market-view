@@ -35,8 +35,9 @@ body{margin:0;background:var(--bg);color:var(--text2);
 .navlang:hover{color:var(--text2)}
 
 /* verdict line */
-.verdict{padding:2px 0 10px;margin:12px 0 0;border-bottom:1px solid var(--border)}
-.verdicttxt{font-size:18px;font-weight:500;line-height:1.5;color:var(--text)}
+.verdict{padding:2px 0 8px;margin:10px 0 0;border-bottom:1px solid var(--border)}
+/* 2026-08-29 (user): the verdict is a one-line SUMMARY, not a title — summary size/weight, secondary ink */
+.verdicttxt{font-size:13.5px;font-weight:400;line-height:1.5;color:var(--text2)}
 
 /* sections */
 .eyebrow{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
@@ -214,7 +215,7 @@ body{margin:0;background:var(--bg);color:var(--text2);
  .mhstampbox{width:100%;align-items:flex-start}
  .twolights{flex-direction:column}
  .twolights>*{margin-top:0}
- .verdicttxt{font-size:16px}
+ .verdicttxt{font-size:13px}
  .idxrow{flex-wrap:nowrap}
  .idxtext{flex-wrap:wrap}
  .idxname{flex:1 1 100%}
@@ -254,7 +255,7 @@ body{
 
 /* ── verdict line: soft hairline instead of the hard border, stronger ink */
 .verdict{border-bottom-color:rgba(255,255,255,.10)}
-.verdicttxt{color:#e8ebf2}
+.verdicttxt{color:#b9c0cf}
 
 /* ── panels / overview cards: glass tiles (see header comment re: the
    backdrop-filter-at-rest performance contract) ────────────────────────── */
