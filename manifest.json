@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-09-01",
+    "theses": 61,
+    "families": 12,
+    "asof": "2026-09-01 07:20",
+    "zh": false
+  },
+  {
     "date": "2026-08-31",
     "theses": 83,
     "families": 8,
